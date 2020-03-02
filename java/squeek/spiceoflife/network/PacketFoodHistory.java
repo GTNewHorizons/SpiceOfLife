@@ -48,11 +48,11 @@ public class PacketFoodHistory extends PacketBase {
         FoodHistory foodHistory = FoodHistory.get(player);
 
         if (shouldOverwrite) {
-            foodHistory.getHistory().clear();
+            foodHistory.getRecentHistory().clear();
             foodHistory.ticksActive = this.foodHistory.ticksActive;
         }
 
-        for (FoodEaten foodEaten : this.foodHistory.getHistory()) {
+        for (FoodEaten foodEaten : this.foodHistory.getRecentHistory()) {
             foodHistory.addFood(foodEaten, !shouldOverwrite);
         }
 

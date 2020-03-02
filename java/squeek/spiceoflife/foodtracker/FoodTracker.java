@@ -45,12 +45,11 @@ public class FoodTracker {
         FoodTracker.addFoodEatenByPlayer(foodEaten, event.player);
     }
 
-    public static boolean addFoodEatenByPlayer(FoodEaten foodEaten, EntityPlayer player) {
+    public static void addFoodEatenByPlayer(FoodEaten foodEaten, EntityPlayer player) {
         // client needs to be told by the server otherwise the client can get out of sync easily
         if (!player.worldObj.isRemote && player instanceof EntityPlayerMP)
             PacketDispatcher.get().sendTo(new PacketFoodHistory(foodEaten), (EntityPlayerMP) player);
-
-        return FoodHistory.get(player).addFood(foodEaten);
+        FoodHistory.get(player).addFood(foodEaten);
     }
 
     /**
@@ -76,7 +75,7 @@ public class FoodTracker {
         foodHistory.deltaTicksActive(1);
 
         if (ModConfig.USE_TIME_QUEUE && !ModConfig.USE_HUNGER_QUEUE) {
-            FixedTimeQueue timeQueue = (FixedTimeQueue) foodHistory.getHistory();
+            FixedTimeQueue timeQueue = (FixedTimeQueue) foodHistory.getRecentHistory();
             timeQueue.prune(event.entityLiving.worldObj.getTotalWorldTime(), foodHistory.ticksActive);
         }
     }
@@ -98,7 +97,7 @@ public class FoodTracker {
         syncFoodHistory(foodHistory);
 
         // give food journal
-        if (!foodHistory.wasGivenFoodJournal && (ModConfig.GIVE_FOOD_JOURNAL_ON_START || (ModConfig.GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS && ModConfig.FOOD_EATEN_THRESHOLD == 0))) {
+        if (!foodHistory.wasGivenFoodJournal && ModConfig.GIVE_FOOD_JOURNAL_ON_START) {
             ItemFoodJournal.giveToPlayer(event.player);
             foodHistory.wasGivenFoodJournal = true;
         }

@@ -59,8 +59,8 @@ public class GuiScreenFoodJournal extends GuiContainer {
 
         foodEatenWidgets.clear();
         FoodHistory foodHistory = FoodHistory.get(mc.thePlayer);
-        if (!ModConfig.CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD || foodHistory.totalFoodsEatenAllTime >= ModConfig.FOOD_EATEN_THRESHOLD) {
-            for (FoodEaten foodEaten : foodHistory.getHistory()) {
+        if (foodHistory.totalFoodsEatenAllTime >= ModConfig.FOOD_EATEN_THRESHOLD) {
+            for (FoodEaten foodEaten : foodHistory.getRecentHistory()) {
                 foodEatenWidgets.add(new WidgetFoodEaten(foodEaten));
             }
         }
@@ -105,7 +105,7 @@ public class GuiScreenFoodJournal extends GuiContainer {
             ((GuiButton) objButton).drawButton(mc, mouseX, mouseY);
         }
 
-        if (!ModConfig.CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD || FoodHistory.get(mc.thePlayer).totalFoodsEatenAllTime >= ModConfig.FOOD_EATEN_THRESHOLD) {
+        if (FoodHistory.get(mc.thePlayer).totalFoodsEatenAllTime >= ModConfig.FOOD_EATEN_THRESHOLD) {
             if (foodEatenWidgets.size() > 0) {
                 GL11.glPushMatrix();
                 int foodEatenIndex = startIndex;
@@ -193,7 +193,7 @@ public class GuiScreenFoodJournal extends GuiContainer {
         FoodHistory foodHistory = FoodHistory.get(mc.thePlayer);
 
         if (ModConfig.USE_HUNGER_QUEUE) {
-            FixedHungerQueue queue = (FixedHungerQueue) foodHistory.getHistory();
+            FixedHungerQueue queue = (FixedHungerQueue) foodHistory.getRecentHistory();
             FixedHungerQueue slice = queue.sliceUntil(foodEaten);
             int hungerOverflow = queue.totalHunger() - queue.hunger();
             int hungerNeededIfThisWereFirst = foodEaten.foodValues.hunger - hungerOverflow;
@@ -202,7 +202,7 @@ public class GuiScreenFoodJournal extends GuiContainer {
             int hungerUntilExpire = Math.max(1, spaceInQueue + hungerNeededIfThisWereFirst + sliceHunger);
             return StatCollector.translateToLocalFormatted("spiceoflife.gui.expires.in.hunger", StringHelper.hungerHistoryLength(hungerUntilExpire));
         } else if (ModConfig.USE_TIME_QUEUE) {
-            FixedTimeQueue queue = (FixedTimeQueue) foodHistory.getHistory();
+            FixedTimeQueue queue = (FixedTimeQueue) foodHistory.getRecentHistory();
             long elapsedTime = foodEaten.elapsedTime(mc.theWorld.getTotalWorldTime(), foodHistory.ticksActive);
             long maxTime = queue.getMaxTime();
             long timeUntilExpire = maxTime - elapsedTime;
@@ -212,7 +212,7 @@ public class GuiScreenFoodJournal extends GuiContainer {
             String value = StatCollector.translateToLocalFormatted(singularOrPlural, numDays);
             return StatCollector.translateToLocalFormatted("spiceoflife.gui.expires.in.time", value);
         } else {
-            FixedSizeQueue queue = (FixedSizeQueue) foodHistory.getHistory();
+            FixedSizeQueue queue = (FixedSizeQueue) foodHistory.getRecentHistory();
             int spaceInQueue = queue.getMaxSize() - queue.size();
             int foodsUntilExpire = spaceInQueue + queue.indexOf(foodEaten) + 1;
             String singularOrPlural = foodsUntilExpire == 1 ? StatCollector.translateToLocal("spiceoflife.tooltip.times.singular") : StatCollector.translateToLocal("spiceoflife.tooltip.times.plural");

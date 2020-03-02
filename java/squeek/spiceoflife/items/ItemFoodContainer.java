@@ -7,7 +7,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -33,7 +32,6 @@ import squeek.spiceoflife.helpers.InventoryHelper;
 import squeek.spiceoflife.helpers.MealPrioritizationHelper;
 import squeek.spiceoflife.helpers.MealPrioritizationHelper.InventoryFoodInfo;
 import squeek.spiceoflife.helpers.MiscHelper;
-import squeek.spiceoflife.helpers.MovementHelper;
 import squeek.spiceoflife.inventory.ContainerFoodContainer;
 import squeek.spiceoflife.inventory.FoodContainerInventory;
 import squeek.spiceoflife.inventory.INBTInventoryHaver;
@@ -245,26 +243,6 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
         return baseTag.getCompoundTag(TAG_KEY_INVENTORY);
     }
 
-    @Override
-    public void onUpdate(ItemStack itemStack, World world, Entity ownerEntity, int par4, boolean par5) {
-        if (!world.isRemote && ownerEntity instanceof EntityPlayer && isOpen(itemStack) && !isEmpty(itemStack)) {
-            EntityPlayer player = (EntityPlayer) ownerEntity;
-            if (!player.isSneaking() && MovementHelper.getDidJumpLastTick(player)) {
-                float chanceToDrop = ModConfig.FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD;
-
-                if (player.isSprinting())
-                    chanceToDrop *= 2f;
-
-                if (chanceToDrop > 0 && random.nextFloat() <= chanceToDrop) {
-                    ItemStack itemToDrop = InventoryHelper.removeRandomSingleItemFromInventory(getInventory(itemStack), random);
-                    player.dropPlayerItemWithRandomChoice(itemToDrop, true);
-                }
-            }
-        }
-
-        super.onUpdate(itemStack, world, ownerEntity, par4, par5);
-    }
-
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List toolTip, boolean isAdvanced) {
@@ -274,8 +252,6 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
         if (isOpen(itemStack)) {
             toolTip.add(openCloseLineColor + StatCollector.translateToLocalFormatted("spiceoflife.tooltip.to.close.food.container"));
 
-            if (ModConfig.FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD > 0)
-                toolTip.add(EnumChatFormatting.GOLD.toString() + EnumChatFormatting.ITALIC + StatCollector.translateToLocal("spiceoflife.tooltip.can.spill.food"));
         } else
             toolTip.add(openCloseLineColor + StatCollector.translateToLocalFormatted("spiceoflife.tooltip.to.open.food.container"));
     }

@@ -55,11 +55,6 @@ public class ModConfig implements IPackable, IPacketProcessor {
     private static final String FOOD_EATEN_THRESHOLD_NAME = "new.player.food.eaten.threshold";
     private static final String FOOD_EATEN_THRESHOLD_COMMENT =
         "The number of times a new player (by World) needs to eat before this mod has any effect";
-    private static final String CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD_NAME = "clear.history.after.food.eaten.threshold.reached";
-    private static final boolean CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD_DEFAULT = false;
-    private static final String CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD_COMMENT =
-        "If true, a player's food history will be empty once they pass the " + FOOD_EATEN_THRESHOLD_NAME + "\n"
-            + "If false, any food eaten before the threshold is passed will also count after it is passed";
     private static final String USE_FOOD_GROUPS_AS_WHITELISTS_NAME = "use.food.groups.as.whitelists";
     private static final boolean USE_FOOD_GROUPS_AS_WHITELISTS_DEFAULT = false;
     private static final String USE_FOOD_GROUPS_AS_WHITELISTS_COMMENT =
@@ -146,16 +141,6 @@ public class ModConfig implements IPackable, IPacketProcessor {
     private static final boolean GIVE_FOOD_JOURNAL_ON_START_DEFAULT = false;
     private static final String GIVE_FOOD_JOURNAL_ON_START_COMMENT =
         "If true, a food journal will be given to each player as a starting item";
-    private static final String GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS_NAME = "give.food.journal.on.dimishing.returns.start";
-    private static final boolean GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS_DEFAULT = false;
-    private static final String GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS_COMMENT =
-        "If true, a food journal will be given to each player once diminishing returns start for them\n"
-            + "Not given if a player was given a food journal by " + ModConfig.GIVE_FOOD_JOURNAL_ON_START_NAME;
-    private static final String FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD_NAME = "food.containers.chance.to.drop.food";
-    private static final float FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD_DEFAULT = 0.25f;
-    private static final String FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD_COMMENT =
-        "The chance for food to drop from an open food container when the player jumps\n"
-            + "Temporarily disabled while a better implementation is written (this config option will do nothing)";
     private static final String FOOD_CONTAINERS_MAX_STACKSIZE_NAME = "food.containers.max.stacksize";
     private static final int FOOD_CONTAINERS_MAX_STACKSIZE_DEFAULT = 2;
     private static final String FOOD_CONTAINERS_MAX_STACKSIZE_COMMENT =
@@ -186,7 +171,6 @@ public class ModConfig implements IPackable, IPacketProcessor {
     private static final int FOOD_EATEN_THRESHOLD_DEFAULT = ModConfig.FOOD_HISTORY_LENGTH / 2;
     public static boolean FOOD_HISTORY_PERSISTS_THROUGH_DEATH = ModConfig.FOOD_HISTORY_PERSISTS_THROUGH_DEATH_DEFAULT;
     public static int FOOD_EATEN_THRESHOLD = ModConfig.FOOD_EATEN_THRESHOLD_DEFAULT;
-    public static boolean CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD = ModConfig.CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD_DEFAULT;
     public static boolean USE_FOOD_GROUPS_AS_WHITELISTS = ModConfig.USE_FOOD_GROUPS_AS_WHITELISTS_DEFAULT;
     public static RoundingMode FOOD_HUNGER_ROUNDING_MODE = null;
     public static String FOOD_HUNGER_ROUNDING_MODE_STRING = ModConfig.FOOD_HUNGER_ROUNDING_MODE_DEFAULT;
@@ -201,8 +185,6 @@ public class ModConfig implements IPackable, IPacketProcessor {
     public static boolean PROGRESS_TIME_WHILE_LOGGED_OFF = ModConfig.PROGRESS_TIME_WHILE_LOGGED_OFF_DEFAULT;
     public static String FOOD_MODIFIER_FORMULA = ModConfig.FOOD_MODIFIER_FORMULA_STRING_DEFAULT;
     public static boolean GIVE_FOOD_JOURNAL_ON_START = ModConfig.GIVE_FOOD_JOURNAL_ON_START_DEFAULT;
-    public static boolean GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS = ModConfig.GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS_DEFAULT;
-    public static float FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD = ModConfig.FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD_DEFAULT;
 
     /*
      * ITEMS
@@ -245,7 +227,6 @@ public class ModConfig implements IPackable, IPacketProcessor {
         FOOD_HISTORY_LENGTH = config.get(CATEGORY_SERVER, FOOD_HISTORY_LENGTH_NAME, FOOD_HISTORY_LENGTH_DEFAULT, FOOD_HISTORY_LENGTH_COMMENT).getInt(FOOD_HISTORY_LENGTH_DEFAULT);
         FOOD_HISTORY_PERSISTS_THROUGH_DEATH = config.get(CATEGORY_SERVER, FOOD_HISTORY_PERSISTS_THROUGH_DEATH_NAME, FOOD_HISTORY_PERSISTS_THROUGH_DEATH_DEFAULT, FOOD_HISTORY_PERSISTS_THROUGH_DEATH_COMMENT).getBoolean(FOOD_HISTORY_PERSISTS_THROUGH_DEATH_DEFAULT);
         FOOD_EATEN_THRESHOLD = config.get(CATEGORY_SERVER, FOOD_EATEN_THRESHOLD_NAME, FOOD_EATEN_THRESHOLD_DEFAULT, FOOD_EATEN_THRESHOLD_COMMENT).getInt(FOOD_EATEN_THRESHOLD_DEFAULT);
-        CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD = config.get(CATEGORY_SERVER, CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD_NAME, CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD_DEFAULT, CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD_COMMENT).getBoolean(CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD_DEFAULT);
         USE_FOOD_GROUPS_AS_WHITELISTS = config.get(CATEGORY_SERVER, USE_FOOD_GROUPS_AS_WHITELISTS_NAME, USE_FOOD_GROUPS_AS_WHITELISTS_DEFAULT, USE_FOOD_GROUPS_AS_WHITELISTS_COMMENT).getBoolean(USE_FOOD_GROUPS_AS_WHITELISTS_DEFAULT);
         AFFECT_FOOD_HUNGER_VALUES = config.get(CATEGORY_SERVER, AFFECT_FOOD_HUNGER_VALUES_NAME, AFFECT_FOOD_HUNGER_VALUES_DEFAULT, AFFECT_FOOD_HUNGER_VALUES_COMMENT).getBoolean(AFFECT_FOOD_HUNGER_VALUES_DEFAULT);
         AFFECT_NEGATIVE_FOOD_HUNGER_VALUES = config.get(CATEGORY_SERVER, AFFECT_NEGATIVE_FOOD_HUNGER_VALUES_NAME, AFFECT_NEGATIVE_FOOD_HUNGER_VALUES_DEFAULT, AFFECT_NEGATIVE_FOOD_HUNGER_VALUES_COMMENT).getBoolean(AFFECT_NEGATIVE_FOOD_HUNGER_VALUES_DEFAULT);
@@ -257,8 +238,6 @@ public class ModConfig implements IPackable, IPacketProcessor {
         USE_TIME_QUEUE = config.get(CATEGORY_SERVER, USE_TIME_QUEUE_NAME, USE_TIME_QUEUE_DEFAULT, USE_TIME_QUEUE_COMMENT).getBoolean(USE_TIME_QUEUE_DEFAULT);
         PROGRESS_TIME_WHILE_LOGGED_OFF = config.get(CATEGORY_SERVER, PROGRESS_TIME_WHILE_LOGGED_OFF_NAME, PROGRESS_TIME_WHILE_LOGGED_OFF_DEFAULT, PROGRESS_TIME_WHILE_LOGGED_OFF_COMMENT).getBoolean(PROGRESS_TIME_WHILE_LOGGED_OFF_DEFAULT);
         GIVE_FOOD_JOURNAL_ON_START = config.get(CATEGORY_SERVER, GIVE_FOOD_JOURNAL_ON_START_NAME, GIVE_FOOD_JOURNAL_ON_START_DEFAULT, GIVE_FOOD_JOURNAL_ON_START_COMMENT).getBoolean(GIVE_FOOD_JOURNAL_ON_START_DEFAULT);
-        GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS = config.get(CATEGORY_SERVER, GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS_NAME, GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS_DEFAULT, GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS_COMMENT).getBoolean(GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS_DEFAULT);
-        FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD = (float) config.get(CATEGORY_SERVER, FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD_NAME, FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD_DEFAULT, FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD_COMMENT).getDouble(FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD_DEFAULT);
         FOOD_CONTAINERS_MAX_STACKSIZE = config.get(CATEGORY_SERVER, FOOD_CONTAINERS_MAX_STACKSIZE_NAME, FOOD_CONTAINERS_MAX_STACKSIZE_DEFAULT, FOOD_CONTAINERS_MAX_STACKSIZE_COMMENT).getInt(FOOD_CONTAINERS_MAX_STACKSIZE_DEFAULT);
 
         FOOD_HUNGER_ROUNDING_MODE_STRING = config.get(CATEGORY_SERVER, FOOD_HUNGER_ROUNDING_MODE_NAME, FOOD_HUNGER_ROUNDING_MODE_DEFAULT, FOOD_HUNGER_ROUNDING_MODE_COMMENT).getString();
@@ -280,9 +259,6 @@ public class ModConfig implements IPackable, IPacketProcessor {
         // remove obsolete config options
         config.getCategory(CATEGORY_SERVER).remove("use.food.groups");
         config.getCategory(CATEGORY_FOODGROUPS).clear();
-
-        // temporarily disable chance to drop food, needs a better implementation
-        FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD = 0;
 
         save();
     }
@@ -332,7 +308,6 @@ public class ModConfig implements IPackable, IPacketProcessor {
             data.writeShort(FOOD_HISTORY_LENGTH);
             data.writeBoolean(FOOD_HISTORY_PERSISTS_THROUGH_DEATH);
             data.writeInt(FOOD_EATEN_THRESHOLD);
-            data.writeBoolean(CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD);
             data.writeBoolean(USE_FOOD_GROUPS_AS_WHITELISTS);
             data.writeBoolean(AFFECT_FOOD_SATURATION_MODIFIERS);
             data.writeBoolean(AFFECT_NEGATIVE_FOOD_SATURATION_MODIFIERS);
@@ -344,7 +319,6 @@ public class ModConfig implements IPackable, IPacketProcessor {
             data.writeUTF(FOOD_HUNGER_ROUNDING_MODE_STRING);
         }
         data.writeInt(FOOD_CONTAINERS_MAX_STACKSIZE);
-        data.writeFloat(FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD);
     }
 
     @Override
@@ -355,7 +329,6 @@ public class ModConfig implements IPackable, IPacketProcessor {
             FOOD_HISTORY_LENGTH = data.readShort();
             FOOD_HISTORY_PERSISTS_THROUGH_DEATH = data.readBoolean();
             FOOD_EATEN_THRESHOLD = data.readInt();
-            CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD = data.readBoolean();
             USE_FOOD_GROUPS_AS_WHITELISTS = data.readBoolean();
             AFFECT_FOOD_SATURATION_MODIFIERS = data.readBoolean();
             AFFECT_NEGATIVE_FOOD_SATURATION_MODIFIERS = data.readBoolean();
@@ -367,7 +340,6 @@ public class ModConfig implements IPackable, IPacketProcessor {
             FOOD_HUNGER_ROUNDING_MODE_STRING = data.readUTF();
         }
         FOOD_CONTAINERS_MAX_STACKSIZE = data.readInt();
-        FOOD_CONTAINERS_CHANCE_TO_DROP_FOOD = data.readFloat();
     }
 
     @Override

@@ -5,7 +5,6 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
@@ -20,7 +19,6 @@ import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupConfig;
 import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
 import squeek.spiceoflife.gui.TooltipHandler;
 import squeek.spiceoflife.helpers.GuiHelper;
-import squeek.spiceoflife.helpers.MovementHelper;
 import squeek.spiceoflife.network.PacketHandler;
 
 import java.io.File;
@@ -44,7 +42,6 @@ public class ModSpiceOfLife {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         GuiHelper.init();
-        MovementHelper.init();
         FoodTracker foodTracker = new FoodTracker();
         FMLCommonHandler.instance().bus().register(foodTracker);
         MinecraftForge.EVENT_BUS.register(foodTracker);
@@ -61,7 +58,6 @@ public class ModSpiceOfLife {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         FoodGroupConfig.load();
-        FMLInterModComms.sendRuntimeMessage(ModInfo.MODID, "VersionChecker", "addVersionCheck", "http://www.ryanliptak.com/minecraft/versionchecker/squeek502/SpiceOfLife");
     }
 
     @EventHandler

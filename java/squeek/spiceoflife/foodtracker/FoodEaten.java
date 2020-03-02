@@ -29,6 +29,18 @@ public class FoodEaten implements IPackable, ISaveable {
         this.worldTimeEaten = eater.getEntityWorld().getTotalWorldTime();
     }
 
+    @Override
+    public int hashCode() {
+        return itemStack.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof FoodEaten)) return false;
+
+        return itemStack.equals(((FoodEaten) obj).itemStack);
+    }
+
     public static FoodEaten loadFromNBTData(NBTTagCompound nbtFood) {
         FoodEaten foodEaten = new FoodEaten();
         foodEaten.readFromNBTData(nbtFood);

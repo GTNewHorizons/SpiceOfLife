@@ -20,8 +20,8 @@ import squeek.spiceoflife.helpers.FoodHelper;
 import squeek.spiceoflife.helpers.MiscHelper;
 import squeek.spiceoflife.interfaces.IPackable;
 import squeek.spiceoflife.interfaces.ISaveable;
-import squeek.spiceoflife.items.ItemFoodJournal;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +33,11 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     public int totalFoodsEatenAllTime = 0;
     public boolean wasGivenFoodJournal = false;
     public long ticksActive = 0;
-    protected FoodQueue history = FoodHistory.getNewFoodQueue();
+    protected FoodQueue recentHistory = FoodHistory.getNewFoodQueue();
+    protected Set<FoodEaten> fullHistory = new HashSet<>();
+
+    @Nullable
+    private ProgressInfo cachedProgressInfo;
 
     public FoodHistory() {
         this(null);
@@ -52,10 +56,32 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         return foodHistory;
     }
 
+
+    public ProgressInfo getProgressInfo() {
+        if (cachedProgressInfo == null) {
+            cachedProgressInfo = new ProgressInfo(this);
+        }
+        return cachedProgressInfo;
+    }
+
     public void onHistoryTypeChanged() {
-        FoodQueue oldHistory = history;
-        history = FoodHistory.getNewFoodQueue();
-        history.addAll(oldHistory);
+        FoodQueue oldHistory = recentHistory;
+        recentHistory = FoodHistory.getNewFoodQueue();
+        recentHistory.addAll(oldHistory);
+    }
+
+    public int getFoodCountForFoodGroup(ItemStack food, FoodGroup foodGroup) {
+        int count = 0;
+
+        for (FoodEaten foodEaten : recentHistory) {
+            if (foodEaten.itemStack == null)
+                continue;
+
+            if (food.isItemEqual(foodEaten.itemStack) || foodEaten.getFoodGroups().contains(foodGroup)) {
+                count += 1;
+            }
+        }
+        return count;
     }
 
     public static FoodQueue getNewFoodQueue() {
@@ -75,23 +101,9 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         return getFoodCountForFoodGroup(food, null);
     }
 
-    public int getFoodCountForFoodGroup(ItemStack food, FoodGroup foodGroup) {
-        int count = 0;
-
-        for (FoodEaten foodEaten : history) {
-            if (foodEaten.itemStack == null)
-                continue;
-
-            if (food.isItemEqual(foodEaten.itemStack) || foodEaten.getFoodGroups().contains(foodGroup)) {
-                count += 1;
-            }
-        }
-        return count;
-    }
-
     public boolean containsFoodOrItsFoodGroups(ItemStack food) {
         Set<FoodGroup> foodGroups = FoodGroupRegistry.getFoodGroupsForFood(food);
-        for (FoodEaten foodEaten : history) {
+        for (FoodEaten foodEaten : recentHistory) {
             if (foodEaten.itemStack == null)
                 continue;
 
@@ -103,13 +115,6 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     }
 
     /**
-     * See {@link #getTotalFoodValuesForFoodGroup}
-     */
-    public FoodValues getTotalFoodValuesIgnoringFoodGroups(ItemStack food) {
-        return getTotalFoodValuesForFoodGroup(food, null);
-    }
-
-    /**
      * Note: the returned FoodValues is not a standard FoodValues.
      * The saturationModifier is set to the total, not to a modifier
      */
@@ -117,7 +122,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         int totalHunger = 0;
         float totalSaturation = 0f;
 
-        for (FoodEaten foodEaten : history) {
+        for (FoodEaten foodEaten : recentHistory) {
             if (foodEaten.itemStack == null)
                 continue;
 
@@ -133,17 +138,24 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
             return new FoodValues(totalHunger, totalSaturation);
     }
 
+    /**
+     * See {@link #getTotalFoodValuesForFoodGroup}
+     */
+    public FoodValues getTotalFoodValuesIgnoringFoodGroups(ItemStack food) {
+        return getTotalFoodValuesForFoodGroup(food, null);
+    }
+
     public int getHistoryLengthInRelevantUnits() {
-        return ModConfig.USE_HUNGER_QUEUE ? ((FixedHungerQueue) history).hunger() : history.size();
+        return ModConfig.USE_HUNGER_QUEUE ? ((FixedHungerQueue) recentHistory).hunger() : recentHistory.size();
     }
 
     public FoodEaten getLastEatenFood() {
-        return history.peekLast();
+        return recentHistory.peekLast();
     }
 
     public Set<FoodGroup> getDistinctFoodGroups() {
         Set<FoodGroup> distinctFoodGroups = new HashSet<>();
-        for (FoodEaten foodEaten : history) {
+        for (FoodEaten foodEaten : recentHistory) {
             if (foodEaten.itemStack == null)
                 continue;
 
@@ -153,35 +165,46 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     }
 
     public void reset() {
-        history.clear();
+        recentHistory.clear();
+        fullHistory.clear();
+        invalidateProgressInfo();
         totalFoodsEatenAllTime = 0;
         wasGivenFoodJournal = false;
         ticksActive = 0;
     }
 
+    public void invalidateProgressInfo() {
+        cachedProgressInfo = null;
+    }
+
     public void validate() {
         List<FoodEaten> invalidFoods = new ArrayList<>();
-        for (FoodEaten foodEaten : history) {
+        // TODO(SoL): Check full history?
+        for (FoodEaten foodEaten : recentHistory) {
             if (!FoodHelper.isValidFood(foodEaten.itemStack)) {
                 invalidFoods.add(foodEaten);
             }
         }
-        history.removeAll(invalidFoods);
+        recentHistory.removeAll(invalidFoods);
         totalFoodsEatenAllTime -= invalidFoods.size();
     }
 
     @Override
     public void pack(IByteIO data) {
         data.writeLong(ticksActive);
-        data.writeShort(getHistory().size());
+        data.writeShort(getRecentHistory().size());
 
-        for (FoodEaten foodEaten : getHistory()) {
+        for (FoodEaten foodEaten : getRecentHistory()) {
             foodEaten.pack(data);
         }
     }
 
-    public FoodQueue getHistory() {
-        return history;
+    public FoodQueue getRecentHistory() {
+        return recentHistory;
+    }
+
+    public Set<FoodEaten> getFullHistory() {
+        return fullHistory;
     }
 
     @Override
@@ -196,31 +219,44 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         }
     }
 
-    public boolean addFood(FoodEaten foodEaten) {
-        return addFood(foodEaten, true);
+    public void addFood(FoodEaten foodEaten) {
+        addFood(foodEaten, true);
     }
 
-    public boolean addFood(FoodEaten foodEaten, boolean countsTowardsAllTime) {
+    public void addFood(FoodEaten foodEaten, boolean countsTowardsAllTime) {
+        final boolean hasTriedNewFood = fullHistory.add(foodEaten);
+
+        if (hasTriedNewFood) {
+            // Sync Food
+
+            boolean newMilestoneReached = MaxHealthHandler.updateFoodHPModifier(player);
+            if (newMilestoneReached) {
+                spawnParticles(this.player, "heart", 12);
+            } else {
+                spawnParticles(this.player, "end_rod", 12);
+            }
+        }
+
         if (countsTowardsAllTime)
             totalFoodsEatenAllTime++;
 
         boolean isAtThreshold = countsTowardsAllTime && totalFoodsEatenAllTime == ModConfig.FOOD_EATEN_THRESHOLD;
-        if (player != null && !player.worldObj.isRemote) {
-            if (ModConfig.GIVE_FOOD_JOURNAL_ON_DIMINISHING_RETURNS && !wasGivenFoodJournal && isAtThreshold) {
-                ItemFoodJournal.giveToPlayer(player);
-                wasGivenFoodJournal = true;
-            }
-            if (ModConfig.CLEAR_HISTORY_ON_FOOD_EATEN_THRESHOLD && isAtThreshold) {
-                history.clear();
-                return true;
-            }
-        }
-        return history.add(foodEaten);
+        recentHistory.add(foodEaten);
     }
 
     @Override
     public void saveNBTData(NBTTagCompound compound) {
         writeToNBTData(compound);
+    }
+
+    private static void spawnParticles(EntityPlayer player, String type, int count) {
+        final World world = player.worldObj;
+        // this overload sends a packet to the client
+        world.spawnParticle(
+            type,
+            player.posX, player.posY + player.getEyeHeight(), player.posZ,
+            count,
+            0.5F, 0.5F);
     }
 
     @Override
@@ -230,11 +266,11 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         NBTTagCompound nonPersistentCompound = new NBTTagCompound();
         NBTTagCompound persistentCompound = new NBTTagCompound();
 
-        if (history.size() > 0) {
+        if (recentHistory.size() > 0) {
             if (data != null || ModConfig.FOOD_HISTORY_PERSISTS_THROUGH_DEATH) {
                 NBTTagCompound nbtHistory = new NBTTagCompound();
 
-                history.writeToNBTData(nbtHistory);
+                recentHistory.writeToNBTData(nbtHistory);
 
                 if (ModConfig.FOOD_HISTORY_PERSISTS_THROUGH_DEATH)
                     persistentCompound.setTag("History", nbtHistory);
@@ -263,6 +299,15 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     }
 
     @Override
+    public void loadNBTData(NBTTagCompound compound) {
+        readFromNBTData(compound);
+    }
+
+    @Override
+    public void init(Entity entity, World world) {
+    }
+
+    @Override
     // null compound parameter means load persistent data only
     public void readFromNBTData(NBTTagCompound data) {
         NBTTagCompound rootPersistentCompound = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
@@ -273,20 +318,11 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
 
             NBTTagCompound nbtHistory = ModConfig.FOOD_HISTORY_PERSISTS_THROUGH_DEATH ? persistentCompound.getCompoundTag("History") : nonPersistentCompound.getCompoundTag("History");
 
-            history.readFromNBTData(nbtHistory);
+            recentHistory.readFromNBTData(nbtHistory);
 
             totalFoodsEatenAllTime = persistentCompound.getInteger("Total");
             wasGivenFoodJournal = persistentCompound.getBoolean("FoodJournal");
             ticksActive = persistentCompound.getLong("Ticks");
         }
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound compound) {
-        readFromNBTData(compound);
-    }
-
-    @Override
-    public void init(Entity entity, World world) {
     }
 }
