@@ -18,6 +18,8 @@ buildscript {
 apply plugin: 'forge'
 apply plugin: 'idea'
 
+version="1.4.0-carrot"
+
 minecraft {
     version = "1.7.10-10.13.4.1614-1.7.10"
 }
@@ -46,8 +48,6 @@ repositories {
         url "http://www.ryanliptak.com/maven/"
     }
 }
-
-version="1.4.0-carrot"
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar,*.zip')
