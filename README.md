@@ -1,9 +1,14 @@
-The Spice Of Life
-=================
+The Spice Of Life - Carrot Edition
+==================================
 
-Minecraft mod that encourages dietary variety through dimishing returns. Uses the [AppleCore API](https://github.com/squeek502/AppleCore).
 
-[Minecraft Forum Thread](http://www.minecraftforum.net/topic/2688857-)
+Minecraft mod that encourages dietary variety through dimishing returns and rewards. Uses the [AppleCore API](https://github.com/squeek502/AppleCore).
+
+Forked and maintained by the GTNH team.  
+
+Inspiration from https://github.com/Cazsius/Spice-of-Life-Carrot-Edition.
+
+[Original Minecraft Forum Thread](http://www.minecraftforum.net/topic/2688857-)
 
 ###Building
 

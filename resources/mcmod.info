@@ -1,14 +1,15 @@
 [
   {
     "modid": "SpiceOfLife",
-    "name": "The Spice of Life",
-    "description": "Encourages dietary variety through diminishing returns.",
+    "name": "The Spice of Life - Carrot Edition",
+    "description": "Encourages dietary variety through diminishing returns and rewards.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "http://www.minecraftforum.net/topic/2688857-",
+    "url": "https://github.com/GTNewHorizons/SpiceOfLife",
     "updateUrl": "",
     "authorList": [
-      "squeek"
+      "squeek",
+      "mitchej123"
     ],
     "credits": "",
     "logoFile": "",
