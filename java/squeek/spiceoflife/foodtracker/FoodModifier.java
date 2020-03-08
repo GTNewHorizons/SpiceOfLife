@@ -106,7 +106,7 @@ public class FoodModifier {
     public static float getFoodGroupModifier(FoodHistory foodHistory, ItemStack food, FoodGroup foodGroup) {
         FoodModifier effectiveFoodModifier = foodGroup != null ? foodGroup.getFoodModifier() : FoodModifier.GLOBAL;
         int count = foodHistory.getFoodCountForFoodGroup(food, foodGroup);
-        int historySize = foodHistory.getHistoryLengthInRelevantUnits();
+        int historySize = foodHistory.getHistoryLength();
         FoodValues totalFoodValues = foodHistory.getTotalFoodValuesForFoodGroup(food, foodGroup);
         FoodValues foodValues = FoodValues.get(food);
 

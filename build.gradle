@@ -47,6 +47,8 @@ repositories {
     }
 }
 
+version="1.4.0-carrot"
+
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar,*.zip')
     compile "applecore:AppleCore:1.7.10-1.3.2:deobf"

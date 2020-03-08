@@ -14,14 +14,10 @@ import org.lwjgl.opengl.GL11;
 import squeek.spiceoflife.ModConfig;
 import squeek.spiceoflife.foodtracker.FoodEaten;
 import squeek.spiceoflife.foodtracker.FoodHistory;
-import squeek.spiceoflife.foodtracker.foodqueue.FixedHungerQueue;
 import squeek.spiceoflife.foodtracker.foodqueue.FixedSizeQueue;
-import squeek.spiceoflife.foodtracker.foodqueue.FixedTimeQueue;
 import squeek.spiceoflife.gui.widget.WidgetButtonNextPage;
 import squeek.spiceoflife.gui.widget.WidgetButtonSortDirection;
 import squeek.spiceoflife.gui.widget.WidgetFoodEaten;
-import squeek.spiceoflife.helpers.MiscHelper;
-import squeek.spiceoflife.helpers.StringHelper;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -137,7 +133,6 @@ public class GuiScreenFoodJournal extends GuiContainer {
                         List<String> toolTipStrings = new ArrayList<>();
                         int foodIndex = sortedDescending ? Math.max(1, totalNum - foodEatenIndex) : foodEatenIndex + 1;
                         toolTipStrings.add(StatCollector.translateToLocalFormatted("spiceoflife.gui.food.num", foodIndex));
-                        toolTipStrings.add(EnumChatFormatting.GRAY + getTimeEatenString(foodEatenWidget.foodEaten));
                         @SuppressWarnings("unchecked")
                         List<String> splitExpiresIn = fontRendererObj.listFormattedStringToWidth(EnumChatFormatting.DARK_AQUA.toString() + EnumChatFormatting.ITALIC + getExpiresInString(foodEatenWidget.foodEaten), 150);
                         toolTipStrings.addAll(splitExpiresIn);
@@ -178,46 +173,15 @@ public class GuiScreenFoodJournal extends GuiContainer {
         return mouseX >= x && mouseY >= y && mouseX < x + w && mouseY < y + h;
     }
 
-    public static String getTimeEatenString(FoodEaten foodEaten) {
-        Minecraft mc = Minecraft.getMinecraft();
-        long elapsedTime = foodEaten.elapsedTime(mc.theWorld.getTotalWorldTime(), FoodHistory.get(mc.thePlayer).ticksActive);
-        double daysElapsed = elapsedTime / (double) MiscHelper.TICKS_PER_DAY;
-        String numDays = dfOne.format(daysElapsed);
-        String singularOrPlural = numDays.equals("1") ? "spiceoflife.gui.x.day" : "spiceoflife.gui.x.days";
-        String daysAgo = StatCollector.translateToLocalFormatted(singularOrPlural, numDays);
-        return StatCollector.translateToLocalFormatted("spiceoflife.gui.time.elapsed.since.food.eaten", daysAgo);
-    }
-
     public static String getExpiresInString(FoodEaten foodEaten) {
         Minecraft mc = Minecraft.getMinecraft();
         FoodHistory foodHistory = FoodHistory.get(mc.thePlayer);
 
-        if (ModConfig.USE_HUNGER_QUEUE) {
-            FixedHungerQueue queue = (FixedHungerQueue) foodHistory.getRecentHistory();
-            FixedHungerQueue slice = queue.sliceUntil(foodEaten);
-            int hungerOverflow = queue.totalHunger() - queue.hunger();
-            int hungerNeededIfThisWereFirst = foodEaten.foodValues.hunger - hungerOverflow;
-            int spaceInQueue = queue.getMaxSize() - queue.hunger();
-            int sliceHunger = slice.totalHunger();
-            int hungerUntilExpire = Math.max(1, spaceInQueue + hungerNeededIfThisWereFirst + sliceHunger);
-            return StatCollector.translateToLocalFormatted("spiceoflife.gui.expires.in.hunger", StringHelper.hungerHistoryLength(hungerUntilExpire));
-        } else if (ModConfig.USE_TIME_QUEUE) {
-            FixedTimeQueue queue = (FixedTimeQueue) foodHistory.getRecentHistory();
-            long elapsedTime = foodEaten.elapsedTime(mc.theWorld.getTotalWorldTime(), foodHistory.ticksActive);
-            long maxTime = queue.getMaxTime();
-            long timeUntilExpire = maxTime - elapsedTime;
-            double daysUntilExpire = timeUntilExpire / (double) MiscHelper.TICKS_PER_DAY;
-            String numDays = dfOne.format(daysUntilExpire);
-            String singularOrPlural = numDays.equals("1") ? "spiceoflife.gui.x.day" : "spiceoflife.gui.x.days";
-            String value = StatCollector.translateToLocalFormatted(singularOrPlural, numDays);
-            return StatCollector.translateToLocalFormatted("spiceoflife.gui.expires.in.time", value);
-        } else {
-            FixedSizeQueue queue = (FixedSizeQueue) foodHistory.getRecentHistory();
-            int spaceInQueue = queue.getMaxSize() - queue.size();
-            int foodsUntilExpire = spaceInQueue + queue.indexOf(foodEaten) + 1;
-            String singularOrPlural = foodsUntilExpire == 1 ? StatCollector.translateToLocal("spiceoflife.tooltip.times.singular") : StatCollector.translateToLocal("spiceoflife.tooltip.times.plural");
-            return StatCollector.translateToLocalFormatted("spiceoflife.gui.expires.in.food", dfOne.format(foodsUntilExpire), singularOrPlural);
-        }
+        FixedSizeQueue queue = (FixedSizeQueue) foodHistory.getRecentHistory();
+        int spaceInQueue = queue.getMaxSize() - queue.size();
+        int foodsUntilExpire = spaceInQueue + queue.indexOf(foodEaten) + 1;
+        String singularOrPlural = foodsUntilExpire == 1 ? StatCollector.translateToLocal("spiceoflife.tooltip.times.singular") : StatCollector.translateToLocal("spiceoflife.tooltip.times.plural");
+        return StatCollector.translateToLocalFormatted("spiceoflife.gui.expires.in.food", dfOne.format(foodsUntilExpire), singularOrPlural);
     }
 
     @Override
