@@ -52,6 +52,7 @@ dependencies {
     compile "applecore:AppleCore:1.7.10-1.3.2:deobf"
     compile 'com.udojava:EvalEx:2.1'
     testCompile "junit:junit:4.11"
+    implementation 'org.jetbrains:annotations:15.0'
 }
 
 // variable replacement in source files

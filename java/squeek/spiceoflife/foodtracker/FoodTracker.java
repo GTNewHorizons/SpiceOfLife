@@ -106,6 +106,7 @@ public class FoodTracker {
     public static void syncFoodHistory(FoodHistory foodHistory) {
         PacketDispatcher.get().sendTo(new PacketFoodEatenAllTime(foodHistory.totalFoodsEatenAllTime), (EntityPlayerMP) foodHistory.player);
         PacketDispatcher.get().sendTo(new PacketFoodHistory(foodHistory, true), (EntityPlayerMP) foodHistory.player);
+        MaxHealthHandler.updateFoodHPModifier(foodHistory.player);
     }
 
     /**

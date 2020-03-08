@@ -25,20 +25,20 @@ public class FoodEaten implements IPackable, ISaveable {
 
     public FoodEaten(ItemStack food, EntityPlayer eater) {
         this.itemStack = food;
-        this.playerTimeEaten = FoodHistory.get(eater).ticksActive;
-        this.worldTimeEaten = eater.getEntityWorld().getTotalWorldTime();
+        this.playerTimeEaten = eater == null ? 0 : FoodHistory.get(eater).ticksActive;
+        this.worldTimeEaten = eater == null ? 0 : eater.getEntityWorld().getTotalWorldTime();
     }
 
     @Override
     public int hashCode() {
-        return itemStack.hashCode();
+        return itemStack.getItem().hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof FoodEaten)) return false;
-
-        return itemStack.equals(((FoodEaten) obj).itemStack);
+        final FoodEaten other = ((FoodEaten) obj);
+        return itemStack.getItem().equals(other.itemStack.getItem());
     }
 
     public static FoodEaten loadFromNBTData(NBTTagCompound nbtFood) {

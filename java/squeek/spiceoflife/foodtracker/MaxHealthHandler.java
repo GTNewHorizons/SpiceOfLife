@@ -12,21 +12,21 @@ import java.util.UUID;
 public class MaxHealthHandler {
     private static final UUID SOL_HEALTH_MODIFIER_ID = UUID.fromString("f88d6ac1-4193-4ff0-85f5-f0357fe89d17");
 
-    private MaxHealthHandler() {
-    }
-
     @SubscribeEvent
-    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         updateFoodHPModifier(event.player);
     }
 
     public static boolean updateFoodHPModifier(EntityPlayer player) {
-        if (player.worldObj.isRemote) return false;
+        if (player.worldObj.isRemote) {
+            return false;
+        }
 
         final IAttributeInstance attribute = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
         final AttributeModifier prevModifier = attribute.getModifier(SOL_HEALTH_MODIFIER_ID);
 
-        ProgressInfo progressInfo = FoodHistory.get(player).getProgressInfo();
+        final FoodHistory foodHistory = FoodHistory.get(player);
+        ProgressInfo progressInfo = foodHistory.getProgressInfo();
         final int milestonesAchieved = progressInfo.milestonesAchieved();
         final double totalHealthModifier = milestonesAchieved * 2 * ProgressInfo.HEARTS_PER_MILESTONE;
 

@@ -4,6 +4,11 @@ spiceoflife.tooltip.eaten.recently=Eaten %s out of the last %d foods
 spiceoflife.tooltip.eaten.recently.hunger=Eaten %s in the last %s hunger
 spiceoflife.tooltip.eaten.recently.time=Eaten %s in the last %s days
 spiceoflife.tooltip.not.eaten.recently=Not eaten recently
+
+spiceoflife.tooltip.not.eaten.ever=Not yet eaten! What does it taste like?
+spiceoflife.tooltip.eaten.ever=Eaten: Assisted in adding hearts 
+spiceoflife.tooltip.eaten.cheap=Eaten: No noticeable effect 
+
 spiceoflife.tooltip.food.until.enabled.1=Diminishing returns start after
 spiceoflife.tooltip.food.until.enabled.2=eating any food %d more %s
 spiceoflife.tooltip.times.singular=time
