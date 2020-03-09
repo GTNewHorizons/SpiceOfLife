@@ -1,7 +1,5 @@
 package squeek.spiceoflife.foodtracker;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -11,11 +9,6 @@ import java.util.UUID;
 
 public class MaxHealthHandler {
     private static final UUID SOL_HEALTH_MODIFIER_ID = UUID.fromString("f88d6ac1-4193-4ff0-85f5-f0357fe89d17");
-
-    @SubscribeEvent
-    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        updateFoodHPModifier(event.player);
-    }
 
     public static boolean updateFoodHPModifier(EntityPlayer player) {
         if (player.worldObj.isRemote) {

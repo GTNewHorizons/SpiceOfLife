@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 import squeek.spiceoflife.foodtracker.FoodLists;
 import squeek.spiceoflife.foodtracker.FoodModifier;
 import squeek.spiceoflife.foodtracker.FoodTracker;
-import squeek.spiceoflife.foodtracker.MaxHealthHandler;
+import squeek.spiceoflife.foodtracker.commands.CommandFoodList;
 import squeek.spiceoflife.foodtracker.commands.CommandResetHistory;
 import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupConfig;
 import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
@@ -51,8 +51,6 @@ public class ModSpiceOfLife {
 
         if (event.getSide() == Side.CLIENT) {
             MinecraftForge.EVENT_BUS.register(new TooltipHandler());
-        } else {
-            FMLCommonHandler.instance().bus().register(new MaxHealthHandler());
         }
 
         // need to make sure that the packet types get registered before packets are received
@@ -70,5 +68,6 @@ public class ModSpiceOfLife {
     public void serverStarting(FMLServerStartingEvent event) {
         FoodGroupRegistry.setInStone();
         event.registerServerCommand(new CommandResetHistory());
+        event.registerServerCommand(new CommandFoodList());
     }
 }

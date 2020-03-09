@@ -56,7 +56,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     }
 
     public boolean hasEverEaten(ItemStack food) {
-        return fullHistory.contains(new FoodEaten(food, null));
+        return fullHistory.contains(new FoodEaten(food));
     }
 
 

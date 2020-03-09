@@ -1,6 +1,5 @@
 package squeek.spiceoflife.foodtracker;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import squeek.applecore.api.food.FoodValues;
@@ -20,8 +19,13 @@ public class FoodEaten implements IPackable, ISaveable {
     public FoodEaten() {
     }
 
-    public FoodEaten(ItemStack food, EntityPlayer eater) {
+    public FoodEaten(ItemStack food) {
         this.itemStack = food;
+    }
+
+    @Override
+    public String toString() {
+        return itemStack.getDisplayName();
     }
 
     @Override

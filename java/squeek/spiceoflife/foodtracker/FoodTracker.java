@@ -37,7 +37,7 @@ public class FoodTracker {
         if (event.player.worldObj.isRemote)
             return;
 
-        FoodEaten foodEaten = new FoodEaten(event.food, event.player);
+        FoodEaten foodEaten = new FoodEaten(event.food);
         foodEaten.foodValues = event.foodValues;
 
         FoodTracker.addFoodEatenByPlayer(foodEaten, event.player);

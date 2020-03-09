@@ -14,10 +14,12 @@ public class WidgetFoodEaten extends Gui {
     public static final int PADDING_LEFT = 18;
     public static final int HUNGER_BAR_WIDTH = 9;
     public final FoodEaten foodEaten;
+    public final boolean eatenRecently;
     protected Minecraft mc = Minecraft.getMinecraft();
 
-    public WidgetFoodEaten(FoodEaten foodEaten) {
+    public WidgetFoodEaten(FoodEaten foodEaten, boolean eatenRecently) {
         this.foodEaten = foodEaten;
+        this.eatenRecently = eatenRecently;
     }
 
     public int width() {
