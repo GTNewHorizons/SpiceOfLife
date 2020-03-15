@@ -1,5 +1,6 @@
 package squeek.spiceoflife.foodtracker;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import squeek.applecore.api.food.FoodValues;
@@ -37,7 +38,14 @@ public class FoodEaten implements IPackable, ISaveable {
     public boolean equals(Object obj) {
         if (!(obj instanceof FoodEaten)) return false;
         final FoodEaten other = ((FoodEaten) obj);
-        return itemStack.getItem().equals(other.itemStack.getItem());
+        final Item item = itemStack.getItem();
+        final Item otherItem = other.itemStack.getItem();
+        return (
+            Item.itemRegistry.getNameForObject(item).equals(Item.itemRegistry.getNameForObject(otherItem)) &&
+                item.equals(otherItem) &&
+                this.itemStack.getItemDamage() == other.itemStack.getItemDamage()
+        );
+
     }
 
     public static FoodEaten loadFromNBTData(NBTTagCompound nbtFood) {
