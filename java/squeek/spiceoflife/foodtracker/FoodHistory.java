@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import squeek.applecore.api.food.FoodValues;
 import squeek.spiceoflife.ModConfig;
@@ -239,8 +240,10 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
                 boolean newMilestoneReached = MaxHealthHandler.updateFoodHPModifier(player);
                 if (newMilestoneReached) {
                     spawnParticles(this.player, "heart", 12);
+                    spawnParticles(this.player, "happyVillager", 12);
+                    player.worldObj.playSoundAtEntity(player, "random.levelup", 1.0f, 1.0f);
                 } else {
-                    spawnParticles(this.player, "end_rod", 12);
+                    spawnParticles(this.player, "heart", 12);
                 }
             }
         }
@@ -264,13 +267,17 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     }
 
     private static void spawnParticles(EntityPlayer player, String type, int count) {
-        final World world = player.worldObj;
-        // this overload sends a packet to the client
-        world.spawnParticle(
+        if (player.worldObj.isRemote) return;
+        if (!(player.worldObj instanceof WorldServer)) return;
+
+        final WorldServer world = (WorldServer) player.worldObj;
+
+        // this function sends a packet to the client
+        world.func_147487_a(
             type,
-            player.posX, player.posY + player.getEyeHeight(), player.posZ,
+            (float) player.posX, (float) player.posY + 2, (float) player.posZ,
             count,
-            0.5F, 0.5F);
+            1F, 1F, 1F, 0.20000000298023224D);
     }
 
     @Override
