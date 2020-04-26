@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import squeek.applecore.api.AppleCoreAPI;
+import squeek.applecore.api.food.FoodValues;
 import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
 import squeek.spiceoflife.items.ItemFoodContainer;
 
@@ -38,5 +39,9 @@ public class FoodHelper {
 
     public static float getSaturationModifierFromIncrement(float saturationIncrement, int hunger) {
         return hunger != 0 ? saturationIncrement / (hunger * 2f) : 0f;
+    }
+
+    public static FoodValues getFoodValues(ItemStack food) {
+        return AppleCoreAPI.accessor.getFoodValues(food);
     }
 }

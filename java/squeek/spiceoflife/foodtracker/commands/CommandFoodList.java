@@ -69,7 +69,7 @@ public class CommandFoodList extends CommandBase {
 
             if (args[0].equals("size")) {
                 final ProgressInfo progressInfo = foodHistory.getProgressInfo();
-                final int foodsEaten = progressInfo.foodsEaten;
+                final int foodsEaten = progressInfo.foodsHaunchesEaten;
                 final int milestone = progressInfo.milestonesAchieved();
                 final int foodsUntilNextMilestone = progressInfo.foodsUntilNextMilestone();
 

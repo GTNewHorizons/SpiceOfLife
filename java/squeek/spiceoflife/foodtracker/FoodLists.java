@@ -2,6 +2,7 @@ package squeek.spiceoflife.foodtracker;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import squeek.applecore.api.food.FoodValues;
 import squeek.spiceoflife.ModSpiceOfLife;
 import squeek.spiceoflife.helpers.FoodHelper;
 
@@ -25,7 +26,8 @@ public final class FoodLists {
             .collect(Collectors.toList());
 
         allFoods.forEach((i -> {
-            ModSpiceOfLife.Log.info(i.getDisplayName());
+            FoodValues fv = FoodHelper.getFoodValues(i);
+            ModSpiceOfLife.Log.info(i.getDisplayName() + ", " + fv.hunger + ", " + fv.saturationModifier);
         }));
         ModSpiceOfLife.Log.info("Done populating food list.");
     }
