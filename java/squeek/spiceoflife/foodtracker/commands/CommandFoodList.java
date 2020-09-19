@@ -74,9 +74,9 @@ public class CommandFoodList extends CommandBase {
                 final int foodsUntilNextMilestone = progressInfo.foodsUntilNextMilestone();
 
                 commandSender.addChatMessage(new ChatComponentText("" + EnumChatFormatting.BOLD + EnumChatFormatting.DARK_AQUA + player.getDisplayName() + "'s" + EnumChatFormatting.RESET + " food stats:"));
-                commandSender.addChatMessage(new ChatComponentText("Shanks's worth eaten: " + foodsEaten));
+                commandSender.addChatMessage(new ChatComponentText("Half-Shanks worth eaten: " + foodsEaten));
                 commandSender.addChatMessage(new ChatComponentText("Bonus Hearts: " + (milestone * ProgressInfo.HEARTS_PER_MILESTONE)));
-                commandSender.addChatMessage(new ChatComponentText("Shanks until next bonus heart: " + foodsUntilNextMilestone));
+                commandSender.addChatMessage(new ChatComponentText("Half-Shanks until next bonus heart: " + foodsUntilNextMilestone));
                 return;
             } else if (args[0].equals("sync")) {
                 FoodTracker.syncFoodHistory(foodHistory);
