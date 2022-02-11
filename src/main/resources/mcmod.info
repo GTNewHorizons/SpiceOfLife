@@ -1,19 +1,14 @@
-[
-  {
+[{
     "modid": "${modId}",
     "name": "${modName}",
-    "description": "Encourages dietary variety through diminishing returns and rewards.",
+    "description": "Encourages dietary variety through rewards and diminishing returns.",
     "version": "${modVersion}",
     "mcversion": "${minecraftVersion}",
     "url": "https://github.com/GTNewHorizons/SpiceOfLife",
     "updateUrl": "",
-    "authorList": [
-      "squeek",
-      "mitchej123"
-    ],
+    "authorList": [ "squeek", "mitchej123" ],
     "credits": "",
     "logoFile": "",
     "screenshots": [],
     "dependencies": []
-  }
-]
+}]

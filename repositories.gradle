@@ -2,6 +2,11 @@
 
 repositories {
     maven {
+        name 'GTNH Maven'
+        url 'http://jenkins.usrv.eu:8081/nexus/content/groups/public/'
+        allowInsecureProtocol
+    }
+    maven {
         name = "sponge"
         url = "https://repo.spongepowered.org/repository/maven-public"
     }
