@@ -8,6 +8,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import squeek.spiceoflife.compat.IByteIO;
 import squeek.spiceoflife.compat.PacketDispatcher;
 import squeek.spiceoflife.foodtracker.FoodHistory;
@@ -18,9 +21,6 @@ import squeek.spiceoflife.interfaces.IPackable;
 import squeek.spiceoflife.interfaces.IPacketProcessor;
 import squeek.spiceoflife.network.PacketBase;
 import squeek.spiceoflife.network.PacketConfigSync;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ModConfig implements IPackable, IPacketProcessor {
 

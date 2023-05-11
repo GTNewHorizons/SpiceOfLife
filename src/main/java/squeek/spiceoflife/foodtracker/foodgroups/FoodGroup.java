@@ -12,13 +12,13 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.google.gson.annotations.SerializedName;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 import squeek.spiceoflife.compat.IByteIO;
 import squeek.spiceoflife.foodtracker.FoodModifier;
 import squeek.spiceoflife.helpers.OreDictionaryHelper;
 import squeek.spiceoflife.interfaces.IPackable;
-
-import com.google.gson.annotations.SerializedName;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class FoodGroup implements IPackable {
 

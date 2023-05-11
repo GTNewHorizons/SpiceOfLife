@@ -7,16 +7,6 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import squeek.spiceoflife.foodtracker.FoodLists;
-import squeek.spiceoflife.foodtracker.FoodModifier;
-import squeek.spiceoflife.foodtracker.FoodTracker;
-import squeek.spiceoflife.foodtracker.commands.CommandFoodList;
-import squeek.spiceoflife.foodtracker.commands.CommandResetHistory;
-import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupConfig;
-import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
-import squeek.spiceoflife.gui.TooltipHandler;
-import squeek.spiceoflife.helpers.GuiHelper;
-import squeek.spiceoflife.network.PacketHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -27,6 +17,16 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.relauncher.Side;
+import squeek.spiceoflife.foodtracker.FoodLists;
+import squeek.spiceoflife.foodtracker.FoodModifier;
+import squeek.spiceoflife.foodtracker.FoodTracker;
+import squeek.spiceoflife.foodtracker.commands.CommandFoodList;
+import squeek.spiceoflife.foodtracker.commands.CommandResetHistory;
+import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupConfig;
+import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
+import squeek.spiceoflife.gui.TooltipHandler;
+import squeek.spiceoflife.helpers.GuiHelper;
+import squeek.spiceoflife.network.PacketHandler;
 
 @Mod(modid = ModInfo.MODID, version = ModInfo.VERSION, dependencies = "required-after:AppleCore")
 public class ModSpiceOfLife {

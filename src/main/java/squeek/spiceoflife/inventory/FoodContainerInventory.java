@@ -3,11 +3,11 @@ package squeek.spiceoflife.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import squeek.spiceoflife.items.ItemFoodContainer;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import squeek.spiceoflife.items.ItemFoodContainer;
 
 public class FoodContainerInventory extends NBTInventory {
 

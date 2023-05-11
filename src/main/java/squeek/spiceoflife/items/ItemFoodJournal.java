@@ -10,12 +10,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import squeek.spiceoflife.ModConfig;
 import squeek.spiceoflife.ModContent;
 import squeek.spiceoflife.ModInfo;
 import squeek.spiceoflife.gui.GuiScreenFoodJournal;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFoodJournal extends Item {
 

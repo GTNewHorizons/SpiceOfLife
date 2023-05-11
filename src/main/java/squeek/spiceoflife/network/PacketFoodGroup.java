@@ -2,10 +2,10 @@ package squeek.spiceoflife.network;
 
 import net.minecraft.entity.player.EntityPlayer;
 
+import cpw.mods.fml.relauncher.Side;
 import squeek.spiceoflife.compat.IByteIO;
 import squeek.spiceoflife.foodtracker.foodgroups.FoodGroup;
 import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class PacketFoodGroup extends PacketBase {
 

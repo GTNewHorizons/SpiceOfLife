@@ -1,10 +1,10 @@
 package squeek.spiceoflife.network;
 
-import squeek.spiceoflife.ModInfo;
-import squeek.spiceoflife.network.simpleimpl.BetterSimpleNetworkWrapper;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
+import squeek.spiceoflife.ModInfo;
+import squeek.spiceoflife.network.simpleimpl.BetterSimpleNetworkWrapper;
 
 public class PacketHandler implements IMessageHandler<PacketBase, PacketBase> {
 

@@ -2,10 +2,10 @@ package squeek.spiceoflife.compat;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
 import squeek.spiceoflife.compat.PacketDispatcher.PacketTarget;
 import squeek.spiceoflife.network.PacketBase;
 import squeek.spiceoflife.network.PacketHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
 
 public class PacketDispatcherNetty implements IPacketDispatcher {
 

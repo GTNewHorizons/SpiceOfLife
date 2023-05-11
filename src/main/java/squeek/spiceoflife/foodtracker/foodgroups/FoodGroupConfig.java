@@ -11,13 +11,13 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import squeek.spiceoflife.ModInfo;
 import squeek.spiceoflife.ModSpiceOfLife;
 import squeek.spiceoflife.helpers.FileHelper;
 import squeek.spiceoflife.helpers.MiscHelper;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class FoodGroupConfig {
 
