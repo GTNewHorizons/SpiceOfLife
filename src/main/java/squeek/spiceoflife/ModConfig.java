@@ -39,6 +39,27 @@ public class ModConfig implements IPackable, IPacketProcessor {
     private static final boolean FOOD_MODIFIER_ENABLED_DEFAULT = true;
     private static final String FOOD_MODIFIER_ENABLED_COMMENT = "If false, disables the entire diminishing returns part of the mod";
     /*
+     * CARROT
+     */
+    private static final String CATEGORY_CARROT = " carrot module ";
+    private static final String CATEGORY_CARROT_COMMENT = COMMENT_SERVER_SIDE_OPTIONS;
+    private static final String EXTRA_HEARTS_NAME = "hearts.milestones.enable";
+    private static final String EXTRA_HEARTS_COMMENT = "Enable extra hearts module";
+    private static final boolean EXTRA_HEARTS_DEFAULT = true;
+    public static boolean EXTRA_HEARTS_ENABLE = ModConfig.EXTRA_HEARTS_DEFAULT;
+    private static final String FOOD_MILESTONE_NAME = "hearts.milestones.base";
+    private static final String FOOD_MILESTONE_COMMENT = "Base requirement for each Food Milestones (in food points) to award extra hearts";
+    private static final int FOOD_MILESTONE_DEFAULT = 50;
+    public static int FOOD_MILESTONE_VALUE = ModConfig.FOOD_MILESTONE_DEFAULT;
+    private static final String MILESTONE_INCREMENT_NAME = "hearts.milestones.increment";
+    private static final String MILESTONE_INCREMENT_COMMENT = "The increase per Milestone to the base Food Milestones value (in food points)";
+    private static final int MILESTONE_INCREMENT_DEFAULT = 2;
+    public static int MILESTONE_INCREMENT_VALUE = ModConfig.MILESTONE_INCREMENT_DEFAULT;
+    private static final String HEARTS_PER_MILESTONE_NAME = "hearts.milestones.reward";
+    private static final String HEARTS_PER_MILESTONE_COMMENT = "Extra hearts awarded per milestone achieved";
+    private static final int HEARTS_PER_MILESTONE_DEFAULT = 1;
+    public static int HEARTS_PER_MILESTONE_VALUE = ModConfig.HEARTS_PER_MILESTONE_DEFAULT;
+    /*
      * DEV
      */
     private static final String CATEGORY_DEV = "dev";
@@ -202,6 +223,25 @@ public class ModConfig implements IPackable, IPacketProcessor {
         // config
         if (FMLCommonHandler.instance().getSide() == Side.SERVER)
             FOOD_MODIFIER_ENABLED = FOOD_MODIFIER_ENABLED_CONFIG_VAL;
+        /*
+         * CARROT
+         */
+        config.getCategory(CATEGORY_CARROT).setComment(CATEGORY_CARROT_COMMENT);
+        EXTRA_HEARTS_ENABLE = config.get(CATEGORY_CARROT, EXTRA_HEARTS_NAME, EXTRA_HEARTS_DEFAULT, EXTRA_HEARTS_COMMENT)
+                .getBoolean(EXTRA_HEARTS_DEFAULT);
+        FOOD_MILESTONE_VALUE = config
+                .get(CATEGORY_CARROT, FOOD_MILESTONE_NAME, FOOD_MILESTONE_DEFAULT, FOOD_MILESTONE_COMMENT)
+                .getInt(FOOD_MILESTONE_DEFAULT);
+        MILESTONE_INCREMENT_VALUE = config.get(
+                CATEGORY_CARROT,
+                MILESTONE_INCREMENT_NAME,
+                MILESTONE_INCREMENT_DEFAULT,
+                MILESTONE_INCREMENT_COMMENT).getInt(MILESTONE_INCREMENT_DEFAULT);
+        HEARTS_PER_MILESTONE_VALUE = config.get(
+                CATEGORY_CARROT,
+                HEARTS_PER_MILESTONE_NAME,
+                HEARTS_PER_MILESTONE_DEFAULT,
+                HEARTS_PER_MILESTONE_COMMENT).getInt(HEARTS_PER_MILESTONE_DEFAULT);
 
         /*
          * DEV
