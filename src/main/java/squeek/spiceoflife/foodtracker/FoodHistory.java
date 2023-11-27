@@ -298,9 +298,14 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
             }
         }
         if (fullHistory.size() > 0) {
-            NBTTagCompound nbtFullHistory = new NBTTagCompound();
-            fullHistory.writeToNBTData(nbtFullHistory);
-            persistentCompound.setTag("FullHistory", nbtFullHistory);
+            if (data != null || ModConfig.FOOD_MILESTONES_PERSISTS_THROUGH_DEATH) {
+                NBTTagCompound nbtFullHistory = new NBTTagCompound();
+
+                fullHistory.writeToNBTData(nbtFullHistory);
+
+                if (ModConfig.FOOD_MILESTONES_PERSISTS_THROUGH_DEATH) persistentCompound.setTag("FullHistory", nbtFullHistory);
+                else nonPersistentCompound.setTag("FullHistory", nbtFullHistory);
+            }
         }
         if (totalFoodsEatenAllTime > 0) {
             persistentCompound.setInteger("Total", totalFoodsEatenAllTime);
@@ -341,6 +346,13 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
                     ? persistentCompound.getCompoundTag("History")
                     : nonPersistentCompound.getCompoundTag("History");
 
+            NBTTagCompound nbtFullHistory = ModConfig.FOOD_MILESTONES_PERSISTS_THROUGH_DEATH
+                    ? persistentCompound.getCompoundTag("FullHistory")
+                    : nonPersistentCompound.getCompoundTag("FullHistory");
+
+            fullHistory.readFromNBTData(nbtHistory);
+            fullHistory.readFromNBTData(nbtFullHistory);
+
             recentHistory.readFromNBTData(nbtHistory);
 
             totalFoodsEatenAllTime = persistentCompound.getInteger("Total");
@@ -348,6 +360,5 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
             ticksActive = persistentCompound.getLong("Ticks");
         }
 
-        fullHistory.readFromNBTData(persistentCompound.getCompoundTag("FullHistory"));
     }
 }

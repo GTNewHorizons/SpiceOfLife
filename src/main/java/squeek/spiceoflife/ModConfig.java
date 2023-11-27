@@ -59,6 +59,15 @@ public class ModConfig implements IPackable, IPacketProcessor {
     private static final String HEARTS_PER_MILESTONE_COMMENT = "Extra hearts awarded per milestone achieved";
     private static final int HEARTS_PER_MILESTONE_DEFAULT = 1;
     public static int HEARTS_PER_MILESTONE_VALUE = ModConfig.HEARTS_PER_MILESTONE_DEFAULT;
+
+    private static final String MAX_MILESTONE_NAME = "hearts.milestones.maximum";
+    private static final String MAX_MILESTONE_COMMENT = "The maximum allowed number of Milestones a player can achieve";
+    private static final int MAX_MILESTONE_DEFAULT = -1;
+    public static int MAX_MILESTONE_VALUE = ModConfig.MAX_MILESTONE_DEFAULT;
+    private static final String FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_NAME = "hearts.milestones.persists.through.death";
+    private static final String FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_COMMENT = "If true, milestone progress will not get reset after every death";
+    private static final boolean FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_DEFAULT = true;
+    public static boolean FOOD_MILESTONES_PERSISTS_THROUGH_DEATH = ModConfig.FOOD_HISTORY_PERSISTS_THROUGH_DEATH_DEFAULT;
     /*
      * DEV
      */
@@ -229,20 +238,34 @@ public class ModConfig implements IPackable, IPacketProcessor {
         config.getCategory(CATEGORY_CARROT).setComment(CATEGORY_CARROT_COMMENT);
         EXTRA_HEARTS_ENABLE = config.get(CATEGORY_CARROT, EXTRA_HEARTS_NAME, EXTRA_HEARTS_DEFAULT, EXTRA_HEARTS_COMMENT)
                 .getBoolean(EXTRA_HEARTS_DEFAULT);
+
         FOOD_MILESTONE_VALUE = config
                 .get(CATEGORY_CARROT, FOOD_MILESTONE_NAME, FOOD_MILESTONE_DEFAULT, FOOD_MILESTONE_COMMENT)
                 .getInt(FOOD_MILESTONE_DEFAULT);
+
         MILESTONE_INCREMENT_VALUE = config.get(
                 CATEGORY_CARROT,
                 MILESTONE_INCREMENT_NAME,
                 MILESTONE_INCREMENT_DEFAULT,
                 MILESTONE_INCREMENT_COMMENT).getInt(MILESTONE_INCREMENT_DEFAULT);
+
         HEARTS_PER_MILESTONE_VALUE = config.get(
                 CATEGORY_CARROT,
                 HEARTS_PER_MILESTONE_NAME,
                 HEARTS_PER_MILESTONE_DEFAULT,
                 HEARTS_PER_MILESTONE_COMMENT).getInt(HEARTS_PER_MILESTONE_DEFAULT);
 
+        MAX_MILESTONE_VALUE = config.get(
+                CATEGORY_CARROT,
+                MAX_MILESTONE_NAME,
+                MAX_MILESTONE_DEFAULT,
+                MAX_MILESTONE_COMMENT).getInt(MAX_MILESTONE_DEFAULT);
+
+        FOOD_MILESTONES_PERSISTS_THROUGH_DEATH = config.get(
+                CATEGORY_CARROT,
+                FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_NAME,
+                FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_DEFAULT,
+                FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_COMMENT).getBoolean(FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_DEFAULT);
         /*
          * DEV
          */
