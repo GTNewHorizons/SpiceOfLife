@@ -303,7 +303,8 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
 
                 fullHistory.writeToNBTData(nbtFullHistory);
 
-                if (ModConfig.FOOD_MILESTONES_PERSISTS_THROUGH_DEATH) persistentCompound.setTag("FullHistory", nbtFullHistory);
+                if (ModConfig.FOOD_MILESTONES_PERSISTS_THROUGH_DEATH)
+                    persistentCompound.setTag("FullHistory", nbtFullHistory);
                 else nonPersistentCompound.setTag("FullHistory", nbtFullHistory);
             }
         }

@@ -46,7 +46,7 @@ public final class ProgressInfo {
     public int nextMilestoneFoodPoints() {
         int nextMilestone = (milestonesAchieved() + 1);
 
-        if (hasCap && nextMilestone > MAX_MILESTONE_VALUE){
+        if (hasCap && nextMilestone > MAX_MILESTONE_VALUE) {
             return 0;
         }
 
@@ -84,8 +84,7 @@ public final class ProgressInfo {
             milestonesTotal = (int) Math.floor((double) foodsPointsEaten / (double) FOOD_POINTS_PER_MILESTONE);
         }
 
-        if (hasCap && milestonesTotal >= MAX_MILESTONE_VALUE)
-            return MAX_MILESTONE_VALUE;
+        if (hasCap && milestonesTotal >= MAX_MILESTONE_VALUE) return MAX_MILESTONE_VALUE;
 
         return milestonesTotal;
     }
