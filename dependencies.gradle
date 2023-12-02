@@ -4,5 +4,5 @@ dependencies {
     // Last version compatible with Java 8
     shadowImplementation('com.udojava:EvalEx:2.6')
 
-    compile('com.github.GTNewHorizons:AppleCore:3.2.11:dev')
+    compile('com.github.GTNewHorizons:AppleCore:3.2.12:dev')
 }
