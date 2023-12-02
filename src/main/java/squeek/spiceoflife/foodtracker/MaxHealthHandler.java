@@ -7,6 +7,8 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 
+import squeek.spiceoflife.ModConfig;
+
 public class MaxHealthHandler {
 
     private static final UUID SOL_HEALTH_MODIFIER_ID = UUID.fromString("f88d6ac1-4193-4ff0-85f5-f0357fe89d17");
@@ -16,10 +18,13 @@ public class MaxHealthHandler {
             return false;
         }
 
+        if (!ModConfig.EXTRA_HEARTS_ENABLE) {
+            return false;
+        }
+
         final IAttributeInstance attribute = player.getAttributeMap()
                 .getAttributeInstance(SharedMonsterAttributes.maxHealth);
         final AttributeModifier prevModifier = attribute.getModifier(SOL_HEALTH_MODIFIER_ID);
-
         final FoodHistory foodHistory = FoodHistory.get(player);
         ProgressInfo progressInfo = foodHistory.getProgressInfo();
         final int milestonesAchieved = progressInfo.milestonesAchieved();

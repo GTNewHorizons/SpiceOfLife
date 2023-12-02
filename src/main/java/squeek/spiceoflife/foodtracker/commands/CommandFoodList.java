@@ -68,9 +68,9 @@ public class CommandFoodList extends CommandBase {
 
             if (args[0].equals("size")) {
                 final ProgressInfo progressInfo = foodHistory.getProgressInfo();
-                final int foodsEaten = progressInfo.foodsHaunchesEaten;
+                final int foodsEaten = progressInfo.foodsPointsEaten;
                 final int milestone = progressInfo.milestonesAchieved();
-                final int foodsUntilNextMilestone = progressInfo.foodsUntilNextMilestone();
+                final int foodsUntilNextMilestone = progressInfo.foodPointsUntilNextMilestone();
 
                 commandSender.addChatMessage(
                         new ChatComponentText(

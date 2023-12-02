@@ -124,9 +124,9 @@ public class GuiScreenFoodJournal extends GuiScreen {
         FoodHistory foodHistory = FoodHistory.get(mc.thePlayer);
         if (pageNum == 0) {
             final ProgressInfo progressInfo = foodHistory.getProgressInfo();
-            final int foodsEaten = progressInfo.foodsHaunchesEaten;
+            final int foodsEaten = progressInfo.foodsPointsEaten;
             final int extraHearts = progressInfo.milestonesAchieved() * ProgressInfo.HEARTS_PER_MILESTONE;
-            final int foodsUntilNextMilestone = progressInfo.foodsUntilNextMilestone();
+            final int foodsUntilNextMilestone = progressInfo.foodPointsUntilNextMilestone();
 
             int localX = x + leftMargin;
             int drawWidth = (bookImageWidth - rightMargin) - leftMargin; // width in which text can be drawn, so it
