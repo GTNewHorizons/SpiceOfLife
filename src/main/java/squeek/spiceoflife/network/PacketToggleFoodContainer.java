@@ -3,10 +3,10 @@ package squeek.spiceoflife.network;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+import cpw.mods.fml.relauncher.Side;
 import squeek.spiceoflife.compat.IByteIO;
 import squeek.spiceoflife.helpers.FoodHelper;
 import squeek.spiceoflife.items.ItemFoodContainer;
-import cpw.mods.fml.relauncher.Side;
 
 public class PacketToggleFoodContainer extends PacketBase {
 

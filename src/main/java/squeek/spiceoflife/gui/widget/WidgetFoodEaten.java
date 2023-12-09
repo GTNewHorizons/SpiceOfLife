@@ -5,11 +5,11 @@ import net.minecraft.client.gui.Gui;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import squeek.applecore.api.food.FoodValues;
 import squeek.spiceoflife.foodtracker.FoodEaten;
 import squeek.spiceoflife.helpers.ColorHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class WidgetFoodEaten extends Gui {

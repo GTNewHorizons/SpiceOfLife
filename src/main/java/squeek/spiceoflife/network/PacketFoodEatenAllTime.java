@@ -2,9 +2,9 @@ package squeek.spiceoflife.network;
 
 import net.minecraft.entity.player.EntityPlayer;
 
+import cpw.mods.fml.relauncher.Side;
 import squeek.spiceoflife.compat.IByteIO;
 import squeek.spiceoflife.foodtracker.FoodHistory;
-import cpw.mods.fml.relauncher.Side;
 
 public class PacketFoodEatenAllTime extends PacketBase {
 

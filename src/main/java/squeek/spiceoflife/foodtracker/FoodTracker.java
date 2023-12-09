@@ -6,13 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
-import squeek.applecore.api.food.FoodEvent;
-import squeek.spiceoflife.ModConfig;
-import squeek.spiceoflife.compat.PacketDispatcher;
-import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
-import squeek.spiceoflife.items.ItemFoodJournal;
-import squeek.spiceoflife.network.PacketFoodEatenAllTime;
-import squeek.spiceoflife.network.PacketFoodHistory;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
@@ -20,6 +13,13 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import cpw.mods.fml.relauncher.Side;
+import squeek.applecore.api.food.FoodEvent;
+import squeek.spiceoflife.ModConfig;
+import squeek.spiceoflife.compat.PacketDispatcher;
+import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
+import squeek.spiceoflife.items.ItemFoodJournal;
+import squeek.spiceoflife.network.PacketFoodEatenAllTime;
+import squeek.spiceoflife.network.PacketFoodHistory;
 
 public class FoodTracker {
 

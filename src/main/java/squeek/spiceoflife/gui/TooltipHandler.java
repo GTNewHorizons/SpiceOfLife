@@ -13,6 +13,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import squeek.applecore.api.food.FoodValues;
 import squeek.spiceoflife.ModConfig;
 import squeek.spiceoflife.foodtracker.FoodHistory;
@@ -23,9 +26,6 @@ import squeek.spiceoflife.helpers.ColorHelper;
 import squeek.spiceoflife.helpers.FoodHelper;
 import squeek.spiceoflife.helpers.KeyHelper;
 import squeek.spiceoflife.helpers.StringHelper;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class TooltipHandler {

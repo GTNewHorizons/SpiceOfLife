@@ -22,6 +22,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import squeek.applecore.api.food.FoodEvent;
 import squeek.applecore.api.food.FoodValues;
 import squeek.applecore.api.food.IEdible;
@@ -40,11 +45,6 @@ import squeek.spiceoflife.inventory.NBTInventory;
 import squeek.spiceoflife.network.NetworkHelper;
 import squeek.spiceoflife.network.PacketHandler;
 import squeek.spiceoflife.network.PacketToggleFoodContainer;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdible {
 
