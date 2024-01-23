@@ -5,7 +5,7 @@ spiceoflife.tooltip.eaten.recently.hunger=Jedzone %s w ostatnich %s głodu
 spiceoflife.tooltip.eaten.recently.time=Jedzone %s w ostatnich %s dniach
 spiceoflife.tooltip.not.eaten.recently=Nie jedzone ostatnio
 
-spiceoflife.tooltip.not.eaten.ever=Jeszcze nie jedzone! Jak może smakować?
+spiceoflife.tooltip.not.eaten.ever=Jeszcze nie jedzone! Ciekawe jak smakuje?
 spiceoflife.tooltip.eaten.ever=Jedzone: Wspomogło w dodawaniu serc
 spiceoflife.tooltip.eaten.cheap=Jedzone: Brak zauważalnych efektów 
 
@@ -27,7 +27,7 @@ spiceoflife.quantity.two.times=2 razy
 spiceoflife.quantity.x.times=%d razy
 
 # Gui
-spiceoflife.gui.alltime.food.eaten=Ilość zjedzonego jedzenia kiedykolwiek
+spiceoflife.gui.alltime.food.eaten=Historia Zjedzonych Rzeczy
 spiceoflife.gui.no.food.history.yet=Historia Jedzenia nie jest zapisywana aż do początku spadania wartości odżywczych
 spiceoflife.gui.no.recent.food.eaten=Nic ostatnio nie jedzono
 spiceoflife.gui.time.elapsed.since.food.eaten=Jedzone %s temu
