@@ -23,8 +23,10 @@ public final class FoodLists {
     public static void setUp() {
         if (ModConfig.DEV_LOGGING_ENABLED) ModSpiceOfLife.Log.info("Starting populating food list.");
         Stream<Item> stream = StreamSupport.stream(Item.itemRegistry.spliterator(), false);
-        allFoods = stream.map(ItemStack::new).filter(FoodHelper::isFood)
-                .sorted(Comparator.comparing(ItemStack::getDisplayName)).collect(Collectors.toList());
+        allFoods = stream.map(ItemStack::new)
+            .filter(FoodHelper::isFood)
+            .sorted(Comparator.comparing(ItemStack::getDisplayName))
+            .collect(Collectors.toList());
 
         allFoods.forEach((i -> {
             FoodValues fv = FoodHelper.getFoodValues(i);

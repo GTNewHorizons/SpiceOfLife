@@ -24,7 +24,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * multiple message types See FML's SimpleChannelHandlerWrapper for general documentation
  */
 public class BetterSimpleChannelHandlerWrapper<REQ extends IMessage, REPLY extends IMessage>
-        extends SimpleChannelInboundHandler<REQ> {
+    extends SimpleChannelInboundHandler<REQ> {
 
     protected static Constructor<MessageContext> messageContextConstructor = null;
 
@@ -43,7 +43,7 @@ public class BetterSimpleChannelHandlerWrapper<REQ extends IMessage, REPLY exten
     private Side side;
 
     public BetterSimpleChannelHandlerWrapper(Class<? extends IMessageHandler<REQ, REPLY>> handler, Side side,
-            Class<? extends REQ> messageType) {
+        Class<? extends REQ> messageType) {
         super(messageType);
         try {
             messageHandler = handler.newInstance();
@@ -55,12 +55,17 @@ public class BetterSimpleChannelHandlerWrapper<REQ extends IMessage, REPLY exten
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, REQ msg) {
-        INetHandler iNetHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
+        INetHandler iNetHandler = ctx.channel()
+            .attr(NetworkRegistry.NET_HANDLER)
+            .get();
         MessageContext context = getMessageContext(iNetHandler, side);
         REPLY result = messageHandler.onMessage(msg, context);
         if (result != null) {
-            ctx.channel().attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.REPLY);
-            ctx.writeAndFlush(result).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+            ctx.channel()
+                .attr(FMLOutboundHandler.FML_MESSAGETARGET)
+                .set(FMLOutboundHandler.OutboundTarget.REPLY);
+            ctx.writeAndFlush(result)
+                .addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
         }
     }
 

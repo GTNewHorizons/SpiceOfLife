@@ -52,7 +52,9 @@ public class ModSpiceOfLife {
     public void init(FMLInitializationEvent event) {
         GuiHelper.init();
         FoodTracker foodTracker = new FoodTracker();
-        FMLCommonHandler.instance().bus().register(foodTracker);
+        FMLCommonHandler.instance()
+            .bus()
+            .register(foodTracker);
         MinecraftForge.EVENT_BUS.register(foodTracker);
         MinecraftForge.EVENT_BUS.register(new FoodModifier());
 

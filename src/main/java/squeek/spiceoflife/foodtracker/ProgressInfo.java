@@ -25,8 +25,11 @@ public final class ProgressInfo {
     public final int foodsPointsEaten;
 
     ProgressInfo(FoodHistory foodList) {
-        foodsPointsEaten = foodList.getFullHistory().stream().filter(eaten -> shouldCount(eaten.itemStack))
-                .mapToInt(eaten -> eaten.foodValues.hunger).sum();
+        foodsPointsEaten = foodList.getFullHistory()
+            .stream()
+            .filter(eaten -> shouldCount(eaten.itemStack))
+            .mapToInt(eaten -> eaten.foodValues.hunger)
+            .sum();
     }
 
     public static boolean shouldCount(ItemStack food) {

@@ -53,7 +53,7 @@ public class FoodGroup implements IPackable {
 
     public void initFromConfig() {
         if (foodStringsByType == null) throw new RuntimeException(
-                toString() + " food group (" + identifier + ".json) missing required \"food\" property");
+            toString() + " food group (" + identifier + ".json) missing required \"food\" property");
 
         formatting = EnumChatFormatting.getValueByName(color);
         if (formatting == null) formatting = DEFAULT_FORMATTING;
@@ -152,12 +152,12 @@ public class FoodGroup implements IPackable {
 
     public boolean isFoodIncluded(ItemStack food) {
         return !isFoodExcluded(food) && matchingItemHashes.contains(OreDictionaryHelper.getItemStackHash(food))
-                || matchingItemHashes.contains(OreDictionaryHelper.getWildCardItemStackHash(food));
+            || matchingItemHashes.contains(OreDictionaryHelper.getWildCardItemStackHash(food));
     }
 
     public boolean isFoodExcluded(ItemStack food) {
         return excludedItemHashes.contains(OreDictionaryHelper.getItemStackHash(food))
-                || excludedItemHashes.contains(OreDictionaryHelper.getWildCardItemStackHash(food));
+            || excludedItemHashes.contains(OreDictionaryHelper.getWildCardItemStackHash(food));
     }
 
     public Set<Integer> getMatchingItemStackHashes() {

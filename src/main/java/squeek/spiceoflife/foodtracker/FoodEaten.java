@@ -32,7 +32,8 @@ public class FoodEaten implements IPackable, ISaveable {
 
     @Override
     public int hashCode() {
-        return itemStack.getItem().hashCode();
+        return itemStack.getItem()
+            .hashCode();
     }
 
     @Override
@@ -41,9 +42,9 @@ public class FoodEaten implements IPackable, ISaveable {
         final FoodEaten other = ((FoodEaten) obj);
         final Item item = itemStack.getItem();
         final Item otherItem = other.itemStack.getItem();
-        return (Item.itemRegistry.getNameForObject(item).equals(Item.itemRegistry.getNameForObject(otherItem))
-                && item.equals(otherItem)
-                && this.itemStack.getItemDamage() == other.itemStack.getItemDamage());
+        return (Item.itemRegistry.getNameForObject(item)
+            .equals(Item.itemRegistry.getNameForObject(otherItem)) && item.equals(otherItem)
+            && this.itemStack.getItemDamage() == other.itemStack.getItemDamage());
     }
 
     public static FoodEaten loadFromNBTData(NBTTagCompound nbtFood) {

@@ -48,14 +48,17 @@ public class PacketFoodHistory extends PacketBase {
         FoodHistory foodHistory = FoodHistory.get(player);
 
         if (shouldOverwrite) {
-            foodHistory.getRecentHistory().clear();
+            foodHistory.getRecentHistory()
+                .clear();
             foodHistory.ticksActive = this.foodHistory.ticksActive;
         } else {
             foodHistory.totalFoodsEatenAllTime++;
         }
 
-        this.foodHistory.getRecentHistory().forEach(foodHistory::addFoodRecent);
-        this.foodHistory.getFullHistory().forEach(foodHistory::addFoodFullHistory);
+        this.foodHistory.getRecentHistory()
+            .forEach(foodHistory::addFoodRecent);
+        this.foodHistory.getFullHistory()
+            .forEach(foodHistory::addFoodFullHistory);
 
         return null;
     }

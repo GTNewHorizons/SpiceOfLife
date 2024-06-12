@@ -28,7 +28,8 @@ public class MiscHelper {
             int y = mc.objectMouseOver.blockY;
             int z = mc.objectMouseOver.blockZ;
 
-            return mc.theWorld.getBlock(x, y, z).getMaterial() == Material.air;
+            return mc.theWorld.getBlock(x, y, z)
+                .getMaterial() == Material.air;
         }
         return false;
     }

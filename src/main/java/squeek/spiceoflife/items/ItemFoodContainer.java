@@ -81,7 +81,8 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
     // necessary to catch tossing items while still in an inventory
     @SubscribeEvent
     public void onItemToss(ItemTossEvent event) {
-        if (event.entityItem.getEntityItem().getItem() instanceof ItemFoodContainer) {
+        if (event.entityItem.getEntityItem()
+            .getItem() instanceof ItemFoodContainer) {
             onDroppedByPlayer(event.entityItem.getEntityItem(), event.player);
         }
     }
@@ -100,7 +101,10 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
 
         NBTTagCompound baseTag = itemStack.getTagCompound();
 
-        if (!baseTag.hasKey(TAG_KEY_UUID)) baseTag.setString(TAG_KEY_UUID, UUID.randomUUID().toString());
+        if (!baseTag.hasKey(TAG_KEY_UUID)) baseTag.setString(
+            TAG_KEY_UUID,
+            UUID.randomUUID()
+                .toString());
 
         return baseTag;
     }
@@ -138,7 +142,8 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
      */
     @Override
     public FoodValues getFoodValues(ItemStack itemStack) {
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+        if (FMLCommonHandler.instance()
+            .getEffectiveSide() == Side.CLIENT) {
             // the client uses the food values for tooltips/etc, so it should
             // inherit them from the food that will be eaten
             return FoodValues.get(getBestFoodForPlayerToEat(itemStack, NetworkHelper.getClientPlayer()));
@@ -179,7 +184,7 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
 
     public void tryPullFoodFrom(ItemStack itemStack, IInventory inventory, EntityPlayer player) {
         List<InventoryFoodInfo> foodsToPull = MealPrioritizationHelper
-                .findBestFoodsForPlayerAccountingForVariety(player, inventory);
+            .findBestFoodsForPlayerAccountingForVariety(player, inventory);
         if (foodsToPull.size() > 0) {
             FoodContainerInventory foodContainerInventory = getInventory(itemStack);
             for (InventoryFoodInfo foodToPull : foodsToPull) {
@@ -202,22 +207,25 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
     }
 
     public boolean isOpen(ItemStack itemStack) {
-        return itemStack.hasTagCompound() && itemStack.getTagCompound().getBoolean(TAG_KEY_OPEN);
+        return itemStack.hasTagCompound() && itemStack.getTagCompound()
+            .getBoolean(TAG_KEY_OPEN);
     }
 
     @Override
     public boolean onDroppedByPlayer(ItemStack itemStack, EntityPlayer player) {
         if (!player.worldObj.isRemote && player.openContainer != null
-                && player.openContainer instanceof ContainerFoodContainer) {
+            && player.openContainer instanceof ContainerFoodContainer) {
             ContainerFoodContainer openFoodContainer = (ContainerFoodContainer) player.openContainer;
             UUID droppedUUID = getUUID(itemStack);
 
-            if (openFoodContainer.getUUID().equals(droppedUUID)) {
+            if (openFoodContainer.getUUID()
+                .equals(droppedUUID)) {
                 // if the cursor item is the open food container, then it will create an infinite loop
                 // due to the container dropping the cursor item when it is closed
                 ItemStack itemOnTheCursor = player.inventory.getItemStack();
                 if (itemOnTheCursor != null && itemOnTheCursor.getItem() instanceof ItemFoodContainer) {
-                    if (((ItemFoodContainer) itemOnTheCursor.getItem()).getUUID(itemOnTheCursor).equals(droppedUUID)) {
+                    if (((ItemFoodContainer) itemOnTheCursor.getItem()).getUUID(itemOnTheCursor)
+                        .equals(droppedUUID)) {
                         player.inventory.setItemStack(null);
                     }
                 }
@@ -248,12 +256,11 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
         String openCloseLineColor = EnumChatFormatting.GRAY.toString();
         if (isOpen(itemStack)) {
             toolTip.add(
-                    openCloseLineColor
-                            + StatCollector.translateToLocalFormatted("spiceoflife.tooltip.to.close.food.container"));
+                openCloseLineColor
+                    + StatCollector.translateToLocalFormatted("spiceoflife.tooltip.to.close.food.container"));
 
         } else toolTip.add(
-                openCloseLineColor
-                        + StatCollector.translateToLocalFormatted("spiceoflife.tooltip.to.open.food.container"));
+            openCloseLineColor + StatCollector.translateToLocalFormatted("spiceoflife.tooltip.to.open.food.container"));
     }
 
     @Override
@@ -271,7 +278,7 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
 
     @Override
     public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side,
-            float hitX, float hitY, float hitZ) {
+        float hitX, float hitY, float hitZ) {
         if (!world.isRemote && isOpen(itemStack)) {
             IInventory inventoryHit = InventoryHelper.getInventoryAtLocation(world, x, y, z);
             if (inventoryHit != null && inventoryHit.isUseableByPlayer(player)) {
@@ -306,7 +313,7 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
     @Override
     public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
         if (entityLiving.worldObj.isRemote && ModConfig.LEFT_CLICK_OPENS_FOOD_CONTAINERS
-                && MiscHelper.isMouseOverNothing()) {
+            && MiscHelper.isMouseOverNothing()) {
             PacketHandler.channel.sendToServer(new PacketToggleFoodContainer());
             return true;
         }

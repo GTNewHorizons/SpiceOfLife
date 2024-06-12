@@ -14,8 +14,8 @@ public class StringHelper {
 
     public static String getQuantityDescriptor(int quantity) {
         return quantity == 1 ? StatCollector.translateToLocal("spiceoflife.quantity.one.time")
-                : (quantity == 2 ? StatCollector.translateToLocalFormatted("spiceoflife.quantity.two.times", quantity)
-                        : StatCollector.translateToLocalFormatted("spiceoflife.quantity.x.times", quantity));
+            : (quantity == 2 ? StatCollector.translateToLocalFormatted("spiceoflife.quantity.two.times", quantity)
+                : StatCollector.translateToLocalFormatted("spiceoflife.quantity.x.times", quantity));
     }
 
     public static String join(Collection<?> values, String delimiter) {
@@ -34,11 +34,14 @@ public class StringHelper {
 
     public static String decapitalize(final String string, final Locale locale) {
         if (string == null || string.isEmpty()) return string;
-        else return string.substring(0, 1).toLowerCase(locale) + string.substring(1);
+        else return string.substring(0, 1)
+            .toLowerCase(locale) + string.substring(1);
     }
 
     public static Locale getMinecraftLocale() {
-        String[] parts = FMLCommonHandler.instance().getCurrentLanguage().split("_");
+        String[] parts = FMLCommonHandler.instance()
+            .getCurrentLanguage()
+            .split("_");
         String langCode = parts[0];
         String regionCode = parts.length > 1 ? parts[1] : null;
         return regionCode != null ? new Locale(langCode, regionCode) : new Locale(langCode);

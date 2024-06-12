@@ -27,13 +27,13 @@ public class ModContent {
 
     public static void registerRecipes() {
         GameRegistry
-                .addShapelessRecipe(new ItemStack(foodJournal), new ItemStack(Items.wheat), new ItemStack(Items.paper));
+            .addShapelessRecipe(new ItemStack(foodJournal), new ItemStack(Items.wheat), new ItemStack(Items.paper));
         GameRegistry.addShapedRecipe(
-                new ItemStack(lunchBox),
-                "_ _",
-                " _ ",
-                '_',
-                new ItemStack(Blocks.heavy_weighted_pressure_plate));
+            new ItemStack(lunchBox),
+            "_ _",
+            " _ ",
+            '_',
+            new ItemStack(Blocks.heavy_weighted_pressure_plate));
         GameRegistry.addShapedRecipe(new ItemStack(lunchBag), "p p", " p ", 'p', new ItemStack(Items.paper));
     }
 }

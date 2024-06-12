@@ -22,11 +22,11 @@ public class PacketDispatcherNetty implements IPacketDispatcher {
     @Override
     public void sendToAllAround(PacketBase packet, PacketTarget packetTarget) {
         NetworkRegistry.TargetPoint targetPoint = new NetworkRegistry.TargetPoint(
-                packetTarget.dimension,
-                packetTarget.x,
-                packetTarget.y,
-                packetTarget.z,
-                packetTarget.range);
+            packetTarget.dimension,
+            packetTarget.x,
+            packetTarget.y,
+            packetTarget.z,
+            packetTarget.range);
         PacketHandler.channel.sendToAllAround(packet, targetPoint);
     }
 

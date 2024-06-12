@@ -33,11 +33,11 @@ public class ItemFoodJournal extends Item {
             // try add, otherwise spawn in the world
             if (!player.inventory.addItemStackToInventory(itemStack)) {
                 EntityItem entityItem = new EntityItem(
-                        player.worldObj,
-                        player.posX + 0.5f,
-                        player.posY + 0.5f,
-                        player.posZ + 0.5f,
-                        itemStack);
+                    player.worldObj,
+                    player.posX + 0.5f,
+                    player.posY + 0.5f,
+                    player.posZ + 0.5f,
+                    itemStack);
                 player.worldObj.spawnEntityInWorld(entityItem);
             }
         }
@@ -46,7 +46,8 @@ public class ItemFoodJournal extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-        if (world.isRemote) Minecraft.getMinecraft().displayGuiScreen(new GuiScreenFoodJournal());
+        if (world.isRemote) Minecraft.getMinecraft()
+            .displayGuiScreen(new GuiScreenFoodJournal());
         return super.onItemRightClick(itemStack, world, player);
     }
 }

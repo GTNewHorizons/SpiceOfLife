@@ -21,7 +21,9 @@ import squeek.spiceoflife.helpers.MiscHelper;
 
 public class FoodGroupConfig {
 
-    private static final Gson gson = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
+    private static final Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
+        .setPrettyPrinting()
+        .create();
     private static File[] configFiles;
 
     public static void setup(File configDirectory) {
@@ -44,7 +46,7 @@ public class FoodGroupConfig {
                 FileHelper.copyFile(sourceFile, exampleFoodGroupDest, shouldOverwrite);
             } else {
                 InputStream exampleFoodGroupInputStream = FoodGroupConfig.class.getClassLoader()
-                        .getResourceAsStream(exampleFoodGroupRelativePath);
+                    .getResourceAsStream(exampleFoodGroupRelativePath);
                 FileHelper.copyFile(exampleFoodGroupInputStream, exampleFoodGroupDest, shouldOverwrite);
                 exampleFoodGroupInputStream.close();
             }
@@ -63,7 +65,7 @@ public class FoodGroupConfig {
         BufferedReader exampleFoodGroupReader = null;
         try {
             exampleFoodGroupReader = new BufferedReader(
-                    new InputStreamReader(exampleFoodGroupStream, StandardCharsets.UTF_8));
+                new InputStreamReader(exampleFoodGroupStream, StandardCharsets.UTF_8));
             String firstLine = exampleFoodGroupReader.readLine();
             return firstLine == null || !firstLine.equals("// Mod Version: " + ModInfo.VERSION);
         } catch (IOException e) {
@@ -75,7 +77,8 @@ public class FoodGroupConfig {
 
     public static void load() {
         for (File configFile : configFiles) {
-            boolean isJson = FilenameUtils.getExtension(configFile.getName()).equalsIgnoreCase("json");
+            boolean isJson = FilenameUtils.getExtension(configFile.getName())
+                .equalsIgnoreCase("json");
             if (!isJson) continue;
 
             InputStreamReader reader = null;

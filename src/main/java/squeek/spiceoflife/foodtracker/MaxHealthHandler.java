@@ -23,7 +23,7 @@ public class MaxHealthHandler {
         }
 
         final IAttributeInstance attribute = player.getAttributeMap()
-                .getAttributeInstance(SharedMonsterAttributes.maxHealth);
+            .getAttributeInstance(SharedMonsterAttributes.maxHealth);
         final AttributeModifier prevModifier = attribute.getModifier(SOL_HEALTH_MODIFIER_ID);
         final FoodHistory foodHistory = FoodHistory.get(player);
         ProgressInfo progressInfo = foodHistory.getProgressInfo();
@@ -33,10 +33,10 @@ public class MaxHealthHandler {
         boolean hasChanged = prevModifier == null || prevModifier.getAmount() != totalHealthModifier;
 
         AttributeModifier modifier = new AttributeModifier(
-                SOL_HEALTH_MODIFIER_ID,
-                "Health gained from trying new foods",
-                totalHealthModifier,
-                0);
+            SOL_HEALTH_MODIFIER_ID,
+            "Health gained from trying new foods",
+            totalHealthModifier,
+            0);
 
         updateHealthModifier(player, modifier);
 
@@ -46,7 +46,8 @@ public class MaxHealthHandler {
     private static void updateHealthModifier(EntityPlayer player, AttributeModifier modifier) {
         float oldMax = player.getMaxHealth();
 
-        IAttributeInstance attribute = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.maxHealth);
+        IAttributeInstance attribute = player.getAttributeMap()
+            .getAttributeInstance(SharedMonsterAttributes.maxHealth);
         attribute.removeModifier(modifier);
         attribute.applyModifier(modifier);
 

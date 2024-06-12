@@ -46,7 +46,7 @@ public class FoodModifier {
             ItemStack actualFood = event.food;
             if (FoodHelper.isFoodContainer(event.food)) {
                 actualFood = ((ItemFoodContainer) event.food.getItem())
-                        .getBestFoodForPlayerToEat(event.food, event.player);
+                    .getBestFoodForPlayerToEat(event.food, event.player);
             }
 
             if (actualFood != null) {
@@ -91,7 +91,8 @@ public class FoodModifier {
         // if this food has mutliple food groups, calculate the modifier for each individually
         // and then take the average
         // for foods with <= 1 food group, this just means dividing the modifier by 1
-        FoodGroup[] foodGroups = FoodGroupRegistry.getFoodGroupsForFood(food).toArray(new FoodGroup[0]);
+        FoodGroup[] foodGroups = FoodGroupRegistry.getFoodGroupsForFood(food)
+            .toArray(new FoodGroup[0]);
         int numIterations = Math.max(1, foodGroups.length);
         float modifierSum = 0f;
 
@@ -112,19 +113,36 @@ public class FoodModifier {
 
         if (foodValues != null) {
             BigDecimal result = effectiveFoodModifier.expression.with("count", new BigDecimal(count))
-                    .and("cur_history_length", new BigDecimal(historySize))
-                    .and("food_hunger_value", new BigDecimal(foodValues.hunger))
-                    .and("food_saturation_mod", new BigDecimal(foodValues.saturationModifier))
-                    .and("cur_hunger", new BigDecimal(foodHistory.player.getFoodStats().getFoodLevel()))
-                    .and("cur_saturation", new BigDecimal(foodHistory.player.getFoodStats().getSaturationLevel()))
-                    .and("total_food_eaten", new BigDecimal(foodHistory.totalFoodsEatenAllTime))
-                    .and("max_history_length", new BigDecimal(ModConfig.FOOD_HISTORY_LENGTH))
-                    .and("hunger_count", new BigDecimal(totalFoodValues.hunger))
-                    .and("saturation_count", new BigDecimal(totalFoodValues.saturationModifier))
-                    .and("food_group_count", new BigDecimal(FoodGroupRegistry.getFoodGroupsForFood(food).size()))
-                    .and("distinct_food_groups_eaten", new BigDecimal(foodHistory.getDistinctFoodGroups().size()))
-                    .and("total_food_groups", new BigDecimal(FoodGroupRegistry.numFoodGroups()))
-                    .and("exact_count", new BigDecimal(foodHistory.getFoodCountIgnoringFoodGroups(food))).eval();
+                .and("cur_history_length", new BigDecimal(historySize))
+                .and("food_hunger_value", new BigDecimal(foodValues.hunger))
+                .and("food_saturation_mod", new BigDecimal(foodValues.saturationModifier))
+                .and(
+                    "cur_hunger",
+                    new BigDecimal(
+                        foodHistory.player.getFoodStats()
+                            .getFoodLevel()))
+                .and(
+                    "cur_saturation",
+                    new BigDecimal(
+                        foodHistory.player.getFoodStats()
+                            .getSaturationLevel()))
+                .and("total_food_eaten", new BigDecimal(foodHistory.totalFoodsEatenAllTime))
+                .and("max_history_length", new BigDecimal(ModConfig.FOOD_HISTORY_LENGTH))
+                .and("hunger_count", new BigDecimal(totalFoodValues.hunger))
+                .and("saturation_count", new BigDecimal(totalFoodValues.saturationModifier))
+                .and(
+                    "food_group_count",
+                    new BigDecimal(
+                        FoodGroupRegistry.getFoodGroupsForFood(food)
+                            .size()))
+                .and(
+                    "distinct_food_groups_eaten",
+                    new BigDecimal(
+                        foodHistory.getDistinctFoodGroups()
+                            .size()))
+                .and("total_food_groups", new BigDecimal(FoodGroupRegistry.numFoodGroups()))
+                .and("exact_count", new BigDecimal(foodHistory.getFoodCountIgnoringFoodGroups(food)))
+                .eval();
 
             return result.floatValue();
         }
@@ -137,7 +155,7 @@ public class FoodModifier {
             ItemStack actualFood = event.item;
             if (FoodHelper.isFoodContainer(event.item)) {
                 actualFood = ((ItemFoodContainer) event.item.getItem())
-                        .getBestFoodForPlayerToEat(event.item, event.entityPlayer);
+                    .getBestFoodForPlayerToEat(event.item, event.entityPlayer);
             }
 
             if (actualFood != null) {

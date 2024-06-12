@@ -16,8 +16,8 @@ import squeek.spiceoflife.ModInfo;
 public class WidgetButtonSortDirection extends GuiButton {
 
     private static final ResourceLocation modIcons = new ResourceLocation(
-            ModInfo.MODID.toLowerCase(Locale.ROOT),
-            "textures/icons.png");
+        ModInfo.MODID.toLowerCase(Locale.ROOT),
+        "textures/icons.png");
 
     /**
      * True for sorted descending (newest first), false for sorted ascending (oldest first).
@@ -36,10 +36,11 @@ public class WidgetButtonSortDirection extends GuiButton {
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
         if (this.visible) {
             boolean isHovered = mouseX >= this.xPosition && mouseY >= this.yPosition
-                    && mouseX < this.xPosition + this.width
-                    && mouseY < this.yPosition + this.height;
+                && mouseX < this.xPosition + this.width
+                && mouseY < this.yPosition + this.height;
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            mc.getTextureManager().bindTexture(modIcons);
+            mc.getTextureManager()
+                .bindTexture(modIcons);
             int x = 0;
             int y = 0;
 

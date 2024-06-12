@@ -56,7 +56,7 @@ public class WidgetFoodEaten extends Gui {
         if (defaultFoodValues == null) return 0;
 
         return (int) Math
-                .max(1, Math.ceil(Math.abs(Math.max(foodEaten.foodValues.hunger, defaultFoodValues.hunger)) / 2f));
+            .max(1, Math.ceil(Math.abs(Math.max(foodEaten.foodValues.hunger, defaultFoodValues.hunger)) / 2f));
     }
 
     public void draw(int x, int y) {
@@ -72,15 +72,16 @@ public class WidgetFoodEaten extends Gui {
         if (defaultFoodValues == null) return;
 
         mc.fontRenderer.drawString(
-                getDisplayName(),
-                x,
-                y,
-                ColorHelper.getRelativeColorInt(foodEaten.foodValues.hunger, 0, defaultFoodValues.hunger));
+            getDisplayName(),
+            x,
+            y,
+            ColorHelper.getRelativeColorInt(foodEaten.foodValues.hunger, 0, defaultFoodValues.hunger));
 
         int barsNeeded = hungerBarsNeeded();
 
         GL11.glColor4f(1, 1, 1, 1);
-        mc.getTextureManager().bindTexture(Gui.icons);
+        mc.getTextureManager()
+            .bindTexture(Gui.icons);
         y += mc.fontRenderer.FONT_HEIGHT;
         for (int i = 0; i < barsNeeded * 2; i += 2) {
             this.drawTexturedModalRect(x, y, 16, 27, 9, 9);

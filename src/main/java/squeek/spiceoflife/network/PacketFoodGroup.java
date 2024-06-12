@@ -41,10 +41,10 @@ public class PacketFoodGroup extends PacketBase {
     @Override
     public PacketBase processAndReply(Side side, EntityPlayer player) {
         if (++foodGroupsRecieved > totalFoodGroups) throw new RuntimeException(
-                "Recieved more food groups than should exist (recieved: " + foodGroupsRecieved
-                        + ", total: "
-                        + totalFoodGroups
-                        + ")");
+            "Recieved more food groups than should exist (recieved: " + foodGroupsRecieved
+                + ", total: "
+                + totalFoodGroups
+                + ")");
 
         FoodGroupRegistry.addFoodGroup(foodGroup);
 

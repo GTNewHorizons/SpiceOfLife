@@ -46,8 +46,7 @@ public class NBTInventory implements ISaveable, IInventory {
     public boolean isInventoryFull() {
         for (ItemStack itemStack : inventoryItems) {
             if (itemStack == null
-                    || itemStack.stackSize < Math.min(getInventoryStackLimit(), itemStack.getMaxStackSize()))
-                return false;
+                || itemStack.stackSize < Math.min(getInventoryStackLimit(), itemStack.getMaxStackSize())) return false;
         }
         return true;
     }

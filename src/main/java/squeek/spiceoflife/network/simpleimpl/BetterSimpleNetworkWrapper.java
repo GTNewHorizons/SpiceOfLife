@@ -41,8 +41,8 @@ public class BetterSimpleNetworkWrapper {
      * @param side           the side for the handler
      */
     public <REQ extends IMessage, REPLY extends IMessage> void registerMessage(
-            Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<? extends REQ> messageType,
-            int discriminator, Side side) {
+        Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<? extends REQ> messageType,
+        int discriminator, Side side) {
         packetCodec.addDiscriminator(discriminator, messageType);
         FMLEmbeddedChannel channel = channels.get(side);
         String type = channel.findChannelHandlerNameForType(SimpleIndexedCodec.class);
@@ -54,29 +54,29 @@ public class BetterSimpleNetworkWrapper {
     }
 
     private <REQ extends IMessage, REPLY extends IMessage, NH extends INetHandler> void addServerHandlerAfter(
-            FMLEmbeddedChannel channel, String type, Class<? extends IMessageHandler<REQ, REPLY>> messageHandler,
-            Class<? extends REQ> messageType) {
+        FMLEmbeddedChannel channel, String type, Class<? extends IMessageHandler<REQ, REPLY>> messageHandler,
+        Class<? extends REQ> messageType) {
         BetterSimpleChannelHandlerWrapper<REQ, REPLY> handler = getHandlerWrapper(
-                messageHandler,
-                Side.SERVER,
-                messageType);
+            messageHandler,
+            Side.SERVER,
+            messageType);
         channel.pipeline()
-                .addAfter(type, messageHandler.getName() + messageType.getName() + Side.SERVER.name(), handler);
+            .addAfter(type, messageHandler.getName() + messageType.getName() + Side.SERVER.name(), handler);
     }
 
     private <REQ extends IMessage, REPLY extends IMessage, NH extends INetHandler> void addClientHandlerAfter(
-            FMLEmbeddedChannel channel, String type, Class<? extends IMessageHandler<REQ, REPLY>> messageHandler,
-            Class<? extends REQ> messageType) {
+        FMLEmbeddedChannel channel, String type, Class<? extends IMessageHandler<REQ, REPLY>> messageHandler,
+        Class<? extends REQ> messageType) {
         BetterSimpleChannelHandlerWrapper<REQ, REPLY> handler = getHandlerWrapper(
-                messageHandler,
-                Side.CLIENT,
-                messageType);
+            messageHandler,
+            Side.CLIENT,
+            messageType);
         channel.pipeline()
-                .addAfter(type, messageHandler.getName() + messageType.getName() + Side.CLIENT.name(), handler);
+            .addAfter(type, messageHandler.getName() + messageType.getName() + Side.CLIENT.name(), handler);
     }
 
     private <REPLY extends IMessage, REQ extends IMessage> BetterSimpleChannelHandlerWrapper<REQ, REPLY> getHandlerWrapper(
-            Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Side side, Class<? extends REQ> messageType) {
+        Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Side side, Class<? extends REQ> messageType) {
         return new BetterSimpleChannelHandlerWrapper<>(messageHandler, side, messageType);
     }
 
@@ -87,7 +87,8 @@ public class BetterSimpleNetworkWrapper {
      * @return A minecraft {@link Packet} suitable for use in minecraft APIs
      */
     public Packet getPacketFrom(IMessage message) {
-        return channels.get(Side.SERVER).generatePacketFrom(message);
+        return channels.get(Side.SERVER)
+            .generatePacketFrom(message);
     }
 
     /**
@@ -96,8 +97,12 @@ public class BetterSimpleNetworkWrapper {
      * @param message The message to send
      */
     public void sendToAll(IMessage message) {
-        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
-        channels.get(Side.SERVER).writeAndFlush(message).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+        channels.get(Side.SERVER)
+            .attr(FMLOutboundHandler.FML_MESSAGETARGET)
+            .set(FMLOutboundHandler.OutboundTarget.ALL);
+        channels.get(Side.SERVER)
+            .writeAndFlush(message)
+            .addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
     }
 
     /**
@@ -108,10 +113,15 @@ public class BetterSimpleNetworkWrapper {
      * @param player  The player to send it to
      */
     public void sendTo(IMessage message, EntityPlayerMP player) {
-        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-                .set(FMLOutboundHandler.OutboundTarget.PLAYER);
-        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
-        channels.get(Side.SERVER).writeAndFlush(message).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+        channels.get(Side.SERVER)
+            .attr(FMLOutboundHandler.FML_MESSAGETARGET)
+            .set(FMLOutboundHandler.OutboundTarget.PLAYER);
+        channels.get(Side.SERVER)
+            .attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
+            .set(player);
+        channels.get(Side.SERVER)
+            .writeAndFlush(message)
+            .addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
     }
 
     /**
@@ -122,10 +132,15 @@ public class BetterSimpleNetworkWrapper {
      * @param point   The {@link TargetPoint} around which to send
      */
     public void sendToAllAround(IMessage message, NetworkRegistry.TargetPoint point) {
-        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-                .set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
-        channels.get(Side.SERVER).writeAndFlush(message).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+        channels.get(Side.SERVER)
+            .attr(FMLOutboundHandler.FML_MESSAGETARGET)
+            .set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+        channels.get(Side.SERVER)
+            .attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
+            .set(point);
+        channels.get(Side.SERVER)
+            .writeAndFlush(message)
+            .addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
     }
 
     /**
@@ -136,10 +151,15 @@ public class BetterSimpleNetworkWrapper {
      * @param dimensionId The dimension id to target
      */
     public void sendToDimension(IMessage message, int dimensionId) {
-        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-                .set(FMLOutboundHandler.OutboundTarget.DIMENSION);
-        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimensionId);
-        channels.get(Side.SERVER).writeAndFlush(message).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+        channels.get(Side.SERVER)
+            .attr(FMLOutboundHandler.FML_MESSAGETARGET)
+            .set(FMLOutboundHandler.OutboundTarget.DIMENSION);
+        channels.get(Side.SERVER)
+            .attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
+            .set(dimensionId);
+        channels.get(Side.SERVER)
+            .writeAndFlush(message)
+            .addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
     }
 
     /**
@@ -148,8 +168,11 @@ public class BetterSimpleNetworkWrapper {
      * @param message The message to send
      */
     public void sendToServer(IMessage message) {
-        channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET)
-                .set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-        channels.get(Side.CLIENT).writeAndFlush(message).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+        channels.get(Side.CLIENT)
+            .attr(FMLOutboundHandler.FML_MESSAGETARGET)
+            .set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+        channels.get(Side.CLIENT)
+            .writeAndFlush(message)
+            .addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
     }
 }

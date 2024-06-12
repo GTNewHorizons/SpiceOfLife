@@ -28,12 +28,12 @@ public class GuiHelper implements IGuiHandler {
         if (!player.worldObj.isRemote) {
             if (itemStack.getItem() instanceof ItemFoodContainer) {
                 player.openGui(
-                        ModSpiceOfLife.instance,
-                        GuiIds.FOOD_CONTAINER.ordinal(),
-                        player.worldObj,
-                        (int) player.posX,
-                        (int) player.posY,
-                        (int) player.posZ);
+                    ModSpiceOfLife.instance,
+                    GuiIds.FOOD_CONTAINER.ordinal(),
+                    player.worldObj,
+                    (int) player.posX,
+                    (int) player.posY,
+                    (int) player.posZ);
                 return true;
             }
             return false;
@@ -64,14 +64,14 @@ public class GuiHelper implements IGuiHandler {
     }
 
     public Object getSidedGuiElement(boolean isClientSide, int guiId, EntityPlayer player, World world, int x, int y,
-            int z) {
+        int z) {
         if (GuiIds.values()[guiId] == GuiIds.FOOD_CONTAINER) {
             ItemStack heldItem = player.getHeldItem();
             if (heldItem != null && heldItem.getItem() instanceof ItemFoodContainer) {
                 FoodContainerInventory foodContainerInventory = ((ItemFoodContainer) heldItem.getItem())
-                        .getInventory(heldItem);
+                    .getInventory(heldItem);
                 return isClientSide ? new GuiFoodContainer(player.inventory, foodContainerInventory)
-                        : new ContainerFoodContainer(player.inventory, foodContainerInventory);
+                    : new ContainerFoodContainer(player.inventory, foodContainerInventory);
             }
         }
         return null;

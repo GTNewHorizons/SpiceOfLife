@@ -26,7 +26,7 @@ public abstract class ContainerGeneric extends Container {
     }
 
     protected void addSlotsOfType(Class<? extends Slot> slotClass, IInventory inventory, int xStart, int yStart,
-            int numSlots, int rows) {
+        int numSlots, int rows) {
         int numSlotsPerRow = numSlots / rows;
         for (int i = 0, col = 0, row = 0; i < numSlots; ++i, ++col) {
             if (col >= numSlotsPerRow) {
@@ -36,8 +36,8 @@ public abstract class ContainerGeneric extends Container {
 
             try {
                 this.addSlotToContainer(
-                        slotClass.getConstructor(IInventory.class, int.class, int.class, int.class)
-                                .newInstance(inventory, getNextSlotIndex(), xStart + col * 18, yStart + row * 18));
+                    slotClass.getConstructor(IInventory.class, int.class, int.class, int.class)
+                        .newInstance(inventory, getNextSlotIndex(), xStart + col * 18, yStart + row * 18));
             } catch (RuntimeException e) {
                 throw e;
             } catch (Exception e) {
@@ -56,7 +56,7 @@ public abstract class ContainerGeneric extends Container {
     }
 
     protected void addSlotsOfType(Class<? extends Slot> slotClass, IInventory inventory, int xStart, int yStart,
-            int rows) {
+        int rows) {
         addSlotsOfType(slotClass, inventory, xStart, yStart, inventory.getSizeInventory(), rows);
     }
 
@@ -81,7 +81,7 @@ public abstract class ContainerGeneric extends Container {
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
                 this.addSlotToContainer(
-                        new Slot(playerInventory, col + row * 9 + 9, xStart + col * 18, yStart + row * 18));
+                    new Slot(playerInventory, col + row * 9 + 9, xStart + col * 18, yStart + row * 18));
             }
         }
 
@@ -101,10 +101,10 @@ public abstract class ContainerGeneric extends Container {
             // transferring from the container to the player inventory
             if (slotNum < this.inventory.getSizeInventory()) {
                 if (!this.mergeItemStack(
-                        stackToTransfer,
-                        this.inventory.getSizeInventory(),
-                        this.inventorySlots.size(),
-                        true)) {
+                    stackToTransfer,
+                    this.inventory.getSizeInventory(),
+                    this.inventorySlots.size(),
+                    true)) {
                     return null;
                 }
             }
@@ -167,14 +167,14 @@ public abstract class ContainerGeneric extends Container {
 
         if (itemStack.isStackable()) {
             while (itemStack.stackSize > 0
-                    && (!checkBackwards && k < endSlotNum || checkBackwards && k >= startSlotNum)) {
+                && (!checkBackwards && k < endSlotNum || checkBackwards && k >= startSlotNum)) {
                 slot = (Slot) this.inventorySlots.get(k);
                 itemstack1 = slot.getStack();
 
                 if (itemstack1 != null && itemstack1.getItem() == itemStack.getItem()
-                        && (!itemStack.getHasSubtypes() || itemStack.getItemDamage() == itemstack1.getItemDamage())
-                        && ItemStack.areItemStackTagsEqual(itemStack, itemstack1)
-                        && slot.isItemValid(itemStack)) {
+                    && (!itemStack.getHasSubtypes() || itemStack.getItemDamage() == itemstack1.getItemDamage())
+                    && ItemStack.areItemStackTagsEqual(itemStack, itemstack1)
+                    && slot.isItemValid(itemStack)) {
                     int l = itemstack1.stackSize + itemStack.stackSize;
                     int effectiveMaxStackSize = getEffectiveMaxStackSizeForSlot(k, itemStack);
 

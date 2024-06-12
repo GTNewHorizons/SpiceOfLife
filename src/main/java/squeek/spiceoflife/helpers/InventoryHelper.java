@@ -16,13 +16,13 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 public class InventoryHelper {
 
     public static final Method hopperInsertIntoInventory = ReflectionHelper.findMethod(
-            TileEntityHopper.class,
-            null,
-            new String[] { "func_145899_c", "c" },
-            IInventory.class,
-            ItemStack.class,
-            int.class,
-            int.class);
+        TileEntityHopper.class,
+        null,
+        new String[] { "func_145899_c", "c" },
+        IInventory.class,
+        ItemStack.class,
+        int.class,
+        int.class);
 
     public static IInventory getInventoryAtLocation(World world, int x, int y, int z) {
         return TileEntityHopper.func_145893_b(world, x, y, z);
@@ -33,7 +33,7 @@ public class InventoryHelper {
     }
 
     public static ItemStack insertStackIntoInventory(ItemStack itemStack, IInventory inventory,
-            ForgeDirection direction) {
+        ForgeDirection direction) {
         return TileEntityHopper.func_145889_a(inventory, itemStack, direction.ordinal());
     }
 
@@ -47,13 +47,13 @@ public class InventoryHelper {
      * @return The remainder
      */
     public static ItemStack insertStackIntoInventoryOnce(ItemStack itemStack, IInventory inventory,
-            ForgeDirection direction) {
+        ForgeDirection direction) {
         int originalStackSize = itemStack.stackSize;
 
         for (int l = 0; l < inventory.getSizeInventory(); ++l) {
             try {
                 itemStack = (ItemStack) hopperInsertIntoInventory
-                        .invoke(null, inventory, itemStack, l, direction.ordinal());
+                    .invoke(null, inventory, itemStack, l, direction.ordinal());
             } catch (RuntimeException e) {
                 throw e;
             } catch (Exception e) {

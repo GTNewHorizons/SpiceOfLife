@@ -15,6 +15,7 @@ public class NetworkHelper {
 
     @SideOnly(Side.CLIENT)
     public static EntityPlayer getClientPlayer() {
-        return FMLClientHandler.instance().getClientPlayerEntity();
+        return FMLClientHandler.instance()
+            .getClientPlayerEntity();
     }
 }

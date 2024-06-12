@@ -16,16 +16,17 @@ import squeek.spiceoflife.foodtracker.FoodModifier;
 public class MealPrioritizationHelper {
 
     public static final Comparator<InventoryFoodInfo> hungerComparator = (a,
-            b) -> integerCompare(a.modifiedFoodValues.hunger, b.modifiedFoodValues.hunger);
+        b) -> integerCompare(a.modifiedFoodValues.hunger, b.modifiedFoodValues.hunger);
     public static final Comparator<InventoryFoodInfo> diminishedComparator = (a, b) -> Float
-            .compare(b.diminishingReturnsModifier, a.diminishingReturnsModifier);
+        .compare(b.diminishingReturnsModifier, a.diminishingReturnsModifier);
 
     public static int findBestFoodForPlayerToEat(EntityPlayer player, IInventory inventory) {
         List<InventoryFoodInfo> allFoodInfo = getFoodInfoFromInventoryForPlayer(player, inventory);
         InventoryFoodInfo bestFoodInfo = null;
 
         if (allFoodInfo.size() > 0) {
-            int hungerMissingFromPlayer = 20 - player.getFoodStats().getFoodLevel();
+            int hungerMissingFromPlayer = 20 - player.getFoodStats()
+                .getFoodLevel();
             allFoodInfo.sort(new FoodInfoComparator(hungerMissingFromPlayer));
             bestFoodInfo = allFoodInfo.get(0);
         }
@@ -46,14 +47,14 @@ public class MealPrioritizationHelper {
     }
 
     public static List<InventoryFoodInfo> findBestFoodsForPlayerAccountingForVariety(EntityPlayer player,
-            IInventory inventory, int limit) {
+        IInventory inventory, int limit) {
         List<InventoryFoodInfo> bestFoods = findBestFoodsForPlayerAccountingForVariety(player, inventory);
         if (bestFoods.size() > limit) bestFoods = bestFoods.subList(0, limit);
         return bestFoods;
     }
 
     public static List<InventoryFoodInfo> findBestFoodsForPlayerAccountingForVariety(EntityPlayer player,
-            IInventory inventory) {
+        IInventory inventory) {
         List<InventoryFoodInfo> allFoodInfo = getFoodInfoFromInventoryForPlayer(player, inventory);
         Collections.shuffle(allFoodInfo);
         allFoodInfo.sort(diminishedComparator);
@@ -100,7 +101,7 @@ public class MealPrioritizationHelper {
             if (FoodHelper.canFoodDiminish(this.itemStack)) {
                 this.diminishingReturnsModifier = FoodModifier.getFoodModifier(player, itemStack);
                 this.modifiedFoodValues = FoodModifier
-                        .getModifiedFoodValues(defaultFoodValues, diminishingReturnsModifier);
+                    .getModifiedFoodValues(defaultFoodValues, diminishingReturnsModifier);
             } else {
                 this.diminishingReturnsModifier = Float.NaN;
                 this.modifiedFoodValues = defaultFoodValues;
@@ -138,8 +139,8 @@ public class MealPrioritizationHelper {
             }
             // better food over worse food
             if (compareResult == 0) compareResult = Float.compare(
-                    b.modifiedFoodValues.saturationModifier * b.modifiedFoodValues.hunger,
-                    a.modifiedFoodValues.saturationModifier * a.modifiedFoodValues.hunger);
+                b.modifiedFoodValues.saturationModifier * b.modifiedFoodValues.hunger,
+                a.modifiedFoodValues.saturationModifier * a.modifiedFoodValues.hunger);
 
             return compareResult;
         }

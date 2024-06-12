@@ -26,7 +26,8 @@ public class FoodContainerInventory extends NBTInventory {
     public void onInventoryChanged() {
         // the itemstack on the client can change, so make sure we always get the
         // new itemstack when making changes to the nbt tag
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+        if (FMLCommonHandler.instance()
+            .getEffectiveSide() == Side.CLIENT) {
             findMatchingClientItemStack();
         }
 
@@ -37,11 +38,12 @@ public class FoodContainerInventory extends NBTInventory {
 
     @SideOnly(Side.CLIENT)
     public void findMatchingClientItemStack() {
-        EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
+        EntityPlayer player = FMLClientHandler.instance()
+            .getClient().thePlayer;
         if (player.openContainer != null && player.openContainer instanceof ContainerFoodContainer) {
             ContainerFoodContainer openFoodContainer = (ContainerFoodContainer) player.openContainer;
             ItemStack matchingFoodContainer = openFoodContainer
-                    .findFoodContainerWithUUID(itemFoodContainer.getUUID(itemStackFoodContainer));
+                .findFoodContainerWithUUID(itemFoodContainer.getUUID(itemStackFoodContainer));
             if (matchingFoodContainer != null) itemStackFoodContainer = matchingFoodContainer;
         }
     }

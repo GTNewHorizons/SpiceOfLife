@@ -58,7 +58,7 @@ public class FoodGroupRegistry {
 
     public static Set<FoodGroup> getFoodGroupsForFood(ItemStack food) {
         Set<FoodGroup> wildCardFoodGroups = foodToIncludedFoodGroups
-                .get(OreDictionaryHelper.getWildCardItemStackHash(food));
+            .get(OreDictionaryHelper.getWildCardItemStackHash(food));
         Set<FoodGroup> exactFoodGroups = foodToIncludedFoodGroups.get(OreDictionaryHelper.getItemStackHash(food));
         Set<FoodGroup> allFoodGroups = new HashSet<>();
 
@@ -85,7 +85,8 @@ public class FoodGroupRegistry {
 
     public static void sync(EntityPlayerMP player) {
         for (FoodGroup foodGroup : foodGroups.values()) {
-            PacketDispatcher.get().sendTo(new PacketFoodGroup(foodGroup), player);
+            PacketDispatcher.get()
+                .sendTo(new PacketFoodGroup(foodGroup), player);
         }
     }
 
@@ -96,7 +97,8 @@ public class FoodGroupRegistry {
             foodGroup.init();
             for (Integer itemHash : foodGroup.getMatchingItemStackHashes()) {
                 foodToIncludedFoodGroups.computeIfAbsent(itemHash, k -> new HashSet<>());
-                foodToIncludedFoodGroups.get(itemHash).add(foodGroup);
+                foodToIncludedFoodGroups.get(itemHash)
+                    .add(foodGroup);
             }
         }
     }

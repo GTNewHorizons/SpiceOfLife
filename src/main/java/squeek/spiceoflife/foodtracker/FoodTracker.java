@@ -24,11 +24,13 @@ import squeek.spiceoflife.network.PacketFoodHistory;
 public class FoodTracker {
 
     public static int getFoodHistoryLengthInRelevantUnits(EntityPlayer player) {
-        return FoodHistory.get(player).getHistoryLength();
+        return FoodHistory.get(player)
+            .getHistoryLength();
     }
 
     public static ItemStack getFoodLastEatenBy(EntityPlayer player) {
-        return FoodHistory.get(player).getLastEatenFood().itemStack;
+        return FoodHistory.get(player)
+            .getLastEatenFood().itemStack;
     }
 
     /**
@@ -46,9 +48,10 @@ public class FoodTracker {
 
     public static void addFoodEatenByPlayer(FoodEaten foodEaten, EntityPlayer player) {
         // client needs to be told by the server otherwise the client can get out of sync easily
-        if (!player.worldObj.isRemote && player instanceof EntityPlayerMP)
-            PacketDispatcher.get().sendTo(new PacketFoodHistory(foodEaten), (EntityPlayerMP) player);
-        FoodHistory.get(player).addFood(foodEaten);
+        if (!player.worldObj.isRemote && player instanceof EntityPlayerMP) PacketDispatcher.get()
+            .sendTo(new PacketFoodHistory(foodEaten), (EntityPlayerMP) player);
+        FoodHistory.get(player)
+            .addFood(foodEaten);
     }
 
     /**
@@ -85,10 +88,12 @@ public class FoodTracker {
     }
 
     public static void syncFoodHistory(FoodHistory foodHistory) {
-        PacketDispatcher.get().sendTo(
+        PacketDispatcher.get()
+            .sendTo(
                 new PacketFoodEatenAllTime(foodHistory.totalFoodsEatenAllTime),
                 (EntityPlayerMP) foodHistory.player);
-        PacketDispatcher.get().sendTo(new PacketFoodHistory(foodHistory, true), (EntityPlayerMP) foodHistory.player);
+        PacketDispatcher.get()
+            .sendTo(new PacketFoodHistory(foodHistory, true), (EntityPlayerMP) foodHistory.player);
         MaxHealthHandler.updateFoodHPModifier(foodHistory.player);
     }
 
@@ -106,8 +111,9 @@ public class FoodTracker {
      */
     @SubscribeEvent
     public void onLivingDeathEvent(LivingDeathEvent event) {
-        if (FMLCommonHandler.instance().getEffectiveSide().isClient() || !(event.entity instanceof EntityPlayer))
-            return;
+        if (FMLCommonHandler.instance()
+            .getEffectiveSide()
+            .isClient() || !(event.entity instanceof EntityPlayer)) return;
 
         EntityPlayer player = (EntityPlayer) event.entity;
 
@@ -120,7 +126,9 @@ public class FoodTracker {
      */
     @SubscribeEvent
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (FMLCommonHandler.instance().getEffectiveSide().isClient()) return;
+        if (FMLCommonHandler.instance()
+            .getEffectiveSide()
+            .isClient()) return;
 
         // load any persistent food history data
         FoodHistory foodHistory = FoodHistory.get(event.player);
@@ -135,6 +143,7 @@ public class FoodTracker {
      */
     @SubscribeEvent
     public void onClientConnectedToServer(ClientConnectedToServerEvent event) {
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) ModConfig.assumeClientOnly();
+        if (FMLCommonHandler.instance()
+            .getEffectiveSide() == Side.CLIENT) ModConfig.assumeClientOnly();
     }
 }

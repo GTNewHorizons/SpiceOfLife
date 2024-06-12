@@ -23,7 +23,7 @@ public class ContainerFoodContainer extends ContainerGeneric {
         this.heldSlotId = playerInventory.currentItem;
 
         slotsX = (int) (GuiHelper.STANDARD_GUI_WIDTH / 2f
-                - (inventory.getSizeInventory() * GuiHelper.STANDARD_SLOT_WIDTH / 2f));
+            - (inventory.getSizeInventory() * GuiHelper.STANDARD_SLOT_WIDTH / 2f));
         slotsY = 19;
 
         this.addSlotsOfType(SlotFiltered.class, inventory, slotsX, slotsY);
@@ -69,7 +69,8 @@ public class ContainerFoodContainer extends ContainerGeneric {
 
     public boolean isFoodContainerWithUUID(ItemStack itemStack, UUID uuid) {
         return itemStack != null && itemStack.getItem() instanceof ItemFoodContainer
-                && ((ItemFoodContainer) itemStack.getItem()).getUUID(itemStack).equals(uuid);
+            && ((ItemFoodContainer) itemStack.getItem()).getUUID(itemStack)
+                .equals(uuid);
     }
 
     @Override
@@ -85,9 +86,9 @@ public class ContainerFoodContainer extends ContainerGeneric {
         if (isFoodContainerWithUUID(pickedUpStack, getUUID())) {
             setFoodContainerItemStack(pickedUpStack);
         } else if (slotNum >= 0 && isFoodContainerWithUUID(putDownStack, getUUID())
-                && isFoodContainerWithUUID(getSlot(slotNum).getStack(), getUUID())) {
-                    setFoodContainerItemStack(getSlot(slotNum).getStack());
-                }
+            && isFoodContainerWithUUID(getSlot(slotNum).getStack(), getUUID())) {
+                setFoodContainerItemStack(getSlot(slotNum).getStack());
+            }
 
         return pickedUpStack;
     }
