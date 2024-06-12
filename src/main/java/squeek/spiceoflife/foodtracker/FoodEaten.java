@@ -40,6 +40,7 @@ public class FoodEaten implements IPackable, ISaveable {
     public boolean equals(Object obj) {
         if (!(obj instanceof FoodEaten)) return false;
         final FoodEaten other = ((FoodEaten) obj);
+        if (other.itemStack == null || this.itemStack == null) return false;
         final Item item = itemStack.getItem();
         final Item otherItem = other.itemStack.getItem();
         return (Item.itemRegistry.getNameForObject(item)
