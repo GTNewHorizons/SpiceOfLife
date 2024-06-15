@@ -53,7 +53,7 @@ public class ModConfig implements IPackable, IPacketProcessor {
     public static int FOOD_MILESTONE_VALUE = ModConfig.FOOD_MILESTONE_DEFAULT;
     private static final String MILESTONE_INCREMENT_NAME = "hearts.milestones.increment";
     private static final String MILESTONE_INCREMENT_COMMENT = "The increase per Milestone to the base Food Milestones value (in food points)";
-    private static final int MILESTONE_INCREMENT_DEFAULT = 2;
+    private static final int MILESTONE_INCREMENT_DEFAULT = 0;
     public static int MILESTONE_INCREMENT_VALUE = ModConfig.MILESTONE_INCREMENT_DEFAULT;
     private static final String HEARTS_PER_MILESTONE_NAME = "hearts.milestones.reward";
     private static final String HEARTS_PER_MILESTONE_COMMENT = "Extra hearts awarded per milestone achieved";
