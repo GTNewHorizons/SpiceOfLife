@@ -100,8 +100,11 @@ public class FoodGroup implements IPackable {
         if (itemStringParts.length > 1) {
             Item item = GameRegistry.findItem(itemStringParts[0], itemStringParts[1]);
             if (item != null) {
-                boolean exactMetadata = itemStringParts.length > 2 && !itemStringParts[2].equals("*");
-                int metadata = exactMetadata ? Integer.parseInt(itemStringParts[2]) : OreDictionary.WILDCARD_VALUE;
+                int metadata = 0;
+                if (itemStringParts.length > 2) {
+                    metadata = itemStringParts[2].equals("*") ? OreDictionary.WILDCARD_VALUE
+                        : Integer.parseInt(itemStringParts[2]);
+                }
                 return new ItemStack(item, 1, metadata);
             }
         }
