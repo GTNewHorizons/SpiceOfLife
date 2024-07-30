@@ -4,7 +4,6 @@ import squeek.spiceoflife.foodtracker.FoodEaten;
 
 public class FixedHungerQueue extends FixedSizeQueue {
 
-    private static final long serialVersionUID = -1347372098150405272L;
     protected int hunger;
     protected int hungerOverflow;
 
@@ -30,20 +29,6 @@ public class FixedHungerQueue extends FixedSizeQueue {
 
     public int hunger() {
         return hunger;
-    }
-
-    public int totalHunger() {
-        return hunger + hungerOverflow;
-    }
-
-    public FixedHungerQueue sliceUntil(FoodEaten target) {
-        FixedHungerQueue slice = new FixedHungerQueue(limit);
-        for (FoodEaten foodEaten : this) {
-            if (target.equals(foodEaten)) break;
-
-            slice.add(foodEaten);
-        }
-        return slice;
     }
 
     @Override
