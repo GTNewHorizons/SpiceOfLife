@@ -143,10 +143,15 @@ public class ModConfig implements IPackable, IPacketProcessor {
         + " is > 0, a food with 0% nutrtional value will take nearly infinite time to eat";
     private static final String USE_HUNGER_QUEUE_NAME = "use.hunger.restored.for.food.history.length";
     private static final boolean USE_HUNGER_QUEUE_DEFAULT = false;
-    private static final String USE_HUNGER_QUEUE_COMMENT = "If true, " + FOOD_HISTORY_LENGTH_NAME + " will use amount of hunger restored instead of number of foods eaten for its maximum length\n"
-        + "For example, a " + FOOD_HISTORY_LENGTH_NAME + " length of 12 will store a max of 2 foods that restored 6 hunger each, \n"
+    private static final String USE_HUNGER_QUEUE_COMMENT = "If true, " + FOOD_HISTORY_LENGTH_NAME
+        + " will use amount of hunger restored instead of number of foods eaten for its maximum length\n"
+        + "For example, a "
+        + FOOD_HISTORY_LENGTH_NAME
+        + " length of 12 will store a max of 2 foods that restored 6 hunger each, \n"
         + "3 foods that restored 4 hunger each, 12 foods that restored 1 hunger each, etc\n"
-        + "NOTE: " + FOOD_HISTORY_LENGTH_NAME + " uses hunger units, where 1 hunger unit = 1/2 hunger bar";
+        + "NOTE: "
+        + FOOD_HISTORY_LENGTH_NAME
+        + " uses hunger units, where 1 hunger unit = 1/2 hunger bar";
     private static final String FOOD_MODIFIER_FORMULA_STRING_NAME = "food.modifier.formula";
     private static final String FOOD_MODIFIER_FORMULA_STRING_DEFAULT = "MAX(0, (1 - count/12))^MIN(8, food_hunger_value)";
     private static final String FOOD_MODIFIER_FORMULA_STRING_COMMENT = "Uses the EvalEx expression parser\n"
@@ -365,7 +370,9 @@ public class ModConfig implements IPackable, IPacketProcessor {
                 FOOD_EATING_DURATION_MAX_DEFAULT,
                 FOOD_EATING_DURATION_MAX_COMMENT)
             .getInt(FOOD_EATING_DURATION_MAX_DEFAULT);
-        USE_HUNGER_QUEUE = config.get(CATEGORY_SERVER, USE_HUNGER_QUEUE_NAME, USE_HUNGER_QUEUE_DEFAULT, USE_HUNGER_QUEUE_COMMENT).getBoolean(USE_HUNGER_QUEUE_DEFAULT);
+        USE_HUNGER_QUEUE = config
+            .get(CATEGORY_SERVER, USE_HUNGER_QUEUE_NAME, USE_HUNGER_QUEUE_DEFAULT, USE_HUNGER_QUEUE_COMMENT)
+            .getBoolean(USE_HUNGER_QUEUE_DEFAULT);
         GIVE_FOOD_JOURNAL_ON_START = config
             .get(
                 CATEGORY_SERVER,

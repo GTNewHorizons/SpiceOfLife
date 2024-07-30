@@ -91,7 +91,8 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     }
 
     public static FoodQueue getNewFoodQueue() {
-        return ModConfig.USE_HUNGER_QUEUE ? new FixedHungerQueue(ModConfig.FOOD_HISTORY_LENGTH) : new FixedSizeQueue(ModConfig.FOOD_HISTORY_LENGTH);
+        return ModConfig.USE_HUNGER_QUEUE ? new FixedHungerQueue(ModConfig.FOOD_HISTORY_LENGTH)
+            : new FixedSizeQueue(ModConfig.FOOD_HISTORY_LENGTH);
     }
 
     public void deltaTicksActive(long delta) {

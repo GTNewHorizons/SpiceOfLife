@@ -2,23 +2,20 @@ package squeek.spiceoflife.foodtracker.foodqueue;
 
 import squeek.spiceoflife.foodtracker.FoodEaten;
 
-public class FixedHungerQueue extends FixedSizeQueue
-{
+public class FixedHungerQueue extends FixedSizeQueue {
+
     private static final long serialVersionUID = -1347372098150405272L;
     protected int hunger;
     protected int hungerOverflow;
 
-    public FixedHungerQueue(int limit)
-    {
+    public FixedHungerQueue(int limit) {
         super(limit);
     }
 
     @Override
-    public boolean add(FoodEaten foodEaten)
-    {
+    public boolean add(FoodEaten foodEaten) {
         boolean added = super.add(foodEaten);
-        if (added)
-        {
+        if (added) {
             hunger += foodEaten.foodValues.hunger;
             trimToMaxSize();
         }
@@ -26,29 +23,23 @@ public class FixedHungerQueue extends FixedSizeQueue
     }
 
     @Override
-    public void clear()
-    {
+    public void clear() {
         super.clear();
         hunger = hungerOverflow = 0;
     }
 
-    public int hunger()
-    {
+    public int hunger() {
         return hunger;
     }
 
-    public int totalHunger()
-    {
+    public int totalHunger() {
         return hunger + hungerOverflow;
     }
 
-    public FixedHungerQueue sliceUntil(FoodEaten target)
-    {
+    public FixedHungerQueue sliceUntil(FoodEaten target) {
         FixedHungerQueue slice = new FixedHungerQueue(limit);
-        for (FoodEaten foodEaten : this)
-        {
-            if (target.equals(foodEaten))
-                break;
+        for (FoodEaten foodEaten : this) {
+            if (target.equals(foodEaten)) break;
 
             slice.add(foodEaten);
         }
@@ -56,15 +47,12 @@ public class FixedHungerQueue extends FixedSizeQueue
     }
 
     @Override
-    protected void trimToMaxSize()
-    {
-        while (hunger > limit && peekFirst() != null)
-        {
+    protected void trimToMaxSize() {
+        while (hunger > limit && peekFirst() != null) {
             hunger -= 1;
             hungerOverflow += 1;
 
-            while (hungerOverflow >= peekFirst().foodValues.hunger)
-            {
+            while (hungerOverflow >= peekFirst().foodValues.hunger) {
                 hungerOverflow -= removeFirst().foodValues.hunger;
             }
         }

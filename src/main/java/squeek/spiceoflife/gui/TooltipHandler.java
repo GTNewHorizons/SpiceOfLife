@@ -163,10 +163,11 @@ public class TooltipHandler {
                 + "]"
             : "";
         if (count > 0) eatenRecently = StatCollector.translateToLocalFormatted(
-                "spiceoflife.tooltip.eaten.recently" + (ModConfig.USE_HUNGER_QUEUE ? ".hunger" : ""),
+            "spiceoflife.tooltip.eaten.recently" + (ModConfig.USE_HUNGER_QUEUE ? ".hunger" : ""),
 
             StringHelper.getQuantityDescriptor(count),
-                ModConfig.USE_HUNGER_QUEUE ? StringHelper.hungerHistoryLength(ModConfig.FOOD_HISTORY_LENGTH) : ModConfig.FOOD_HISTORY_LENGTH);
+            ModConfig.USE_HUNGER_QUEUE ? StringHelper.hungerHistoryLength(ModConfig.FOOD_HISTORY_LENGTH)
+                : ModConfig.FOOD_HISTORY_LENGTH);
         else eatenRecently = StatCollector.translateToLocal("spiceoflife.tooltip.not.eaten.recently");
         return prefix + (foodGroup != null ? StringHelper.decapitalize(eatenRecently, StringHelper.getMinecraftLocale())
             : eatenRecently) + nutritionalValue;
