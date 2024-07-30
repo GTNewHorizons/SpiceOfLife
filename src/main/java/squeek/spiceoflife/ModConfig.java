@@ -141,6 +141,17 @@ public class ModConfig implements IPackable, IPacketProcessor {
         + "Note: If this is set to 0 and "
         + ModConfig.FOOD_EATING_SPEED_MODIFIER_NAME
         + " is > 0, a food with 0% nutrtional value will take nearly infinite time to eat";
+    private static final String USE_HUNGER_QUEUE_NAME = "use.hunger.restored.for.food.history.length";
+    private static final boolean USE_HUNGER_QUEUE_DEFAULT = false;
+    private static final String USE_HUNGER_QUEUE_COMMENT = "If true, " + FOOD_HISTORY_LENGTH_NAME
+        + " will use amount of hunger restored instead of number of foods eaten for its maximum length\n"
+        + "For example, a "
+        + FOOD_HISTORY_LENGTH_NAME
+        + " length of 12 will store a max of 2 foods that restored 6 hunger each, \n"
+        + "3 foods that restored 4 hunger each, 12 foods that restored 1 hunger each, etc\n"
+        + "NOTE: "
+        + FOOD_HISTORY_LENGTH_NAME
+        + " uses hunger units, where 1 hunger unit = 1/2 hunger bar";
     private static final String FOOD_MODIFIER_FORMULA_STRING_NAME = "food.modifier.formula";
     private static final String FOOD_MODIFIER_FORMULA_STRING_DEFAULT = "MAX(0, (1 - count/12))^MIN(8, food_hunger_value)";
     private static final String FOOD_MODIFIER_FORMULA_STRING_COMMENT = "Uses the EvalEx expression parser\n"
@@ -168,6 +179,7 @@ public class ModConfig implements IPackable, IPacketProcessor {
     private static final String FOOD_CONTAINERS_MAX_STACKSIZE_NAME = "food.containers.max.stacksize";
     private static final int FOOD_CONTAINERS_MAX_STACKSIZE_DEFAULT = 2;
     private static final String FOOD_CONTAINERS_MAX_STACKSIZE_COMMENT = "The maximum stacksize per slot in a food container";
+
     /*
      * CLIENT
      */
@@ -201,6 +213,7 @@ public class ModConfig implements IPackable, IPacketProcessor {
     public static boolean AFFECT_NEGATIVE_FOOD_SATURATION_MODIFIERS = ModConfig.AFFECT_NEGATIVE_FOOD_SATURATION_MODIFIERS_DEFAULT;
     public static float FOOD_EATING_SPEED_MODIFIER = ModConfig.FOOD_EATING_SPEED_MODIFIER_DEFAULT;
     public static int FOOD_EATING_DURATION_MAX = ModConfig.FOOD_EATING_DURATION_MAX_DEFAULT;
+    public static boolean USE_HUNGER_QUEUE = USE_HUNGER_QUEUE_DEFAULT;
     public static String FOOD_MODIFIER_FORMULA = ModConfig.FOOD_MODIFIER_FORMULA_STRING_DEFAULT;
     public static boolean GIVE_FOOD_JOURNAL_ON_START = ModConfig.GIVE_FOOD_JOURNAL_ON_START_DEFAULT;
 
@@ -357,6 +370,9 @@ public class ModConfig implements IPackable, IPacketProcessor {
                 FOOD_EATING_DURATION_MAX_DEFAULT,
                 FOOD_EATING_DURATION_MAX_COMMENT)
             .getInt(FOOD_EATING_DURATION_MAX_DEFAULT);
+        USE_HUNGER_QUEUE = config
+            .get(CATEGORY_SERVER, USE_HUNGER_QUEUE_NAME, USE_HUNGER_QUEUE_DEFAULT, USE_HUNGER_QUEUE_COMMENT)
+            .getBoolean(USE_HUNGER_QUEUE_DEFAULT);
         GIVE_FOOD_JOURNAL_ON_START = config
             .get(
                 CATEGORY_SERVER,
