@@ -150,7 +150,7 @@ public class TooltipHandler {
     public String getEatenRecentlyTooltip(FoodHistory foodHistory, ItemStack itemStack, FoodGroup foodGroup,
         boolean shouldShowNutritionalValue) {
         final int count = foodHistory.getFoodCountForFoodGroup(itemStack, foodGroup);
-        final String prefix = "Diminishing Returns: "
+        final String prefix = StatCollector.translateToLocal("spiceoflife.tooltip.diminishing")
             + (foodGroup != null ? foodGroup.formatString(EnumChatFormatting.ITALIC.toString() + foodGroup) + " " : "")
             + EnumChatFormatting.RESET.toString()
             + EnumChatFormatting.DARK_AQUA.toString()
@@ -180,7 +180,8 @@ public class TooltipHandler {
     }
 
     public String getFullHistoryToolTip(FoodHistory foodHistory, ItemStack itemStack) {
-        final String prefix = "Extra Hearts: " + EnumChatFormatting.DARK_AQUA.toString()
+        final String prefix = StatCollector.translateToLocal("spiceoflife.tooltip.extrahearts")
+            + EnumChatFormatting.DARK_AQUA.toString()
             + EnumChatFormatting.ITALIC.toString();
         if (!foodHistory.hasEverEaten(itemStack)) {
             return prefix + StatCollector.translateToLocal("spiceoflife.tooltip.not.eaten.ever");
