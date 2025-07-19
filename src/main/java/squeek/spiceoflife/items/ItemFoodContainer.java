@@ -67,7 +67,7 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
         setCreativeTab(CreativeTabs.tabMisc);
 
         // for ItemTossEvent
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     public boolean isFull(ItemStack itemStack) {
@@ -79,7 +79,6 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
     }
 
     // necessary to catch tossing items while still in an inventory
-    @SubscribeEvent
     public void onItemToss(ItemTossEvent event) {
         if (event.entityItem.getEntityItem()
             .getItem() instanceof ItemFoodContainer) {
@@ -163,7 +162,6 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
     // necessary to stop food containers themselves being modified
     // for example, HO's modFoodDivider was being applied to the values
     // shown in the tooltips/overlay
-    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void getFoodValues(FoodEvent.GetFoodValues event) {
         if (FoodHelper.isFoodContainer(event.food)) {
             event.foodValues = event.unmodifiedFoodValues;
@@ -348,5 +346,19 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
         super.registerIcons(iconRegister);
         iconOpenEmpty = iconRegister.registerIcon(getIconString() + "_open_empty");
         iconOpenFull = iconRegister.registerIcon(getIconString() + "_open_full");
+    }
+
+    public class EventHandler {
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public void getFoodValuesWrapper(FoodEvent.GetFoodValues event) {
+            getFoodValues(event);
+        }
+
+        @SubscribeEvent
+        public void onItemTossWrapper(ItemTossEvent event) {
+            onItemTossWrapper(event);
+        }
+
     }
 }
