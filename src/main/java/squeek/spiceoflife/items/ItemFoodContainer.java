@@ -357,7 +357,7 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
 
         @SubscribeEvent
         public void onItemTossWrapper(ItemTossEvent event) {
-            onItemTossWrapper(event);
+            onItemToss(event);
         }
 
     }
