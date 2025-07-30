@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -17,6 +18,7 @@ import squeek.applecore.api.food.FoodEvent;
 import squeek.spiceoflife.ModConfig;
 import squeek.spiceoflife.compat.PacketDispatcher;
 import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
+import squeek.spiceoflife.foodtracker.foodqueue.FixedTimeQueue;
 import squeek.spiceoflife.items.ItemFoodJournal;
 import squeek.spiceoflife.network.PacketFoodEatenAllTime;
 import squeek.spiceoflife.network.PacketFoodHistory;
@@ -40,7 +42,7 @@ public class FoodTracker {
     public void onFoodEaten(FoodEvent.FoodEaten event) {
         if (event.player.worldObj.isRemote) return;
 
-        FoodEaten foodEaten = new FoodEaten(event.food);
+        FoodEaten foodEaten = new FoodEaten(event.food, event.player);
         foodEaten.foodValues = event.foodValues;
 
         FoodTracker.addFoodEatenByPlayer(foodEaten, event.player);
@@ -61,6 +63,24 @@ public class FoodTracker {
     public void onEntityConstructing(EntityConstructing event) {
         if (event.entity instanceof EntityPlayer) {
             FoodHistory.get((EntityPlayer) event.entity);
+        }
+    }
+
+    /**
+     * Keep track of how many ticks the player has actively spent on the server,
+     * and make sure the food history prunes expired items
+     */
+    @SubscribeEvent
+    public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+        if (!(event.entityLiving instanceof EntityPlayer)) return;
+
+        FoodHistory foodHistory = FoodHistory.get((EntityPlayer) event.entityLiving);
+        foodHistory.deltaTicksActive(10);
+
+        if (ModConfig.USE_TIME_QUEUE && !ModConfig.USE_HUNGER_QUEUE) {
+            FixedTimeQueue timeQueue = (FixedTimeQueue) foodHistory.getRecentHistory();
+            System.out.println("Using Time based, here is history: " + foodHistory + " |   | " + timeQueue);
+            timeQueue.prune(event.entityLiving.worldObj.getTotalWorldTime(), foodHistory.ticksActive);
         }
     }
 
