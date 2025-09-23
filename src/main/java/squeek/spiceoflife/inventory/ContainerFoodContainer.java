@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import squeek.spiceoflife.helpers.GuiHelper;
@@ -16,11 +15,13 @@ public class ContainerFoodContainer extends ContainerGeneric {
     public int slotsY;
     protected FoodContainerInventory foodContainerInventory;
     private final int heldSlotId;
+    private final InventoryPlayer playerInventory;
 
     public ContainerFoodContainer(InventoryPlayer playerInventory, FoodContainerInventory foodContainerInventory) {
         super(foodContainerInventory);
         this.foodContainerInventory = foodContainerInventory;
         this.heldSlotId = playerInventory.currentItem;
+        this.playerInventory = playerInventory;
 
         slotsX = (int) (GuiHelper.STANDARD_GUI_WIDTH / 2f
             - (inventory.getSizeInventory() * GuiHelper.STANDARD_SLOT_WIDTH / 2f));
@@ -49,11 +50,9 @@ public class ContainerFoodContainer extends ContainerGeneric {
     }
 
     public ItemStack findFoodContainerWithUUID(UUID uuid) {
-        for (Object inventorySlotObj : this.inventorySlots) {
-            Slot inventorySlot = (Slot) inventorySlotObj;
-            ItemStack itemStack = inventorySlot.getStack();
-            if (isFoodContainerWithUUID(itemStack, uuid)) {
-                return itemStack;
+        for (ItemStack stack : playerInventory.mainInventory) {
+            if (isFoodContainerWithUUID(stack, uuid)) {
+                return stack;
             }
         }
         return null;
