@@ -42,7 +42,9 @@ public class ContainerFoodContainer extends ContainerGeneric {
     @Override
     public void onContainerClosed(EntityPlayer player) {
         if (cachedUUID != null) {
-
+            // the client could have a different ItemStack than the one the
+            // container was initialized with (due to server syncing), so
+            // we need to find the new one
             if (player.worldObj.isRemote) {
                 setFoodContainerItemStack(findFoodContainerWithUUID(getUUID()));
             }
