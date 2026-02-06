@@ -2,7 +2,6 @@ package squeek.spiceoflife.items;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 import java.util.UUID;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -48,7 +47,6 @@ import squeek.spiceoflife.network.PacketToggleFoodContainer;
 
 public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdible {
 
-    public static final Random random = new Random();
     public static final String TAG_KEY_INVENTORY = "Inventory";
     public static final String TAG_KEY_OPEN = "Open";
     public static final String TAG_KEY_UUID = "UUID";
@@ -92,13 +90,30 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
     }
 
     public UUID getUUID(ItemStack itemStack) {
-        return UUID.fromString(getOrInitBaseTag(itemStack).getString(TAG_KEY_UUID));
+        if (itemStack == null) return null;
+
+        NBTTagCompound base = getOrInitBaseTag(itemStack);
+        if (base == null) return null;
+
+        String uuidStr = base.getString(TAG_KEY_UUID);
+        try {
+            return UUID.fromString(uuidStr);
+        } catch (IllegalArgumentException e) {
+            UUID uuid = UUID.randomUUID();
+            base.setString(TAG_KEY_UUID, uuid.toString());
+            return uuid;
+        }
     }
 
     public NBTTagCompound getOrInitBaseTag(ItemStack itemStack) {
+        if (itemStack == null) return null;
         if (!itemStack.hasTagCompound()) itemStack.setTagCompound(new NBTTagCompound());
 
         NBTTagCompound baseTag = itemStack.getTagCompound();
+        if (baseTag == null) {
+            baseTag = new NBTTagCompound();
+            itemStack.setTagCompound(baseTag);
+        }
 
         if (!baseTag.hasKey(TAG_KEY_UUID)) baseTag.setString(
             TAG_KEY_UUID,
@@ -133,6 +148,7 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
 
     public void setIsOpen(ItemStack itemStack, boolean isOpen) {
         NBTTagCompound baseTag = getOrInitBaseTag(itemStack);
+        if (baseTag == null) return;
         baseTag.setBoolean(TAG_KEY_OPEN, isOpen);
     }
 
@@ -183,7 +199,7 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
     public void tryPullFoodFrom(ItemStack itemStack, IInventory inventory, EntityPlayer player) {
         List<InventoryFoodInfo> foodsToPull = MealPrioritizationHelper
             .findBestFoodsForPlayerAccountingForVariety(player, inventory);
-        if (foodsToPull.size() > 0) {
+        if (!foodsToPull.isEmpty()) {
             FoodContainerInventory foodContainerInventory = getInventory(itemStack);
             for (InventoryFoodInfo foodToPull : foodsToPull) {
                 ItemStack stackInSlot = inventory.getStackInSlot(foodToPull.slotNum);
@@ -205,25 +221,24 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
     }
 
     public boolean isOpen(ItemStack itemStack) {
-        return itemStack.hasTagCompound() && itemStack.getTagCompound()
-            .getBoolean(TAG_KEY_OPEN);
+        return itemStack != null && itemStack.hasTagCompound()
+            && itemStack.getTagCompound()
+                .getBoolean(TAG_KEY_OPEN);
     }
 
     @Override
     public boolean onDroppedByPlayer(ItemStack itemStack, EntityPlayer player) {
-        if (!player.worldObj.isRemote && player.openContainer != null
-            && player.openContainer instanceof ContainerFoodContainer) {
+        if (!player.worldObj.isRemote && player.openContainer instanceof ContainerFoodContainer) {
             ContainerFoodContainer openFoodContainer = (ContainerFoodContainer) player.openContainer;
             UUID droppedUUID = getUUID(itemStack);
 
-            if (openFoodContainer.getUUID()
-                .equals(droppedUUID)) {
+            if (droppedUUID != null && droppedUUID.equals(openFoodContainer.getUUID())) {
                 // if the cursor item is the open food container, then it will create an infinite loop
                 // due to the container dropping the cursor item when it is closed
                 ItemStack itemOnTheCursor = player.inventory.getItemStack();
                 if (itemOnTheCursor != null && itemOnTheCursor.getItem() instanceof ItemFoodContainer) {
-                    if (((ItemFoodContainer) itemOnTheCursor.getItem()).getUUID(itemOnTheCursor)
-                        .equals(droppedUUID)) {
+                    UUID cursorUUID = ((ItemFoodContainer) itemOnTheCursor.getItem()).getUUID(itemOnTheCursor);
+                    if (cursorUUID != null && cursorUUID.equals(droppedUUID)) {
                         player.inventory.setItemStack(null);
                     }
                 }
@@ -240,6 +255,7 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
 
     public NBTTagCompound getInventoryTag(ItemStack itemStack) {
         NBTTagCompound baseTag = getOrInitBaseTag(itemStack);
+        if (baseTag == null) return new NBTTagCompound();
 
         if (!baseTag.hasKey(TAG_KEY_INVENTORY)) baseTag.setTag(TAG_KEY_INVENTORY, new NBTTagCompound());
 
