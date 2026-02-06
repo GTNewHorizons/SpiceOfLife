@@ -147,7 +147,6 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
     }
 
     public void setIsOpen(ItemStack itemStack, boolean isOpen) {
-        if (itemStack == null) return;
         NBTTagCompound baseTag = getOrInitBaseTag(itemStack);
         if (baseTag == null) return;
         baseTag.setBoolean(TAG_KEY_OPEN, isOpen);
