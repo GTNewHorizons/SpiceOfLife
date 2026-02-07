@@ -1,7 +1,6 @@
 package squeek.spiceoflife.foodtracker.foodqueue;
 
 import net.minecraft.nbt.NBTTagCompound;
-import squeek.spiceoflife.foodtracker.FoodHistory;
 
 public class FixedTimeQueue extends FoodQueue {
 
