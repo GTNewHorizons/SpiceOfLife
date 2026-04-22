@@ -16,12 +16,20 @@ public class ContainerFoodContainer extends ContainerGeneric {
     protected FoodContainerInventory foodContainerInventory;
     private final int heldSlotId;
     private final InventoryPlayer playerInventory;
+    private final UUID cachedUUID;
 
     public ContainerFoodContainer(InventoryPlayer playerInventory, FoodContainerInventory foodContainerInventory) {
         super(foodContainerInventory);
         this.foodContainerInventory = foodContainerInventory;
         this.heldSlotId = playerInventory.currentItem;
         this.playerInventory = playerInventory;
+
+        ItemStack stack = getItemStack();
+        UUID uuid = null;
+        if (stack != null && stack.getItem() instanceof ItemFoodContainer) {
+            uuid = ((ItemFoodContainer) stack.getItem()).getUUID(stack);
+        }
+        this.cachedUUID = uuid;
 
         slotsX = (int) (GuiHelper.STANDARD_GUI_WIDTH / 2f
             - (inventory.getSizeInventory() * GuiHelper.STANDARD_SLOT_WIDTH / 2f));
@@ -33,14 +41,20 @@ public class ContainerFoodContainer extends ContainerGeneric {
 
     @Override
     public void onContainerClosed(EntityPlayer player) {
-        // the client could have a different ItemStack than the one the
-        // container was initialized with (due to server syncing), so
-        // we need to find the new one
-        if (player.worldObj.isRemote) {
-            setFoodContainerItemStack(findFoodContainerWithUUID(getUUID()));
+        if (cachedUUID != null) {
+            // the client could have a different ItemStack than the one the
+            // container was initialized with (due to server syncing), so
+            // we need to find the new one
+            if (player.worldObj.isRemote) {
+                setFoodContainerItemStack(findFoodContainerWithUUID(getUUID()));
+            }
+
         }
 
-        if (getItemStack() != null) ((ItemFoodContainer) getItemStack().getItem()).setIsOpen(getItemStack(), false);
+        ItemStack stack = getItemStack();
+        if (stack != null && stack.getItem() instanceof ItemFoodContainer) {
+            ((ItemFoodContainer) stack.getItem()).setIsOpen(stack, false);
+        }
 
         super.onContainerClosed(player);
     }
@@ -50,6 +64,8 @@ public class ContainerFoodContainer extends ContainerGeneric {
     }
 
     public ItemStack findFoodContainerWithUUID(UUID uuid) {
+        if (uuid == null) return null;
+
         for (ItemStack stack : playerInventory.mainInventory) {
             if (isFoodContainerWithUUID(stack, uuid)) {
                 return stack;
@@ -59,7 +75,7 @@ public class ContainerFoodContainer extends ContainerGeneric {
     }
 
     public UUID getUUID() {
-        return ((ItemFoodContainer) getItemStack().getItem()).getUUID(getItemStack());
+        return cachedUUID;
     }
 
     public ItemStack getItemStack() {
@@ -67,9 +83,10 @@ public class ContainerFoodContainer extends ContainerGeneric {
     }
 
     public boolean isFoodContainerWithUUID(ItemStack itemStack, UUID uuid) {
+        if (uuid == null) return false;
+
         return itemStack != null && itemStack.getItem() instanceof ItemFoodContainer
-            && ((ItemFoodContainer) itemStack.getItem()).getUUID(itemStack)
-                .equals(uuid);
+            && uuid.equals(((ItemFoodContainer) itemStack.getItem()).getUUID(itemStack));
     }
 
     @Override
