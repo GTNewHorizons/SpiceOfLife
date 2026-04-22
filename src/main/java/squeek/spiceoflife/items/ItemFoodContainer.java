@@ -90,8 +90,6 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
     }
 
     public UUID getUUID(ItemStack itemStack) {
-        if (itemStack == null) return null;
-
         NBTTagCompound base = getOrInitBaseTag(itemStack);
         if (base == null) return null;
 
