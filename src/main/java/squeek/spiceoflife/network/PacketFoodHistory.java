@@ -6,6 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import squeek.spiceoflife.compat.IByteIO;
 import squeek.spiceoflife.foodtracker.FoodEaten;
 import squeek.spiceoflife.foodtracker.FoodHistory;
+import squeek.spiceoflife.foodtracker.FoodTracker;
 
 public class PacketFoodHistory extends PacketBase {
 
@@ -59,6 +60,10 @@ public class PacketFoodHistory extends PacketBase {
             .forEach(foodHistory::addFoodRecent);
         this.foodHistory.getFullHistory()
             .forEach(foodHistory::addFoodFullHistory);
+
+        if (side == Side.CLIENT && !shouldOverwrite) {
+            FoodTracker.onFoodEatenClient(this.foodHistory.getLastEatenFood());
+        }
 
         return null;
     }

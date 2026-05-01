@@ -15,6 +15,7 @@ import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import cpw.mods.fml.relauncher.Side;
 import squeek.applecore.api.food.FoodEvent;
 import squeek.spiceoflife.ModConfig;
+import squeek.spiceoflife.compat.NEICompat;
 import squeek.spiceoflife.compat.PacketDispatcher;
 import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
 import squeek.spiceoflife.items.ItemFoodJournal;
@@ -44,6 +45,12 @@ public class FoodTracker {
         foodEaten.foodValues = event.foodValues;
 
         FoodTracker.addFoodEatenByPlayer(foodEaten, event.player);
+    }
+
+    public static void onFoodEatenClient(FoodEaten foodEaten) {
+        if (NEICompat.LOADED && foodEaten.itemStack != null) {
+            NEICompat.updateTooltipCache(foodEaten.itemStack);
+        }
     }
 
     public static void addFoodEatenByPlayer(FoodEaten foodEaten, EntityPlayer player) {
