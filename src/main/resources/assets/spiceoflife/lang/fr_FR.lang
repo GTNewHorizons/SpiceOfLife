@@ -33,6 +33,8 @@ spiceoflife.gui.expires.in.food=Expire après avoir mangé n'importe quoi %s %s 
 spiceoflife.gui.expires.in.hunger=Expire après avoir mangé l'équivalent de %s gigots de nourriture
 spiceoflife.gui.food.num=Nourriture #%d
 spiceoflife.gui.items.on.page=%d-%d of %d
+spiceoflife.gui.title.lunchbox=Boîte à Pic-Nique
+spiceoflife.gui.title.lunchbag=Sac à Pic-Nique
 
 # Items
 item.spiceoflife.bookfoodjournal.name=Compte-rendu Alimentaire
