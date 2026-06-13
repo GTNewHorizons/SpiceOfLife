@@ -4,6 +4,6 @@ dependencies {
     // Last version compatible with Java 8
     shadowImplementation('com.udojava:EvalEx:2.6')
 
-    api('com.github.GTNewHorizons:AppleCore:3.3.9:dev')
-    devOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.8.93-GTNH:dev")
+    api('com.github.GTNewHorizons:AppleCore:3.3.11:dev')
+    devOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.8.103-GTNH:dev")
 }
