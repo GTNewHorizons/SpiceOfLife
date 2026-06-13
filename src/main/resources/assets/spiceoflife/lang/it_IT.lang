@@ -21,7 +21,9 @@ spiceoflife.quantity.x.times=%d volte
 # Gui
 spiceoflife.gui.alltime.food.eaten=Tutti i cibi mangiati
 spiceoflife.gui.no.food.history.yet=Storia alimentare non compare finchè la diminuzione inizia
-spiceoflife.gui.no.recent.food.eaten=Nessun cibo mangiato recentemente 
+spiceoflife.gui.no.recent.food.eaten=Nessun cibo mangiato recentemente
+spiceoflife.gui.title.lunchbox=Portapranzo
+spiceoflife.gui.title.lunchbag=Sacchetto con pranzo
 
 # Items
 item.spiceoflife.bookfoodjournal.name=Diario alimentare

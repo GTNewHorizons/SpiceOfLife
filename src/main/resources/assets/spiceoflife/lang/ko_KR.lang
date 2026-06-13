@@ -22,6 +22,8 @@ spiceoflife.quantity.x.times=%d 번
 spiceoflife.gui.alltime.food.eaten=All-time food eaten
 spiceoflife.gui.no.food.history.yet=Food history not logged until diminishing returns start
 spiceoflife.gui.no.recent.food.eaten=No food eaten recently
+spiceoflife.gui.title.lunchbox=Lunch Box
+spiceoflife.gui.title.lunchbag=Lunch Bag
 
 # Items
 item.spiceoflife.bookfoodjournal.name=음식 잡지

@@ -32,6 +32,8 @@ spiceoflife.gui.expires.in.food=Expira después de comer cualquier alimento %s m
 spiceoflife.gui.expires.in.hunger=Expira después de comer %s el hambre de cualquier alimento
 spiceoflife.gui.food.num=Comida #%d
 spiceoflife.gui.items.on.page=%d-%d de %d
+spiceoflife.gui.title.lunchbox=Caja de Comida
+spiceoflife.gui.title.lunchbag=Bolsa de Comida
 
 # Items
 item.spiceoflife.bookfoodjournal.name=Diario de Comidas

@@ -86,7 +86,7 @@ public class ItemFoodContainer extends Item implements INBTInventoryHaver, IEdib
 
     @Override
     public String getInvName(NBTInventory inventory) {
-        return this.getItemStackDisplayName(null);
+        return "spiceoflife.gui.title." + this.itemName;
     }
 
     public UUID getUUID(ItemStack itemStack) {
