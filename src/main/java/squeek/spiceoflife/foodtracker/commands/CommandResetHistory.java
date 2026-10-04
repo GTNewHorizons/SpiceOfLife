@@ -56,11 +56,7 @@ public class CommandResetHistory extends CommandBase {
                 FoodHistory foodHistoryToReset = FoodHistory.get(playerToReset);
                 foodHistoryToReset.reset();
                 FoodTracker.syncFoodHistory(foodHistoryToReset);
-                func_152374_a(
-                    commandSender,
-                    this,
-                    0,
-                    "Reset all 'The Spice of Life' mod data for " + playerToReset.getDisplayName());
+                func_152374_a(commandSender, this, 0, "spiceoflife.chat.reset", playerToReset.getDisplayName());
                 return;
             }
         }
