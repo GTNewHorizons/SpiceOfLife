@@ -23,6 +23,7 @@ import squeek.spiceoflife.foodtracker.foodgroups.FoodGroup;
 import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
 import squeek.spiceoflife.foodtracker.foodqueue.FixedHungerQueue;
 import squeek.spiceoflife.foodtracker.foodqueue.FixedSizeQueue;
+import squeek.spiceoflife.foodtracker.foodqueue.FixedTimeQueue;
 import squeek.spiceoflife.foodtracker.foodqueue.FoodQueue;
 import squeek.spiceoflife.helpers.FoodHelper;
 import squeek.spiceoflife.helpers.MiscHelper;
@@ -60,7 +61,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     }
 
     public boolean hasEverEaten(ItemStack food) {
-        return fullHistory.contains(new FoodEaten(food));
+        return fullHistory.contains(new FoodEaten(food, player));
     }
 
     public ProgressInfo getProgressInfo() {
@@ -91,8 +92,10 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     }
 
     public static FoodQueue getNewFoodQueue() {
-        return ModConfig.USE_HUNGER_QUEUE ? new FixedHungerQueue(ModConfig.FOOD_HISTORY_LENGTH)
-            : new FixedSizeQueue(ModConfig.FOOD_HISTORY_LENGTH);
+        if (ModConfig.USE_HUNGER_QUEUE) return new FixedHungerQueue(ModConfig.FOOD_HISTORY_LENGTH);
+        else if (ModConfig.USE_TIME_QUEUE)
+            return new FixedTimeQueue((long) ModConfig.FOOD_HISTORY_LENGTH * MiscHelper.TICKS_PER_DAY);
+        else return new FixedSizeQueue(ModConfig.FOOD_HISTORY_LENGTH);
     }
 
     public void deltaTicksActive(long delta) {
