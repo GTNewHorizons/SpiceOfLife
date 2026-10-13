@@ -9,8 +9,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ChatComponentTranslation;
 
 import squeek.spiceoflife.foodtracker.FoodHistory;
 import squeek.spiceoflife.foodtracker.FoodTracker;
@@ -75,23 +74,20 @@ public class CommandFoodList extends CommandBase {
                 final int foodsUntilNextMilestone = progressInfo.foodPointsUntilNextMilestone();
 
                 commandSender.addChatMessage(
-                    new ChatComponentText(
-                        "" + EnumChatFormatting.BOLD
-                            + EnumChatFormatting.DARK_AQUA
-                            + player.getDisplayName()
-                            + "'s"
-                            + EnumChatFormatting.RESET
-                            + " food stats:"));
-                commandSender.addChatMessage(new ChatComponentText("Half-Shanks worth eaten: " + foodsEaten));
+                    new ChatComponentTranslation("spiceoflife.chat.foodstats", player.getDisplayName()));
+                commandSender
+                    .addChatMessage(new ChatComponentTranslation("spiceoflife.chat.foodstats.eaten", foodsEaten));
                 commandSender.addChatMessage(
-                    new ChatComponentText("Bonus Hearts: " + (milestone * ProgressInfo.HEARTS_PER_MILESTONE)));
+                    new ChatComponentTranslation(
+                        "spiceoflife.chat.foodstats.bonus",
+                        (milestone * ProgressInfo.HEARTS_PER_MILESTONE)));
                 commandSender.addChatMessage(
-                    new ChatComponentText("Half-Shanks until next bonus heart: " + foodsUntilNextMilestone));
+                    new ChatComponentTranslation("spiceoflife.chat.foodstats.next", foodsUntilNextMilestone));
                 return;
             } else if (args[0].equals("sync")) {
                 FoodTracker.syncFoodHistory(foodHistory);
-                commandSender
-                    .addChatMessage(new ChatComponentText("Synced food history for " + player.getDisplayName()));
+                commandSender.addChatMessage(
+                    new ChatComponentTranslation("spiceoflife.chat.foodstats.sync", player.getDisplayName()));
                 return;
             }
         }
