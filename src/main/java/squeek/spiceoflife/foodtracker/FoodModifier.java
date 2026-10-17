@@ -22,7 +22,7 @@ import squeek.spiceoflife.items.ItemFoodContainer;
 public class FoodModifier {
 
     public static final FoodModifier GLOBAL = new FoodModifier();
-    public Expression expression;
+    private Expression expression;
 
     public FoodModifier() {
         this(ModConfig.FOOD_MODIFIER_FORMULA);
@@ -32,7 +32,7 @@ public class FoodModifier {
         setFormula(formula);
     }
 
-    public void setFormula(String formula) {
+    public synchronized void setFormula(String formula) {
         expression = new Expression(formula);
     }
 
@@ -112,39 +112,39 @@ public class FoodModifier {
         FoodValues foodValues = FoodValues.get(food);
 
         if (foodValues != null) {
-            BigDecimal result = effectiveFoodModifier.expression.with("count", new BigDecimal(count))
-                .and("cur_history_length", new BigDecimal(historySize))
-                .and("food_hunger_value", new BigDecimal(foodValues.hunger))
-                .and("food_saturation_mod", new BigDecimal(foodValues.saturationModifier))
-                .and(
-                    "cur_hunger",
-                    new BigDecimal(
-                        foodHistory.player.getFoodStats()
-                            .getFoodLevel()))
-                .and(
-                    "cur_saturation",
-                    new BigDecimal(
-                        foodHistory.player.getFoodStats()
-                            .getSaturationLevel()))
-                .and("total_food_eaten", new BigDecimal(foodHistory.totalFoodsEatenAllTime))
-                .and("max_history_length", new BigDecimal(ModConfig.FOOD_HISTORY_LENGTH))
-                .and("hunger_count", new BigDecimal(totalFoodValues.hunger))
-                .and("saturation_count", new BigDecimal(totalFoodValues.saturationModifier))
-                .and(
-                    "food_group_count",
-                    new BigDecimal(
-                        FoodGroupRegistry.getFoodGroupsForFood(food)
-                            .size()))
-                .and(
-                    "distinct_food_groups_eaten",
-                    new BigDecimal(
-                        foodHistory.getDistinctFoodGroups()
-                            .size()))
-                .and("total_food_groups", new BigDecimal(FoodGroupRegistry.numFoodGroups()))
-                .and("exact_count", new BigDecimal(foodHistory.getFoodCountIgnoringFoodGroups(food)))
-                .eval();
+            int currentHunger = foodHistory.player.getFoodStats()
+                .getFoodLevel();
+            float currentSaturation = foodHistory.player.getFoodStats()
+                .getSaturationLevel();
+            int totalFoodEaten = foodHistory.totalFoodsEatenAllTime;
+            int maxHistoryLength = ModConfig.FOOD_HISTORY_LENGTH;
+            int foodGroupCount = FoodGroupRegistry.getFoodGroupsForFood(food)
+                .size();
+            int distinctFoodGroupsEaten = foodHistory.getDistinctFoodGroups()
+                .size();
+            int totalFoodGroups = FoodGroupRegistry.numFoodGroups();
+            int exactCount = foodHistory.getFoodCountIgnoringFoodGroups(food);
 
-            return result.floatValue();
+            // EvalEx shares mutable variables and parser state across evaluations of this modifier
+            synchronized (effectiveFoodModifier) {
+                BigDecimal result = effectiveFoodModifier.expression.with("count", new BigDecimal(count))
+                    .and("cur_history_length", new BigDecimal(historySize))
+                    .and("food_hunger_value", new BigDecimal(foodValues.hunger))
+                    .and("food_saturation_mod", new BigDecimal(foodValues.saturationModifier))
+                    .and("cur_hunger", new BigDecimal(currentHunger))
+                    .and("cur_saturation", new BigDecimal(currentSaturation))
+                    .and("total_food_eaten", new BigDecimal(totalFoodEaten))
+                    .and("max_history_length", new BigDecimal(maxHistoryLength))
+                    .and("hunger_count", new BigDecimal(totalFoodValues.hunger))
+                    .and("saturation_count", new BigDecimal(totalFoodValues.saturationModifier))
+                    .and("food_group_count", new BigDecimal(foodGroupCount))
+                    .and("distinct_food_groups_eaten", new BigDecimal(distinctFoodGroupsEaten))
+                    .and("total_food_groups", new BigDecimal(totalFoodGroups))
+                    .and("exact_count", new BigDecimal(exactCount))
+                    .eval();
+
+                return result.floatValue();
+            }
         }
         return 0.0f;
     }
