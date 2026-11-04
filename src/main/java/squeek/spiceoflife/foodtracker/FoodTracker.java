@@ -11,6 +11,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import cpw.mods.fml.relauncher.Side;
 import squeek.applecore.api.food.FoodEvent;
@@ -99,8 +100,10 @@ public class FoodTracker {
             .sendTo(
                 new PacketFoodEatenAllTime(foodHistory.totalFoodsEatenAllTime),
                 (EntityPlayerMP) foodHistory.player);
+
         PacketDispatcher.get()
             .sendTo(new PacketFoodHistory(foodHistory, true), (EntityPlayerMP) foodHistory.player);
+
         MaxHealthHandler.updateFoodHPModifier(foodHistory.player);
     }
 
@@ -152,5 +155,16 @@ public class FoodTracker {
     public void onClientConnectedToServer(ClientConnectedToServerEvent event) {
         if (FMLCommonHandler.instance()
             .getEffectiveSide() == Side.CLIENT) ModConfig.assumeClientOnly();
+    }
+
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (ModConfig.COOKOFF_MODE_ENABLE) {
+            if (event.player.worldObj.isRemote) return;
+            if (event.phase != TickEvent.Phase.END) return;
+
+            FoodHistory.get(event.player)
+                .milestoneCountdown();
+        }
     }
 }

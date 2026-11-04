@@ -19,6 +19,12 @@ public final class FoodLists {
 
     private static List<ItemStack> allFoods;
 
+    private static final List<ItemStack> greatFoods = new ArrayList<>();
+    private static final List<ItemStack> goodFoods = new ArrayList<>();
+    private static final List<ItemStack> normalFoods = new ArrayList<>();
+    private static final List<ItemStack> lowFoods = new ArrayList<>();
+    private static final List<ItemStack> poorFoods = new ArrayList<>();
+
     @SuppressWarnings("unchecked")
     public static void setUp() {
         if (ModConfig.DEV_LOGGING_ENABLED) ModSpiceOfLife.Log.info("Starting populating food list.");
@@ -30,13 +36,57 @@ public final class FoodLists {
 
         allFoods.forEach((i -> {
             FoodValues fv = FoodHelper.getFoodValues(i);
-            if (ModConfig.DEV_LOGGING_ENABLED)
-                ModSpiceOfLife.Log.info(i.getDisplayName() + ", " + fv.hunger + ", " + fv.saturationModifier);
+            String nourishmentGroup = "";
+
+            if (ModConfig.COOKOFF_MODE_ENABLE) {
+                float saturationModifier = fv.saturationModifier;
+                if (saturationModifier >= ModConfig.COOKOFF_MODE_FOOD_VALUE_GREAT) {
+                    greatFoods.add(i);
+                    nourishmentGroup += " | Great";
+                } else if (saturationModifier >= ModConfig.COOKOFF_MODE_FOOD_VALUE_GOOD) {
+                    goodFoods.add(i);
+                    nourishmentGroup = " | Good";
+                } else if (saturationModifier >= ModConfig.COOKOFF_MODE_FOOD_VALUE_NORMAL) {
+                    normalFoods.add(i);
+                    nourishmentGroup = " | Normal";
+                } else if (saturationModifier >= ModConfig.COOKOFF_MODE_FOOD_VALUE_LOW) {
+                    lowFoods.add(i);
+                    nourishmentGroup = " | Low";
+                } else if (saturationModifier >= ModConfig.COOKOFF_MODE_FOOD_VALUE_POOR) {
+                    poorFoods.add(i);
+                    nourishmentGroup = " | Poor";
+                }
+            }
+
+            if (ModConfig.DEV_LOGGING_ENABLED) {
+                ModSpiceOfLife.Log
+                    .info(i.getDisplayName() + ", " + fv.hunger + ", " + fv.saturationModifier + nourishmentGroup);
+            }
         }));
-        if (ModConfig.DEV_LOGGING_ENABLED) ModSpiceOfLife.Log.info("Done populating food list.");
+        if (ModConfig.DEV_LOGGING_ENABLED) ModSpiceOfLife.Log.info("Done populating food lists.");
     }
 
     public static List<ItemStack> getAllFoods() {
         return new ArrayList<>(allFoods);
+    }
+
+    public static List<ItemStack> getGreatFoods() {
+        return greatFoods;
+    }
+
+    public static List<ItemStack> getGoodFoods() {
+        return goodFoods;
+    }
+
+    public static List<ItemStack> getNormalFoods() {
+        return normalFoods;
+    }
+
+    public static List<ItemStack> getLowFoods() {
+        return lowFoods;
+    }
+
+    public static List<ItemStack> getPoorFoods() {
+        return poorFoods;
     }
 }

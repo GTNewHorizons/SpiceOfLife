@@ -32,4 +32,8 @@ public class FixedSizeQueue extends FoodQueue {
         this.limit = limit;
         trimToMaxSize();
     }
+
+    public boolean isFull() {
+        return limit > 0 && size() == getMaxSize();
+    }
 }

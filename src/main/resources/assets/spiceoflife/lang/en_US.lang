@@ -41,15 +41,27 @@ spiceoflife.gui.expires.in.food=Expires after eating any food %s more %s
 spiceoflife.gui.expires.in.hunger=Expires after eating %s hunger worth of any food
 spiceoflife.gui.food.num=Food #%d
 spiceoflife.gui.items.on.page=%d-%d of %d
+spiceoflife.gui.bonus_hearts=Bonus Hearts:
 spiceoflife.gui.food_history.title=About my food
 spiceoflife.gui.food_history.worth_eaten=worth eaten:
-spiceoflife.gui.food_history.bonus_hearts=Bonus Hearts:
 spiceoflife.gui.food_history.next_heart=until next heart:
 spiceoflife.gui.title.lunchbox=Lunch Box
 spiceoflife.gui.title.lunchbag=Lunch Bag
 
+spiceoflife.gui.milestone_history.title=About my diet:
+spiceoflife.gui.milestone_history.milestone=Current Milestone:
+spiceoflife.gui.milestone_history.status=Meal Plan:
+spiceoflife.gui.milestone_history.statusComplete=Completed!
+spiceoflife.gui.milestone_history.statusInProgress=Pending...
+spiceoflife.gui.expires.in.days=Expires in %s days
+spiceoflife.gui.expires.in.hours=%sh%sm
+spiceoflife.gui.milestone_history.menu=Current Menu
+
 # Items
 item.spiceoflife.bookfoodjournal.name=Food Journal
+item.spiceoflife.bookfoodjournal.desc=Documents your recent food history
+item.spiceoflife.bookmilestonejournal.name=Wholesome Cookbook
+item.spiceoflife.bookmilestonejournal.desc=Reveals meals with the optimal balance of nutrients required to improve health.
 item.spiceoflife.lunchbox.name=Lunch Box
 item.spiceoflife.lunchbag.name=Lunch Bag
 
@@ -60,3 +72,7 @@ spiceoflife.chat.foodstats.bonus=Bonus Hearts: %s
 spiceoflife.chat.foodstats.next=Half-Shanks until next bonus heart: %s
 spiceoflife.chat.foodstats.sync=Synced food history for %s
 spiceoflife.chat.reset=Reset all 'The Spice of Life' mod data for %s
+spiceoflife.chat.foodstats.time=Time remaining: %s days
+spiceoflife.chat.foodstats.complete=Current milestone challenge has been complete.
+spiceoflife.chat.foodstats.null=Current milestone challenge has not been initiated.
+spiceoflife.chat.foodstats.active=Current milestone challenge: %s

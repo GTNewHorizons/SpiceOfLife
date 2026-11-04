@@ -124,6 +124,7 @@ public class FoodModifier {
                 .size();
             int totalFoodGroups = FoodGroupRegistry.numFoodGroups();
             int exactCount = foodHistory.getFoodCountIgnoringFoodGroups(food);
+            int isMilestoneFood = foodHistory.isMilestoneTarget(new FoodEaten(food)) ? 1 : 0;
 
             // EvalEx shares mutable variables and parser state across evaluations of this modifier
             synchronized (effectiveFoodModifier) {
@@ -141,6 +142,7 @@ public class FoodModifier {
                     .and("distinct_food_groups_eaten", new BigDecimal(distinctFoodGroupsEaten))
                     .and("total_food_groups", new BigDecimal(totalFoodGroups))
                     .and("exact_count", new BigDecimal(exactCount))
+                    .and("is_milestone_food", new BigDecimal(isMilestoneFood))
                     .eval();
 
                 return result.floatValue();
