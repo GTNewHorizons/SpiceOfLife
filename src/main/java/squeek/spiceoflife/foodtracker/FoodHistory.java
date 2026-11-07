@@ -260,7 +260,6 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
             food.stackSize = 1;
             processMilestoneFood(food);
         }
-        System.out.println("Added " + foodEaten);
     }
 
     public void addFood(FoodEaten foodEaten, boolean countsTowardsAllTime) {
@@ -275,10 +274,8 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     }
 
     public boolean addMilestoneHistory(ItemStack food) {
-        System.out.println("Adding Milestone ");
         if (!milestoneHistory.containsItemStack(food)) {
             milestoneHistory.add(food);
-            System.out.println("Added Milestone ");
             return true;
         }
         return false;
@@ -286,7 +283,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
 
     public void addMilestoneTarget(ItemStack food) {
         milestoneTargets.add(food);
-    };
+    }
 
     public void addFoodFullHistory(FoodEaten foodEaten) {
         final boolean hasTriedNewFood = fullHistory.add(foodEaten);
@@ -313,7 +310,6 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
      */
     public void processMilestoneFood(ItemStack food) {
         if (player != null) {
-            System.out.println("processing " + food);
             if (isMilestoneTarget(food) && awardMilestone(food)) {
                 setChallengeCompleted();
                 invalidateProgressInfo();

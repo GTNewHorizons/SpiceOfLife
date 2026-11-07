@@ -12,7 +12,7 @@ public class FixedSizeFoodQueue extends FoodQueue {
     }
 
     protected void trimToMaxSize() {
-        while (size() > limit) {
+        while (size() > 0 && size() > limit) {
             super.remove();
         }
     }
