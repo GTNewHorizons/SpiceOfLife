@@ -24,12 +24,20 @@ public final class ProgressInfo {
      */
     public final int foodsPointsEaten;
 
+    /**
+     * the number of milestone awarded from the journal challenges
+     */
+    public final int milestoneAwards;
+
     ProgressInfo(FoodHistory foodList) {
         foodsPointsEaten = foodList.getFullHistory()
             .stream()
             .filter(eaten -> shouldCount(eaten.itemStack))
             .mapToInt(eaten -> eaten.foodValues.hunger)
             .sum();
+
+        milestoneAwards = foodList.getMilestoneHistory()
+            .size();
     }
 
     public static boolean shouldCount(ItemStack food) {
@@ -66,9 +74,12 @@ public final class ProgressInfo {
     }
 
     /**
-     * the number of milestones achieved based on foodPointsEaten, doubling as the index of the next milestone
+     * the number of milestones achieved based on foodPointsEaten, doubling as the index of the next milestone.
+     * If `circadianModeConfig` is true, returns milestoneAwards instead.
      */
     public int milestonesAchieved() {
+        if (ModConfig.IRON_CHEF_MODE_ENABLE) return milestoneAwards;
+
         int milestonesTotal;
 
         if (INCREMENT_PER_MILESTONE > 0) {

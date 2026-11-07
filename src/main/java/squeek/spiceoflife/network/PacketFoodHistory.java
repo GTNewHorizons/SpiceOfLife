@@ -51,6 +51,10 @@ public class PacketFoodHistory extends PacketBase {
         if (shouldOverwrite) {
             foodHistory.getRecentHistory()
                 .clear();
+            foodHistory.getMilestoneTargets()
+                .clear();
+            foodHistory.getMilestoneHistory()
+                .clear();
             foodHistory.ticksActive = this.foodHistory.ticksActive;
         } else {
             foodHistory.totalFoodsEatenAllTime++;
@@ -60,6 +64,10 @@ public class PacketFoodHistory extends PacketBase {
             .forEach(foodHistory::addFoodRecent);
         this.foodHistory.getFullHistory()
             .forEach(foodHistory::addFoodFullHistory);
+        this.foodHistory.getMilestoneTargets()
+            .forEach(foodHistory::addMilestoneTarget);
+        this.foodHistory.getMilestoneHistory()
+            .forEach(foodHistory::addMilestoneHistory);
 
         if (side == Side.CLIENT && !shouldOverwrite) {
             FoodTracker.onFoodEatenClient(this.foodHistory.getLastEatenFood());
