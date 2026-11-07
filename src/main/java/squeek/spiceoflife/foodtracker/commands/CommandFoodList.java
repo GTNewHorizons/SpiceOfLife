@@ -9,6 +9,7 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 
@@ -16,7 +17,7 @@ import squeek.spiceoflife.ModConfig;
 import squeek.spiceoflife.foodtracker.FoodHistory;
 import squeek.spiceoflife.foodtracker.FoodTracker;
 import squeek.spiceoflife.foodtracker.ProgressInfo;
-import squeek.spiceoflife.foodtracker.foodqueue.FixedSizeQueue;
+import squeek.spiceoflife.foodtracker.queue.FixedSizeQueue;
 
 public class CommandFoodList extends CommandBase {
 
@@ -85,7 +86,7 @@ public class CommandFoodList extends CommandBase {
 
                     List<String> activeChallenge = foodHistory.getMilestoneTargets()
                         .stream()
-                        .map(food -> food.itemStack.getDisplayName())
+                        .map(ItemStack::getDisplayName)
                         .collect(Collectors.toList());
 
                     commandSender.addChatMessage(

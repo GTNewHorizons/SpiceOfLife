@@ -124,7 +124,7 @@ public class FoodModifier {
                 .size();
             int totalFoodGroups = FoodGroupRegistry.numFoodGroups();
             int exactCount = foodHistory.getFoodCountIgnoringFoodGroups(food);
-            int isMilestoneFood = foodHistory.isMilestoneTarget(new FoodEaten(food)) ? 1 : 0;
+            int isMilestoneFood = foodHistory.isMilestoneTarget(food) ? 1 : 0;
 
             // EvalEx shares mutable variables and parser state across evaluations of this modifier
             synchronized (effectiveFoodModifier) {

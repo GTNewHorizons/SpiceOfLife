@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -26,8 +24,9 @@ import squeek.spiceoflife.compat.IByteIO;
 import squeek.spiceoflife.foodtracker.foodgroups.FoodGroup;
 import squeek.spiceoflife.foodtracker.foodgroups.FoodGroupRegistry;
 import squeek.spiceoflife.foodtracker.foodqueue.FixedHungerQueue;
-import squeek.spiceoflife.foodtracker.foodqueue.FixedSizeQueue;
+import squeek.spiceoflife.foodtracker.foodqueue.FixedSizeFoodQueue;
 import squeek.spiceoflife.foodtracker.foodqueue.FoodQueue;
+import squeek.spiceoflife.foodtracker.queue.FixedSizeQueue;
 import squeek.spiceoflife.helpers.FoodHelper;
 import squeek.spiceoflife.helpers.MiscHelper;
 import squeek.spiceoflife.interfaces.IPackable;
@@ -104,7 +103,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
 
     public static FoodQueue getNewFoodQueue() {
         return ModConfig.USE_HUNGER_QUEUE ? new FixedHungerQueue(ModConfig.FOOD_HISTORY_LENGTH)
-            : new FixedSizeQueue(ModConfig.FOOD_HISTORY_LENGTH);
+            : new FixedSizeFoodQueue(ModConfig.FOOD_HISTORY_LENGTH);
     }
 
     public int getFoodCountIgnoringFoodGroups(ItemStack food) {
@@ -208,16 +207,16 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     }
 
     public void validateMilestoneTargets() {
-        List<FoodEaten> invalidFoods = new ArrayList<>();
+        List<ItemStack> invalidFoods = new ArrayList<>();
 
-        for (FoodEaten target : milestoneTargets) {
-            if (!FoodHelper.isValidFood(target.itemStack)) {
-                invalidFoods.add(target);
+        for (ItemStack food : milestoneTargets) {
+            if (!FoodHelper.isValidFood(food) || milestoneHistory.containsItemStack(food)) {
+                invalidFoods.add(food);
             }
         }
         if (invalidFoods.isEmpty()) return;
 
-        invalidFoods.forEach(milestoneTargets::remove);
+        milestoneTargets.removeAll(invalidFoods);
         populateMilestoneTargets();
     }
 
@@ -229,7 +228,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         return fullHistory;
     }
 
-    public FoodQueue getMilestoneHistory() {
+    public FixedSizeQueue getMilestoneHistory() {
         return milestoneHistory;
     }
 
@@ -256,7 +255,12 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     public void addFood(FoodEaten foodEaten) {
         addFood(foodEaten, true);
 
-        if (ModConfig.IRON_CHEF_MODE_ENABLE) processMilestoneFood(foodEaten);
+        if (ModConfig.IRON_CHEF_MODE_ENABLE) {
+            ItemStack food = foodEaten.itemStack;
+            food.stackSize = 1;
+            processMilestoneFood(food);
+        }
+        System.out.println("Added " + foodEaten);
     }
 
     public void addFood(FoodEaten foodEaten, boolean countsTowardsAllTime) {
@@ -270,16 +274,18 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         recentHistory.add(foodEaten);
     }
 
-    public boolean addMilestoneHistory(FoodEaten foodEaten) {
-        if (!milestoneHistory.contains(foodEaten)) {
-            milestoneHistory.add(foodEaten);
+    public boolean addMilestoneHistory(ItemStack food) {
+        System.out.println("Adding Milestone ");
+        if (!milestoneHistory.containsItemStack(food)) {
+            milestoneHistory.add(food);
+            System.out.println("Added Milestone ");
             return true;
         }
         return false;
     }
 
-    public void addMilestoneTarget(FoodEaten foodEaten) {
-        milestoneTargets.add(foodEaten);
+    public void addMilestoneTarget(ItemStack food) {
+        milestoneTargets.add(food);
     };
 
     public void addFoodFullHistory(FoodEaten foodEaten) {
@@ -305,9 +311,10 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
      * Attempts to award a milestone checking if the food is a valid milestone target.
      * If successful
      */
-    public void processMilestoneFood(FoodEaten foodEaten) {
+    public void processMilestoneFood(ItemStack food) {
         if (player != null) {
-            if (isMilestoneTarget(foodEaten)) {
+            System.out.println("processing " + food);
+            if (isMilestoneTarget(food) && awardMilestone(food)) {
                 setChallengeCompleted();
                 invalidateProgressInfo();
                 MaxHealthHandler.updateFoodHPModifier(player);
@@ -326,7 +333,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     public void milestoneCountdown() {
         if (ticksActive > 1) ticksActive--;
         else {
-            FoodQueue currentMilestones = getMilestoneHistory();
+            FixedSizeQueue currentMilestones = getMilestoneHistory();
 
             if (!currentMilestones.isEmpty()) {
                 boolean hasFailedChallenge = Collections.disjoint(currentMilestones, milestoneTargets);
@@ -368,16 +375,12 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
                 if (remainingSlots < 1) break;
 
                 List<ItemStack> tierFoods = getTieredFoodList(tier);
-
-                getMilestoneHistory().stream()
-                    .map(food -> food.itemStack)
-                    .filter(Objects::nonNull)
-                    .forEach(tierFoods::remove);
+                tierFoods.removeAll(getMilestoneHistory());
 
                 Collections.shuffle(tierFoods, random);
 
                 for (ItemStack food : tierFoods.subList(0, Math.min(remainingSlots, tierFoods.size()))) {
-                    addMilestoneTarget(new FoodEaten(food));
+                    addMilestoneTarget(food);
                 }
             }
         }
@@ -404,11 +407,8 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     /**
      * Checks if the given food is contained in the current list of foods that award a milestone.
      */
-    public boolean isMilestoneTarget(FoodEaten foodEaten) {
-        if (milestoneTargets.contains(foodEaten) && !milestoneHistory.contains(foodEaten)) {
-            return awardMilestone(foodEaten);
-        }
-        return false;
+    public boolean isMilestoneTarget(ItemStack food) {
+        return milestoneTargets.containsItemStack(food) && !milestoneHistory.containsItemStack(food);
     }
 
     /**
@@ -416,21 +416,18 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
      * If the milestone cap has been achieved, a random milestone of the current tier is removed or
      * the latest one if a common food in the current tier cannot be found.
      */
-    public boolean awardMilestone(FoodEaten foodEaten) {
+    public boolean awardMilestone(ItemStack foodEaten) {
         if (milestoneHistory.isFull()) {
             int currentFoodTier = ModConfig.IRON_CHEF_MODE_TIER;
 
             if (advancementsSaturation != 0)
                 currentFoodTier += getProgressInfo().milestonesAchieved() / advancementsSaturation;
 
-            List<ItemStack> tierFoods = getTieredFoodList(currentFoodTier);
-            List<FoodEaten> tierMilestoneHistory = getMilestoneHistory().stream()
-                .filter(food -> food.itemStack != null)
-                .filter(food -> tierFoods.contains(food.itemStack))
-                .collect(Collectors.toList());
+            List<ItemStack> tierMilestoneHistory = getTieredFoodList(currentFoodTier);
+            tierMilestoneHistory.retainAll(getMilestoneHistory());
 
             if (!tierMilestoneHistory.isEmpty()) {
-                FoodEaten toRemove = tierMilestoneHistory.get(new Random().nextInt(tierMilestoneHistory.size()));
+                ItemStack toRemove = tierMilestoneHistory.get(new Random().nextInt(tierMilestoneHistory.size()));
 
                 milestoneHistory.remove(toRemove);
             } else milestoneHistory.removeLast();
@@ -475,12 +472,10 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         getFullHistory().forEach(f -> f.pack(data));
 
         data.writeShort(getMilestoneHistory().size());
-        getMilestoneHistory().forEach(f -> f.pack(data));
+        getMilestoneHistory().forEach(data::writeItemStack);
 
         data.writeShort(getMilestoneTargets().size());
-        for (FoodEaten foodEaten : getMilestoneTargets()) {
-            foodEaten.pack(data);
-        }
+        for (ItemStack target : getMilestoneTargets()) data.writeItemStack(target);
     }
 
     @Override
@@ -503,19 +498,12 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         }
 
         short milestoneHistorySize = data.readShort();
-        for (int i = 0; i < milestoneHistorySize; i++) {
-            FoodEaten foodEaten = new FoodEaten();
-            foodEaten.unpack(data);
-            addMilestoneHistory(foodEaten);
-        }
+        for (int i = 0; i < milestoneHistorySize; i++) addMilestoneHistory(data.readItemStack());
 
         short currentMilestoneSize = data.readShort();
-        for (int i = 0; i < currentMilestoneSize; i++) {
-            FoodEaten target = new FoodEaten();
-            target.unpack(data);
 
-            if (milestoneTargets.size() < ModConfig.IRON_CHEF_MODE_MENU_SIZE) milestoneTargets.add(target);
-        }
+        for (int i = 0; i < currentMilestoneSize; i++) if (milestoneTargets.size() < ModConfig.IRON_CHEF_MODE_MENU_SIZE)
+            milestoneTargets.add(data.readItemStack());
     }
 
     @Override

@@ -21,7 +21,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import squeek.spiceoflife.foodtracker.FoodHistory;
 import squeek.spiceoflife.foodtracker.ProgressInfo;
-import squeek.spiceoflife.foodtracker.foodqueue.FixedSizeQueue;
+import squeek.spiceoflife.foodtracker.queue.FixedSizeQueue;
 import squeek.spiceoflife.gui.widget.WidgetButtonNextPage;
 
 @SideOnly(Side.CLIENT)
@@ -30,10 +30,8 @@ public class GuiScreenMilestoneJournal extends GuiScreen {
     public static final DecimalFormat dfOne = new DecimalFormat("#.#");
     protected static final int numPerPage = 5;
     private static final ResourceLocation bookGuiTextures = new ResourceLocation("textures/gui/book.png");
-    protected List<ItemStack> milestoneMenu = new ArrayList<>();
-    protected int lastMilestone = -1;
+    protected FixedSizeQueue milestoneMenu = new FixedSizeQueue(0);
     protected int pageNum = 0;
-    protected int numPages;
     protected GuiButton buttonNextPage;
     protected GuiButton buttonPrevPage;
     private final int bookImageWidth = 192;
@@ -49,12 +47,13 @@ public class GuiScreenMilestoneJournal extends GuiScreen {
         this.buttonList.add(
             buttonNextPage = new WidgetButtonNextPage(2, (this.width - this.bookImageWidth) / 2 + 120, 2 + 154, true));
 
-        updateMilestoneMenu();
         updateButtons();
     }
 
     private void updateButtons() {
-        this.buttonNextPage.visible = this.pageNum < this.numPages - 1;
+        int numPages = 1 + (int) Math.ceil((float) milestoneMenu.size() / numPerPage);
+
+        this.buttonNextPage.visible = this.pageNum < numPages - 1;
         this.buttonPrevPage.visible = this.pageNum > 0;
     }
 
@@ -68,6 +67,9 @@ public class GuiScreenMilestoneJournal extends GuiScreen {
         this.drawTexturedModalRect(x, y, 0, 0, this.bookImageWidth, bookImageHeight);
 
         GL11.glDisable(GL11.GL_LIGHTING);
+
+        FoodHistory foodHistory = FoodHistory.get(mc.thePlayer);
+
         for (Object objButton : this.buttonList) {
             ((GuiButton) objButton).drawButton(mc, mouseX, mouseY);
         }
@@ -80,16 +82,6 @@ public class GuiScreenMilestoneJournal extends GuiScreen {
         int verticalIndent = 8;
         int drawWidth = (bookImageWidth - rightMargin) - leftMargin; // width in which text can be drawn, so it
         // doesn't step over the edges
-
-        FoodHistory foodHistory = FoodHistory.get(mc.thePlayer);
-
-        if (milestoneMenu.size() != foodHistory.getMilestoneTargets()
-            .size()) {
-            updateMilestoneMenu();
-            updateButtons();
-        } // Refreshes the food menu upon changing milestones.
-
-        boolean challengeCompleted = milestoneMenu.isEmpty();
 
         if (pageNum == 0) {
             int currentMilestone = foodHistory.getMilestoneHistory()
@@ -148,7 +140,11 @@ public class GuiScreenMilestoneJournal extends GuiScreen {
 
             localY += verticalIndent;
 
-            String statusKey = challengeCompleted
+            milestoneMenu = foodHistory.getMilestoneTargets();
+            boolean challengeCompleted = milestoneMenu.isEmpty();
+            updateButtons();
+
+            String statusKey = milestoneMenu.isEmpty()
                 ? StatCollector.translateToLocal("spiceoflife.gui.milestone_history.statusComplete")
                 : StatCollector.translateToLocal("spiceoflife.gui.milestone_history.statusInProgress");
             String currentStatus = I18n.format(statusKey);
@@ -170,7 +166,7 @@ public class GuiScreenMilestoneJournal extends GuiScreen {
                 GuiUtils.drawText(fontRendererObj, s, localX, localY, blackColor);
                 localY += fontRendererObj.FONT_HEIGHT;
             }
-        } else { // Menu Page
+        } else if (!milestoneMenu.isEmpty()) { // Menu Page
             int startIndex = Math.max(0, (pageNum - 1) * numPerPage);
             int endIndex = startIndex + numPerPage;
 
@@ -183,20 +179,19 @@ public class GuiScreenMilestoneJournal extends GuiScreen {
 
             y += verticalIndent * 2;
 
-            if (!challengeCompleted) {
-                GL11.glPushMatrix();
-                int menuIndex = startIndex;
-                while (menuIndex < milestoneMenu.size() && menuIndex < endIndex) {
-                    ItemStack menuItem = milestoneMenu.get(menuIndex);
-                    int localY = y + 32 + (int) ((menuIndex - startIndex) * fontRendererObj.FONT_HEIGHT * 2.5f);
-                    GuiUtils.drawText(fontRendererObj, menuItem.getDisplayName(), localX + 18, localY + 5, 0x666666);
+            GL11.glPushMatrix();
+            int menuIndex = startIndex;
+            while (menuIndex < milestoneMenu.size() && menuIndex < endIndex) {
+                ItemStack menuItem = milestoneMenu.get(menuIndex);
+                int localY = y + 32 + (int) ((menuIndex - startIndex) * fontRendererObj.FONT_HEIGHT * 2.5f);
+                GuiUtils.drawText(fontRendererObj, menuItem.getDisplayName(), localX + 18, localY + 5, 0x666666);
 
-                    drawItemStack(menuItem, localX, localY);
+                drawItemStack(menuItem, localX, localY);
 
-                    menuIndex++;
-                }
-                GL11.glPopMatrix();
+                menuIndex++;
             }
+            GL11.glPopMatrix();
+
         }
 
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -252,10 +247,6 @@ public class GuiScreenMilestoneJournal extends GuiScreen {
         itemRender.zLevel = 0.0F;
     }
 
-    public static boolean isMouseInsideBox(int mouseX, int mouseY, int x, int y, int w, int h) {
-        return mouseX >= x && mouseY >= y && mouseX < x + w && mouseY < y + h;
-    }
-
     @Override
     public boolean doesGuiPauseGame() {
         return false;
@@ -274,15 +265,5 @@ public class GuiScreenMilestoneJournal extends GuiScreen {
 
             updateButtons();
         }
-    }
-
-    public void updateMilestoneMenu() {
-        milestoneMenu.clear();
-        FixedSizeQueue milestoneTargets = FoodHistory.get(mc.thePlayer)
-            .getMilestoneTargets();
-
-        milestoneTargets.forEach(target -> milestoneMenu.add(target.itemStack));
-
-        numPages = 1 + (int) Math.ceil((float) milestoneMenu.size() / numPerPage);
     }
 }
