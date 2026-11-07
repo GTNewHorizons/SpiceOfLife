@@ -491,7 +491,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         for (int i = 0; i < historySize; i++) {
             FoodEaten foodEaten = new FoodEaten();
             foodEaten.unpack(data);
-            addFood(foodEaten);
+            addFoodRecent(foodEaten);
         }
 
         short fullHistorySize = data.readShort();
