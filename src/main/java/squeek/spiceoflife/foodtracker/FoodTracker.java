@@ -159,7 +159,7 @@ public class FoodTracker {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (ModConfig.COOKOFF_MODE_ENABLE) {
+        if (ModConfig.IRON_CHEF_MODE_ENABLE) {
             if (event.player.worldObj.isRemote) return;
             if (event.phase != TickEvent.Phase.END) return;
 

@@ -44,7 +44,7 @@ public class ItemFoodJournal extends Item {
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List list) {
         list.add(new ItemStack(item, 1, 0));
-        if (ModConfig.COOKOFF_MODE_ENABLE) list.add(new ItemStack(item, 1, 1));
+        if (ModConfig.IRON_CHEF_MODE_ENABLE) list.add(new ItemStack(item, 1, 1));
     }
 
     @Override

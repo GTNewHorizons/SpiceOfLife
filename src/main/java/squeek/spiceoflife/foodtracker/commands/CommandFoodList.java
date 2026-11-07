@@ -76,7 +76,7 @@ public class CommandFoodList extends CommandBase {
                 commandSender.addChatMessage(
                     new ChatComponentTranslation("spiceoflife.chat.foodstats", player.getDisplayName()));
 
-                if (ModConfig.COOKOFF_MODE_ENABLE) {
+                if (ModConfig.IRON_CHEF_MODE_ENABLE) {
                     final int milestonesAchieved = progressInfo.milestoneAwards;
                     final double timeRemaining = foodHistory.ticksActive / 24000F;
 

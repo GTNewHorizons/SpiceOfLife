@@ -118,7 +118,7 @@ public class TooltipHandler {
                             event.itemStack,
                             foodGroup,
                             shouldShowNutritionalValue));
-                    if (!ModConfig.COOKOFF_MODE_ENABLE)
+                    if (!ModConfig.IRON_CHEF_MODE_ENABLE)
                         toolTipStringsToAdd.add(getFullHistoryToolTip(foodHistory, event.itemStack));
                 }
             }

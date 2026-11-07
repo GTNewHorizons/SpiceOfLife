@@ -47,7 +47,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         : ModConfig.MAX_MILESTONE_VALUE;
 
     public long ticksActive = 0;
-    public FixedSizeQueue milestoneTargets = new FixedSizeQueue(ModConfig.COOKOFF_MODE_MENU_SIZE);
+    public FixedSizeQueue milestoneTargets = new FixedSizeQueue(ModConfig.IRON_CHEF_MODE_MENU_SIZE);
     public static final int advancementsSaturation = MAX_MILESTONE_VALUE / 5; // 5 is the number of food tiers in MC
                                                                               // {POOR,LOW,NORMAL,GOOD,GREAT}
 
@@ -182,7 +182,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
         milestoneHistory.clear();
 
         milestoneTargets.clear();
-        milestoneTargets.setMaxSize(ModConfig.COOKOFF_MODE_MENU_SIZE);
+        milestoneTargets.setMaxSize(ModConfig.IRON_CHEF_MODE_MENU_SIZE);
     }
 
     public void invalidateProgressInfo() {
@@ -192,7 +192,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     public void validate() {
         validateRecentHistory();
 
-        if (ModConfig.COOKOFF_MODE_ENABLE) validateMilestoneTargets();
+        if (ModConfig.IRON_CHEF_MODE_ENABLE) validateMilestoneTargets();
     }
 
     public void validateRecentHistory() {
@@ -256,7 +256,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
     public void addFood(FoodEaten foodEaten) {
         addFood(foodEaten, true);
 
-        if (ModConfig.COOKOFF_MODE_ENABLE) processMilestoneFood(foodEaten);
+        if (ModConfig.IRON_CHEF_MODE_ENABLE) processMilestoneFood(foodEaten);
     }
 
     public void addFood(FoodEaten foodEaten, boolean countsTowardsAllTime) {
@@ -284,7 +284,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
 
     public void addFoodFullHistory(FoodEaten foodEaten) {
         final boolean hasTriedNewFood = fullHistory.add(foodEaten);
-        if (ModConfig.COOKOFF_MODE_ENABLE) return;
+        if (ModConfig.IRON_CHEF_MODE_ENABLE) return;
 
         if (player != null) {
             if (hasTriedNewFood) {
@@ -341,8 +341,8 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
                                                                         // something clearer and less ambiguous
             }
 
-            ticksActive = 24000L * ModConfig.COOKOFF_MODE_COOLDOWN;
-            milestoneTargets.setMaxSize(ModConfig.COOKOFF_MODE_MENU_SIZE);
+            ticksActive = 24000L * ModConfig.IRON_CHEF_MODE_COOLDOWN;
+            milestoneTargets.setMaxSize(ModConfig.IRON_CHEF_MODE_MENU_SIZE);
         }
     }
 
@@ -359,12 +359,12 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
 
             Random random = new Random();
             int currentMilestones = getProgressInfo().milestonesAchieved();
-            int startingTier = ModConfig.COOKOFF_MODE_TIER;
+            int startingTier = ModConfig.IRON_CHEF_MODE_TIER;
 
             if (advancementsSaturation != 0) startingTier += currentMilestones / advancementsSaturation;
 
             for (int tier = startingTier; tier < 5; tier++) {
-                int remainingSlots = ModConfig.COOKOFF_MODE_MENU_SIZE - milestoneTargets.size();
+                int remainingSlots = ModConfig.IRON_CHEF_MODE_MENU_SIZE - milestoneTargets.size();
                 if (remainingSlots < 1) break;
 
                 List<ItemStack> tierFoods = getTieredFoodList(tier);
@@ -418,7 +418,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
      */
     public boolean awardMilestone(FoodEaten foodEaten) {
         if (milestoneHistory.isFull()) {
-            int currentFoodTier = ModConfig.COOKOFF_MODE_TIER;
+            int currentFoodTier = ModConfig.IRON_CHEF_MODE_TIER;
 
             if (advancementsSaturation != 0)
                 currentFoodTier += getProgressInfo().milestonesAchieved() / advancementsSaturation;
@@ -514,7 +514,7 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
             FoodEaten target = new FoodEaten();
             target.unpack(data);
 
-            if (milestoneTargets.size() < ModConfig.COOKOFF_MODE_MENU_SIZE) milestoneTargets.add(target);
+            if (milestoneTargets.size() < ModConfig.IRON_CHEF_MODE_MENU_SIZE) milestoneTargets.add(target);
         }
     }
 
@@ -548,23 +548,23 @@ public class FoodHistory implements IExtendedEntityProperties, ISaveable, IPacka
             }
         }
         if (!milestoneTargets.isEmpty()) {
-            if (data != null || ModConfig.COOKOFF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH) {
+            if (data != null || ModConfig.IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH) {
                 NBTTagCompound nbtMilestoneTargets = new NBTTagCompound();
 
                 milestoneTargets.writeToNBTData(nbtMilestoneTargets);
 
-                if (ModConfig.COOKOFF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH)
+                if (ModConfig.IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH)
                     persistentCompound.setTag("MilestoneTargets", nbtMilestoneTargets);
                 else nonPersistentCompound.setTag("MilestoneTargets", nbtMilestoneTargets);
             }
         }
         if (!milestoneHistory.isEmpty()) {
-            if (data != null || ModConfig.COOKOFF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH) {
+            if (data != null || ModConfig.IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH) {
                 NBTTagCompound nbtMilestoneHistory = new NBTTagCompound();
 
                 milestoneHistory.writeToNBTData(nbtMilestoneHistory);
 
-                if (ModConfig.COOKOFF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH)
+                if (ModConfig.IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH)
                     persistentCompound.setTag("MilestoneHistory", nbtMilestoneHistory);
                 else nonPersistentCompound.setTag("MilestoneHistory", nbtMilestoneHistory);
             }

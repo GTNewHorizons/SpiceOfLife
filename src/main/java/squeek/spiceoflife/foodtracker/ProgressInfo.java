@@ -78,7 +78,7 @@ public final class ProgressInfo {
      * If `circadianModeConfig` is true, returns milestoneAwards instead.
      */
     public int milestonesAchieved() {
-        if (ModConfig.COOKOFF_MODE_ENABLE) return milestoneAwards;
+        if (ModConfig.IRON_CHEF_MODE_ENABLE) return milestoneAwards;
 
         int milestonesTotal;
 

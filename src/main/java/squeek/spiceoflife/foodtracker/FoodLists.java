@@ -38,21 +38,21 @@ public final class FoodLists {
             FoodValues fv = FoodHelper.getFoodValues(i);
             String nourishmentGroup = "";
 
-            if (ModConfig.COOKOFF_MODE_ENABLE) {
+            if (ModConfig.IRON_CHEF_MODE_ENABLE) {
                 float saturationModifier = fv.saturationModifier;
-                if (saturationModifier >= ModConfig.COOKOFF_MODE_FOOD_VALUE_GREAT) {
+                if (saturationModifier >= ModConfig.IRON_CHEF_MODE_FOOD_VALUE_GREAT) {
                     greatFoods.add(i);
                     nourishmentGroup += " | Great";
-                } else if (saturationModifier >= ModConfig.COOKOFF_MODE_FOOD_VALUE_GOOD) {
+                } else if (saturationModifier >= ModConfig.IRON_CHEF_MODE_FOOD_VALUE_GOOD) {
                     goodFoods.add(i);
                     nourishmentGroup = " | Good";
-                } else if (saturationModifier >= ModConfig.COOKOFF_MODE_FOOD_VALUE_NORMAL) {
+                } else if (saturationModifier >= ModConfig.IRON_CHEF_MODE_FOOD_VALUE_NORMAL) {
                     normalFoods.add(i);
                     nourishmentGroup = " | Normal";
-                } else if (saturationModifier >= ModConfig.COOKOFF_MODE_FOOD_VALUE_LOW) {
+                } else if (saturationModifier >= ModConfig.IRON_CHEF_MODE_FOOD_VALUE_LOW) {
                     lowFoods.add(i);
                     nourishmentGroup = " | Low";
-                } else if (saturationModifier >= ModConfig.COOKOFF_MODE_FOOD_VALUE_POOR) {
+                } else if (saturationModifier >= ModConfig.IRON_CHEF_MODE_FOOD_VALUE_POOR) {
                     poorFoods.add(i);
                     nourishmentGroup = " | Poor";
                 }

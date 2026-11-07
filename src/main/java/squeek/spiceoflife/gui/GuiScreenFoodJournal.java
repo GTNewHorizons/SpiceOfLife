@@ -44,7 +44,7 @@ public class GuiScreenFoodJournal extends GuiScreen {
     protected GuiButton buttonPrevPage;
     private final int bookImageWidth = 192;
     private final int bookImageHeight = 192;
-    private final boolean showMilestonePage = ModConfig.EXTRA_HEARTS_ENABLE && !ModConfig.COOKOFF_MODE_ENABLE;
+    private final boolean showMilestonePage = ModConfig.EXTRA_HEARTS_ENABLE && !ModConfig.IRON_CHEF_MODE_ENABLE;
 
     @SuppressWarnings("unchecked")
     @Override
