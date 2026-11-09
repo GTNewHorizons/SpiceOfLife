@@ -21,7 +21,7 @@ public class FixedSizeQueue extends LinkedList<ItemStack> implements IPackable, 
     }
 
     protected void trimToMaxSize() {
-        while (size() > limit) {
+        while (size() > 0 && size() > limit) {
             super.remove();
         }
     }
@@ -43,7 +43,7 @@ public class FixedSizeQueue extends LinkedList<ItemStack> implements IPackable, 
     }
 
     public boolean isFull() {
-        return limit > 0 && !this.isEmpty();
+        return size() == getMaxSize();
     }
 
     @Override
