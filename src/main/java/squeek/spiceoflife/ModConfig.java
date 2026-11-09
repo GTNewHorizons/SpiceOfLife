@@ -619,6 +619,31 @@ public class ModConfig implements IPackable, IPacketProcessor {
             data.writeUTF(FOOD_HUNGER_ROUNDING_MODE_STRING);
         }
         data.writeInt(FOOD_CONTAINERS_MAX_STACKSIZE);
+
+        // Carrot Edition Config Sync
+        data.writeBoolean(EXTRA_HEARTS_ENABLE);
+        if (EXTRA_HEARTS_ENABLE) {
+            data.writeInt(FOOD_MILESTONE_VALUE);
+            data.writeInt(MILESTONE_INCREMENT_VALUE);
+            data.writeInt(HEARTS_PER_MILESTONE_VALUE);
+            data.writeInt(MAX_MILESTONE_VALUE);
+            data.writeBoolean(FOOD_MILESTONES_PERSISTS_THROUGH_DEATH);
+
+            // Carrot Edition - Iron Chef Remaster Config Sync
+            data.writeBoolean(IRON_CHEF_MODE_ENABLE);
+            if (IRON_CHEF_MODE_ENABLE) {
+                data.writeInt(IRON_CHEF_MODE_TIER);
+                data.writeInt(IRON_CHEF_MODE_MENU_SIZE);
+                data.writeInt(IRON_CHEF_MODE_COOLDOWN);
+                data.writeBoolean(IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH);
+
+                data.writeDouble(IRON_CHEF_MODE_FOOD_VALUE_POOR);
+                data.writeDouble(IRON_CHEF_MODE_FOOD_VALUE_LOW);
+                data.writeDouble(IRON_CHEF_MODE_FOOD_VALUE_NORMAL);
+                data.writeDouble(IRON_CHEF_MODE_FOOD_VALUE_GOOD);
+                data.writeDouble(IRON_CHEF_MODE_FOOD_VALUE_GREAT);
+            }
+        }
     }
 
     @Override
@@ -637,6 +662,29 @@ public class ModConfig implements IPackable, IPacketProcessor {
             FOOD_HUNGER_ROUNDING_MODE_STRING = data.readUTF();
         }
         FOOD_CONTAINERS_MAX_STACKSIZE = data.readInt();
+
+        EXTRA_HEARTS_ENABLE = data.readBoolean();
+        if (EXTRA_HEARTS_ENABLE) {
+            FOOD_MILESTONE_VALUE = data.readInt();
+            MILESTONE_INCREMENT_VALUE = data.readInt();
+            HEARTS_PER_MILESTONE_VALUE = data.readInt();
+            MAX_MILESTONE_VALUE = data.readInt();
+            FOOD_MILESTONES_PERSISTS_THROUGH_DEATH = data.readBoolean();
+
+            IRON_CHEF_MODE_ENABLE = data.readBoolean();
+            if (IRON_CHEF_MODE_ENABLE) {
+                IRON_CHEF_MODE_TIER = data.readInt();
+                IRON_CHEF_MODE_MENU_SIZE = data.readInt();
+                IRON_CHEF_MODE_COOLDOWN = data.readInt();
+                IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH = data.readBoolean();
+
+                IRON_CHEF_MODE_FOOD_VALUE_POOR = data.readDouble();
+                IRON_CHEF_MODE_FOOD_VALUE_LOW = data.readDouble();
+                IRON_CHEF_MODE_FOOD_VALUE_NORMAL = data.readDouble();
+                IRON_CHEF_MODE_FOOD_VALUE_GOOD = data.readDouble();
+                IRON_CHEF_MODE_FOOD_VALUE_GREAT = data.readDouble();
+            }
+        }
     }
 
     @Override
