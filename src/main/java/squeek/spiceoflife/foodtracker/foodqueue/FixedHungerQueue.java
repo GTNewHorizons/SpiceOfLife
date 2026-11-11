@@ -2,7 +2,7 @@ package squeek.spiceoflife.foodtracker.foodqueue;
 
 import squeek.spiceoflife.foodtracker.FoodEaten;
 
-public class FixedHungerQueue extends FixedSizeQueue {
+public class FixedHungerQueue extends FixedSizeFoodQueue {
 
     protected int hunger;
     protected int hungerOverflow;

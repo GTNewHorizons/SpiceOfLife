@@ -13,6 +13,10 @@ spiceoflife.tooltip.to.close.food.container=Click con shift per chiudere
 spiceoflife.tooltip.to.open.food.container=Click con shift per aprire
 spiceoflife.tooltip.can.spill.food=Cibo può uscire mentre è aperto
 
+spiceoflife.tooltip.hold.key.for.details=Tenere %s per detagli
+spiceoflife.tooltip.diminishing=Ritorni decrescenti:
+spiceoflife.tooltip.extrahearts=Cuori Extra:
+
 # Quantity descriptors
 spiceoflife.quantity.one.time=una volta
 spiceoflife.quantity.two.times=due volte
@@ -25,7 +29,32 @@ spiceoflife.gui.no.recent.food.eaten=Nessun cibo mangiato recentemente
 spiceoflife.gui.title.lunchbox=Portapranzo
 spiceoflife.gui.title.lunchbag=Sacchetto con pranzo
 
+spiceoflife.gui.time.elapsed.since.food.eaten=Mangiato %s fa
+spiceoflife.gui.x.day=%s giorno
+spiceoflife.gui.x.days=%s giorni
+spiceoflife.gui.expires.in.time=Scade in %s
+spiceoflife.gui.expires.in.food=Scade dopo aver mangiato qualsiasi cibo %s piu' %s
+spiceoflife.gui.expires.in.hunger=Scade dopo aver mangiato %s punti di fame di qualsiasi cibo
+spiceoflife.gui.food.num=Cibo #%d
+spiceoflife.gui.items.on.page=%d-%d di %d
+spiceoflife.gui.bonus_hearts=Cuori Extra:
+spiceoflife.gui.food_history.title=About my food
+spiceoflife.gui.food_history.worth_eaten=valore mangiato:
+spiceoflife.gui.food_history.next_heart=fino al prossimo cuore:
+
+spiceoflife.gui.milestone_history.title=La mia dieta:
+spiceoflife.gui.milestone_history.milestone=Traguardo attuale:
+spiceoflife.gui.milestone_history.status=Piano Alimentare:
+spiceoflife.gui.milestone_history.statusComplete=Completato!
+spiceoflife.gui.milestone_history.statusInProgress=In attesa...
+spiceoflife.gui.expires.in.days=Scade in %s giorni
+spiceoflife.gui.expires.in.hours=%sh%sm
+spiceoflife.gui.milestone_history.menu=Menu Attuale
+
 # Items
 item.spiceoflife.bookfoodjournal.name=Diario alimentare
+item.spiceoflife.bookfoodjournal.desc=Registra la cronologia dei tuoi pasti recenti
+item.spiceoflife.bookmilestonejournal.name=Ricettario del Benessere
+item.spiceoflife.bookmilestonejournal.desc=Scopre quali pasti offrono il perfetto equilibrio di nutrienti essenziali che migliorano la tua salute.
 item.spiceoflife.lunchbox.name=Portapranzo
 item.spiceoflife.lunchbag.name=Sacchetto con pranzo

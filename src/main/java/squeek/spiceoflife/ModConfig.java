@@ -65,9 +65,63 @@ public class ModConfig implements IPackable, IPacketProcessor {
     private static final int MAX_MILESTONE_DEFAULT = -1;
     public static int MAX_MILESTONE_VALUE = ModConfig.MAX_MILESTONE_DEFAULT;
     private static final String FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_NAME = "hearts.milestones.persists.through.death";
-    private static final String FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_COMMENT = "If true, milestone progress will not get reset after every death";
+    private static final String FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_COMMENT = "If true, milestone progress from trying new foods will not get reset after every death";
     private static final boolean FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_DEFAULT = true;
     public static boolean FOOD_MILESTONES_PERSISTS_THROUGH_DEATH = ModConfig.FOOD_HISTORY_PERSISTS_THROUGH_DEATH_DEFAULT;
+
+    private static final String CATEGORY_CARROT_IRON_CHEF = "carrot module - Iron Chef Edition";
+    private static final String CATEGORY_CARROT_IRON_CHEF_COMMENT = "A modified version of obtaining milestones through cooking competition rather than total unique food eaten. Requires [hearts.milestones.enable] to be true";
+
+    public static boolean IRON_CHEF_MODE_ENABLE = ModConfig.IRON_CHEF_MODE_ENABLE_DEFAULT;
+    private static final String IRON_CHEF_MODE_ENABLE_NAME = "Enable Iron Chef mode";
+    private static final String IRON_CHEF_MODE_ENABLE_COMMENT = "If true, milestones are awarded for eating a listed food before time runs out and deducted for failing to do so.";
+    private static final boolean IRON_CHEF_MODE_ENABLE_DEFAULT = false;
+
+    private static final String IRON_CHEF_MODE_TIER_NAME = "Start tier offset";
+    private static final String IRON_CHEF_MODE_TIER_COMMENT = "Which tier of food to start based on saturation. Starts from 0 Poor Foods all the way to 4 which are Great Food";
+    private static final int IRON_CHEF_MODE_TIER_DEFAULT = 0;
+    public static int IRON_CHEF_MODE_TIER = ModConfig.IRON_CHEF_MODE_TIER_DEFAULT;
+
+    private static final String IRON_CHEF_MODE_MENU_SIZE_NAME = "Milestone Food Selection Size";
+    private static final String IRON_CHEF_MODE_MENU_SIZE_COMMENT = "How many options of food players are given per challenge";
+    private static final int IRON_CHEF_MODE_MENU_SIZE_DEFAULT = 3;
+    public static int IRON_CHEF_MODE_MENU_SIZE = ModConfig.IRON_CHEF_MODE_MENU_SIZE_DEFAULT;
+
+    private static final String IRON_CHEF_MODE_COOLDOWN_NAME = "Competition Duration";
+    private static final String IRON_CHEF_MODE_COOLDOWN_COMMENT = "How long of a timeframe in days a player has before the challenge expires and a new one begins";
+    private static final int IRON_CHEF_MODE_COOLDOWN_DEFAULT = 5;
+    public static int IRON_CHEF_MODE_COOLDOWN = ModConfig.IRON_CHEF_MODE_COOLDOWN_DEFAULT;
+
+    private static final String IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH_NAME = "ironChef.milestones.persists.through.death";
+    private static final String IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH_COMMENT = "If true, milestone from challenges progress will not get reset after every death";
+    private static final boolean IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH_DEFAULT = true;
+    public static boolean IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH = ModConfig.IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH_DEFAULT;
+
+    private static final String IRON_CHEF_MODE_FOOD_VALUE_POOR_NAME = "Stats - Food Tier 0: Poor Foods";
+    private static final String IRON_CHEF_MODE_FOOD_VALUE_POOR_COMMENT = "Saturation Value of Poor Foods. Only change if running an saturation progression diverging from vanilla";
+    private static final double IRON_CHEF_MODE_FOOD_VALUE_POOR_DEFAULT = 0.2;
+    public static double IRON_CHEF_MODE_FOOD_VALUE_POOR = ModConfig.IRON_CHEF_MODE_FOOD_VALUE_POOR_DEFAULT;
+
+    private static final String IRON_CHEF_MODE_FOOD_VALUE_LOW_NAME = "Stats - Food Tier 1: Low Foods";
+    private static final String IRON_CHEF_MODE_FOOD_VALUE_LOW_COMMENT = "Saturation Value of Low Foods. Only change if running an saturation progression diverging from vanilla";
+    private static final double IRON_CHEF_MODE_FOOD_VALUE_LOW_DEFAULT = 0.6;
+    public static double IRON_CHEF_MODE_FOOD_VALUE_LOW = ModConfig.IRON_CHEF_MODE_FOOD_VALUE_LOW_DEFAULT;
+
+    private static final String IRON_CHEF_MODE_FOOD_VALUE_NORMAL_NAME = "Stats - Food Tier 2: Normal Foods";
+    private static final String IRON_CHEF_MODE_FOOD_VALUE_NORMAL_COMMENT = "Saturation Value of Normal Foods. Only change if running an saturation progression diverging from vanilla";
+    private static final double IRON_CHEF_MODE_FOOD_VALUE_NORMAL_DEFAULT = 1.2;
+    public static double IRON_CHEF_MODE_FOOD_VALUE_NORMAL = ModConfig.IRON_CHEF_MODE_FOOD_VALUE_NORMAL_DEFAULT;
+
+    private static final String IRON_CHEF_MODE_FOOD_VALUE_GOOD_NAME = "Stats - Food Tier 3: Good Foods";
+    private static final String IRON_CHEF_MODE_FOOD_VALUE_GOOD_COMMENT = "Saturation Value of Good Foods. Only change if running an saturation progression diverging from vanilla";
+    private static final double IRON_CHEF_MODE_FOOD_VALUE_GOOD_DEFAULT = 1.6;
+    public static double IRON_CHEF_MODE_FOOD_VALUE_GOOD = ModConfig.IRON_CHEF_MODE_FOOD_VALUE_GOOD_DEFAULT;
+
+    private static final String IRON_CHEF_MODE_FOOD_VALUE_GREAT_NAME = "Stats - Food Tier 4:  Great Foods";
+    private static final String IRON_CHEF_MODE_FOOD_VALUE_GREAT_COMMENT = "Saturation Value of Great Foods. Only change if running an saturation progression diverging from vanilla";
+    private static final double IRON_CHEF_MODE_FOOD_VALUE_GREAT_DEFAULT = 2.4;
+    public static double IRON_CHEF_MODE_FOOD_VALUE_GREAT = ModConfig.IRON_CHEF_MODE_FOOD_VALUE_GREAT_DEFAULT;
+
     /*
      * DEV
      */
@@ -172,7 +226,9 @@ public class ModConfig implements IPackable, IPacketProcessor {
         + "\tfood_group_count : The number of food groups that the food belongs to\n"
         + "\tdistinct_food_groups_eaten : The number of distinct food groups in the player's current food history\n"
         + "\ttotal_food_groups : The total number of enabled food groups\n"
-        + "\texact_count : The number of times the food (ignoring food groups) has been eaten within the food history\n";
+        + "\texact_count : The number of times the food (ignoring food groups) has been eaten within the food history\n"
+        + "\ttotal_food_groups : The total number of enabled food groups\n"
+        + "\tis_milestone_food : Returns 1 if it is contained in the milestone challenge or 0 if it isn't.\n";
     private static final String GIVE_FOOD_JOURNAL_ON_START_NAME = "give.food.journal.as.starting.item";
     private static final boolean GIVE_FOOD_JOURNAL_ON_START_DEFAULT = false;
     private static final String GIVE_FOOD_JOURNAL_ON_START_COMMENT = "If true, a food journal will be given to each player as a starting item";
@@ -244,6 +300,14 @@ public class ModConfig implements IPackable, IPacketProcessor {
                 FOOD_MODIFIER_ENABLED_COMMENT)
             .getBoolean(FOOD_MODIFIER_ENABLED_DEFAULT);
 
+        FOOD_MODIFIER_ENABLED_CONFIG_VAL = config
+            .get(
+                CATEGORY_MAIN,
+                FOOD_MODIFIER_ENABLED_NAME,
+                FOOD_MODIFIER_ENABLED_DEFAULT,
+                FOOD_MODIFIER_ENABLED_COMMENT)
+            .getBoolean(FOOD_MODIFIER_ENABLED_DEFAULT);
+
         // only use the config value immediately when server-side; the client assumes false until the server syncs the
         // config
         if (FMLCommonHandler.instance()
@@ -279,6 +343,79 @@ public class ModConfig implements IPackable, IPacketProcessor {
                 FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_DEFAULT,
                 FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_COMMENT)
             .getBoolean(FOOD_MILESTONES_PERSISTS_THROUGH_DEATH_DEFAULT);
+
+        config.getCategory(CATEGORY_CARROT_IRON_CHEF)
+            .setComment(CATEGORY_CARROT_IRON_CHEF_COMMENT);
+        IRON_CHEF_MODE_ENABLE = config
+            .get(
+                CATEGORY_CARROT_IRON_CHEF,
+                IRON_CHEF_MODE_ENABLE_NAME,
+                IRON_CHEF_MODE_ENABLE_DEFAULT,
+                IRON_CHEF_MODE_ENABLE_COMMENT)
+            .getBoolean(IRON_CHEF_MODE_ENABLE_DEFAULT);
+        IRON_CHEF_MODE_TIER = config
+            .get(
+                CATEGORY_CARROT_IRON_CHEF,
+                IRON_CHEF_MODE_TIER_NAME,
+                IRON_CHEF_MODE_TIER_DEFAULT,
+                IRON_CHEF_MODE_TIER_COMMENT)
+            .getInt(IRON_CHEF_MODE_TIER_DEFAULT);
+        IRON_CHEF_MODE_MENU_SIZE = config
+            .get(
+                CATEGORY_CARROT_IRON_CHEF,
+                IRON_CHEF_MODE_MENU_SIZE_NAME,
+                IRON_CHEF_MODE_MENU_SIZE_DEFAULT,
+                IRON_CHEF_MODE_MENU_SIZE_COMMENT)
+            .getInt(IRON_CHEF_MODE_MENU_SIZE_DEFAULT);
+        IRON_CHEF_MODE_COOLDOWN = config
+            .get(
+                CATEGORY_CARROT_IRON_CHEF,
+                IRON_CHEF_MODE_COOLDOWN_NAME,
+                IRON_CHEF_MODE_COOLDOWN_DEFAULT,
+                IRON_CHEF_MODE_COOLDOWN_COMMENT)
+            .getInt(IRON_CHEF_MODE_COOLDOWN_DEFAULT);
+        IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH = config
+            .get(
+                CATEGORY_CARROT_IRON_CHEF,
+                IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH_NAME,
+                IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH_DEFAULT,
+                IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH_COMMENT)
+            .getBoolean(IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH_DEFAULT);
+        IRON_CHEF_MODE_FOOD_VALUE_POOR = config
+            .get(
+                CATEGORY_CARROT_IRON_CHEF,
+                IRON_CHEF_MODE_FOOD_VALUE_POOR_NAME,
+                IRON_CHEF_MODE_FOOD_VALUE_POOR_DEFAULT,
+                IRON_CHEF_MODE_FOOD_VALUE_POOR_COMMENT)
+            .getDouble(IRON_CHEF_MODE_FOOD_VALUE_POOR_DEFAULT);
+        IRON_CHEF_MODE_FOOD_VALUE_LOW = config
+            .get(
+                CATEGORY_CARROT_IRON_CHEF,
+                IRON_CHEF_MODE_FOOD_VALUE_LOW_NAME,
+                IRON_CHEF_MODE_FOOD_VALUE_LOW_DEFAULT,
+                IRON_CHEF_MODE_FOOD_VALUE_LOW_COMMENT)
+            .getDouble(IRON_CHEF_MODE_FOOD_VALUE_LOW_DEFAULT);
+        IRON_CHEF_MODE_FOOD_VALUE_NORMAL = config
+            .get(
+                CATEGORY_CARROT_IRON_CHEF,
+                IRON_CHEF_MODE_FOOD_VALUE_NORMAL_NAME,
+                IRON_CHEF_MODE_FOOD_VALUE_NORMAL_DEFAULT,
+                IRON_CHEF_MODE_FOOD_VALUE_NORMAL_COMMENT)
+            .getDouble(IRON_CHEF_MODE_FOOD_VALUE_NORMAL_DEFAULT);
+        IRON_CHEF_MODE_FOOD_VALUE_GOOD = config
+            .get(
+                CATEGORY_CARROT_IRON_CHEF,
+                IRON_CHEF_MODE_FOOD_VALUE_GOOD_NAME,
+                IRON_CHEF_MODE_FOOD_VALUE_GOOD_DEFAULT,
+                IRON_CHEF_MODE_FOOD_VALUE_GOOD_COMMENT)
+            .getDouble(IRON_CHEF_MODE_FOOD_VALUE_GOOD_DEFAULT);
+        IRON_CHEF_MODE_FOOD_VALUE_GREAT = config
+            .get(
+                CATEGORY_CARROT_IRON_CHEF,
+                IRON_CHEF_MODE_FOOD_VALUE_GREAT_NAME,
+                IRON_CHEF_MODE_FOOD_VALUE_GREAT_DEFAULT,
+                IRON_CHEF_MODE_FOOD_VALUE_GREAT_COMMENT)
+            .getDouble(IRON_CHEF_MODE_FOOD_VALUE_GREAT_DEFAULT);
         /*
          * DEV
          */
@@ -482,6 +619,31 @@ public class ModConfig implements IPackable, IPacketProcessor {
             data.writeUTF(FOOD_HUNGER_ROUNDING_MODE_STRING);
         }
         data.writeInt(FOOD_CONTAINERS_MAX_STACKSIZE);
+
+        // Carrot Edition Config Sync
+        data.writeBoolean(EXTRA_HEARTS_ENABLE);
+        if (EXTRA_HEARTS_ENABLE) {
+            data.writeInt(FOOD_MILESTONE_VALUE);
+            data.writeInt(MILESTONE_INCREMENT_VALUE);
+            data.writeInt(HEARTS_PER_MILESTONE_VALUE);
+            data.writeInt(MAX_MILESTONE_VALUE);
+            data.writeBoolean(FOOD_MILESTONES_PERSISTS_THROUGH_DEATH);
+
+            // Carrot Edition - Iron Chef Remaster Config Sync
+            data.writeBoolean(IRON_CHEF_MODE_ENABLE);
+            if (IRON_CHEF_MODE_ENABLE) {
+                data.writeInt(IRON_CHEF_MODE_TIER);
+                data.writeInt(IRON_CHEF_MODE_MENU_SIZE);
+                data.writeInt(IRON_CHEF_MODE_COOLDOWN);
+                data.writeBoolean(IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH);
+
+                data.writeDouble(IRON_CHEF_MODE_FOOD_VALUE_POOR);
+                data.writeDouble(IRON_CHEF_MODE_FOOD_VALUE_LOW);
+                data.writeDouble(IRON_CHEF_MODE_FOOD_VALUE_NORMAL);
+                data.writeDouble(IRON_CHEF_MODE_FOOD_VALUE_GOOD);
+                data.writeDouble(IRON_CHEF_MODE_FOOD_VALUE_GREAT);
+            }
+        }
     }
 
     @Override
@@ -500,6 +662,29 @@ public class ModConfig implements IPackable, IPacketProcessor {
             FOOD_HUNGER_ROUNDING_MODE_STRING = data.readUTF();
         }
         FOOD_CONTAINERS_MAX_STACKSIZE = data.readInt();
+
+        EXTRA_HEARTS_ENABLE = data.readBoolean();
+        if (EXTRA_HEARTS_ENABLE) {
+            FOOD_MILESTONE_VALUE = data.readInt();
+            MILESTONE_INCREMENT_VALUE = data.readInt();
+            HEARTS_PER_MILESTONE_VALUE = data.readInt();
+            MAX_MILESTONE_VALUE = data.readInt();
+            FOOD_MILESTONES_PERSISTS_THROUGH_DEATH = data.readBoolean();
+
+            IRON_CHEF_MODE_ENABLE = data.readBoolean();
+            if (IRON_CHEF_MODE_ENABLE) {
+                IRON_CHEF_MODE_TIER = data.readInt();
+                IRON_CHEF_MODE_MENU_SIZE = data.readInt();
+                IRON_CHEF_MODE_COOLDOWN = data.readInt();
+                IRON_CHEF_MODE_MILESTONES_PERSISTS_THROUGH_DEATH = data.readBoolean();
+
+                IRON_CHEF_MODE_FOOD_VALUE_POOR = data.readDouble();
+                IRON_CHEF_MODE_FOOD_VALUE_LOW = data.readDouble();
+                IRON_CHEF_MODE_FOOD_VALUE_NORMAL = data.readDouble();
+                IRON_CHEF_MODE_FOOD_VALUE_GOOD = data.readDouble();
+                IRON_CHEF_MODE_FOOD_VALUE_GREAT = data.readDouble();
+            }
+        }
     }
 
     @Override
