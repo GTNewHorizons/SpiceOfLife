@@ -62,6 +62,7 @@ public class PacketFoodHistory extends PacketBase {
             .forEach(foodHistory::addFoodFullHistory);
 
         if (side == Side.CLIENT && !shouldOverwrite) {
+            FoodTracker.onFoodsEatenAllTimeChangedClient(foodHistory.totalFoodsEatenAllTime);
             FoodTracker.onFoodEatenClient(this.foodHistory.getLastEatenFood());
         }
 

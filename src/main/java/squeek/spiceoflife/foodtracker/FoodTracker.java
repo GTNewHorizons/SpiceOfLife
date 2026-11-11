@@ -24,6 +24,8 @@ import squeek.spiceoflife.network.PacketFoodHistory;
 
 public class FoodTracker {
 
+    private static Boolean tooltipCacheBelowThreshold;
+
     public static int getFoodHistoryLengthInRelevantUnits(EntityPlayer player) {
         return FoodHistory.get(player)
             .getHistoryLength();
@@ -50,6 +52,17 @@ public class FoodTracker {
     public static void onFoodEatenClient(FoodEaten foodEaten) {
         if (NEICompat.LOADED && foodEaten.itemStack != null) {
             NEICompat.updateTooltipCache(foodEaten.itemStack);
+        }
+    }
+
+    public static void onFoodsEatenAllTimeChangedClient(int totalFoodsEaten) {
+        if (!NEICompat.LOADED) return;
+
+        final boolean belowThreshold = ModConfig.FOOD_EATEN_THRESHOLD > 0
+            && totalFoodsEaten < ModConfig.FOOD_EATEN_THRESHOLD;
+        if (tooltipCacheBelowThreshold == null || tooltipCacheBelowThreshold != belowThreshold) {
+            NEICompat.clearTooltipCache();
+            tooltipCacheBelowThreshold = belowThreshold;
         }
     }
 
