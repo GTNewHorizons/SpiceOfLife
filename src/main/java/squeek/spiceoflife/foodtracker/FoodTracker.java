@@ -55,7 +55,7 @@ public class FoodTracker {
         }
     }
 
-    public static void onFoodsEatenAllTimeChangedClient(int totalFoodsEaten) {
+    public static void onFoodHistoryUpdatedClient(int totalFoodsEaten) {
         if (!NEICompat.LOADED) return;
 
         final boolean belowThreshold = ModConfig.FOOD_EATEN_THRESHOLD > 0
@@ -163,6 +163,8 @@ public class FoodTracker {
      */
     @SubscribeEvent
     public void onClientConnectedToServer(ClientConnectedToServerEvent event) {
+        tooltipCacheBelowThreshold = null;
+
         if (FMLCommonHandler.instance()
             .getEffectiveSide() == Side.CLIENT) ModConfig.assumeClientOnly();
     }

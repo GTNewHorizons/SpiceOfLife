@@ -5,7 +5,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import cpw.mods.fml.relauncher.Side;
 import squeek.spiceoflife.compat.IByteIO;
 import squeek.spiceoflife.foodtracker.FoodHistory;
-import squeek.spiceoflife.foodtracker.FoodTracker;
 
 public class PacketFoodEatenAllTime extends PacketBase {
 
@@ -32,10 +31,6 @@ public class PacketFoodEatenAllTime extends PacketBase {
         FoodHistory foodHistory = FoodHistory.get(player);
 
         foodHistory.totalFoodsEatenAllTime = this.foodEatenAllTime;
-
-        if (side == Side.CLIENT) {
-            FoodTracker.onFoodsEatenAllTimeChangedClient(this.foodEatenAllTime);
-        }
 
         return null;
     }
