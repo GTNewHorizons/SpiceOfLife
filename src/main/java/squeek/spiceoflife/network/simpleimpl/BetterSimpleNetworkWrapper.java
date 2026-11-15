@@ -14,11 +14,14 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.SimpleIndexedCodec;
 import cpw.mods.fml.relauncher.Side;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandlerContext;
+import squeek.spiceoflife.network.PacketConfigSync;
 
 /**
- * Exact copy of FML's SimpleNetworkWrapper implementation with added support for message handlers handling multiple
- * message types See FML's SimpleNetworkWrapper for general documentation
+ * Copy of FML's SimpleNetworkWrapper implementation with added support for message handlers handling multiple
+ * message types and receive-side validation for config sync. See FML's SimpleNetworkWrapper for general documentation.
  */
 public class BetterSimpleNetworkWrapper {
 
@@ -26,8 +29,22 @@ public class BetterSimpleNetworkWrapper {
     private SimpleIndexedCodec packetCodec;
 
     public BetterSimpleNetworkWrapper(String channelName) {
-        packetCodec = new SimpleIndexedCodec();
+        packetCodec = new PacketCodec();
         channels = NetworkRegistry.INSTANCE.newChannel(channelName, packetCodec);
+    }
+
+    static class PacketCodec extends SimpleIndexedCodec {
+
+        @Override
+        public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, IMessage msg) {
+            // Config sync mutates global state in fromBytes; use the channel side, not a thread-based side guess.
+            if (msg instanceof PacketConfigSync && ctx.channel()
+                .attr(NetworkRegistry.CHANNEL_SOURCE)
+                .get() == Side.SERVER) {
+                throw new IllegalStateException("Client sent config sync");
+            }
+            super.decodeInto(ctx, source, msg);
+        }
     }
 
     /**
