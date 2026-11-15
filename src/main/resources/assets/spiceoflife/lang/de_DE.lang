@@ -8,7 +8,16 @@ spiceoflife.tooltip.food.until.enabled.2=Nahrung %d weitere%s verzehrt wurde
 spiceoflife.tooltip.times.singular=s mal
 spiceoflife.tooltip.times.plural= Male
 spiceoflife.tooltip.hunger=Hunger
-spiceoflife.tooltip.food.group=Nahrungsgruppe: 
+spiceoflife.tooltip.food.group=Nahrungsgruppe:
+spiceoflife.tooltip.food.groups=Nahrungsgruppen:
+
+spiceoflife.tooltip.to.close.food.container=Zum Schließen, schleichen benutzen
+spiceoflife.tooltip.to.open.food.container=Zum Öffnen, schleichen benutzen
+spiceoflife.tooltip.can.spill.food=Im geöffneten Zustand können Lebensmittel rausfallen
+spiceoflife.tooltip.hold.key.for.details=Halt %s für Details gedrückt
+
+spiceoflife.tooltip.diminishing=Abnehmende Erträge:
+spiceoflife.tooltip.extrahearts=Zusätzliche Herzen:
 
 # Quantity descriptors
 spiceoflife.quantity.one.time=Einmal
@@ -19,6 +28,30 @@ spiceoflife.quantity.x.times=%d Male
 spiceoflife.gui.alltime.food.eaten=Am meisten verzehrte Nahrung
 spiceoflife.gui.no.food.history.yet=Verzehrte Nahrung wird nicht dokumentiert, bis der Nährwert abnimmt
 spiceoflife.gui.no.recent.food.eaten=Kürzlich keine Nahrung verzehrt
+spiceoflife.gui.time.elapsed.since.food.eaten=Vor %s gegessen
+spiceoflife.gui.x.day=%s Tag
+spiceoflife.gui.x.days=%s Tagen
+spiceoflife.gui.expires.in.time=Läuft in %s ab
+spiceoflife.gui.expires.in.food=Läuft ab, nachdem etwas gegessen wurde %s mehr %s
+spiceoflife.gui.expires.in.hunger=Läuft ab, nachdem etwas im Wert von %s Hunger gegessen wurde
+spiceoflife.gui.food.num=Essen #%d
+spiceoflife.gui.items.on.page=%d-%d von %d
+spiceoflife.gui.bonus_hearts=Extra Herzen:
+spiceoflife.gui.food_history.title=Mein Essen
+spiceoflife.gui.food_history.worth_eaten=Wert gegessen:
+spiceoflife.gui.food_history.next_heart=bis zum nächsten Herzen:
+
+spiceoflife.gui.milestone_history.title=Meine Ernährung:
+spiceoflife.gui.milestone_history.milestone=Aktueller Meilenstein:
+spiceoflife.gui.milestone_history.status=Ernährungsplan:
+spiceoflife.gui.milestone_history.statusComplete=Vollendet!
+spiceoflife.gui.milestone_history.statusInProgress=Ausstehend...
+spiceoflife.gui.expires.in.days=Läuft ab in %s Tagen
+spiceoflife.gui.expires.in.hours=%sh%sm
+spiceoflife.gui.milestone_history.menu=Aktuelles Menü
 
 # Items
 item.spiceoflife.bookfoodjournal.name=Nahrungsjournal
+item.spiceoflife.bookfoodjournal.desc=Dokumentiert deine letzten Mahlzeiten
+item.spiceoflife.bookmilestonejournal.name=Wohlfühl-Kochbuch
+item.spiceoflife.bookmilestonejournal.desc=Enthüllt, welche Mahlzeiten die optimale Balance an Nährstoffen bieten, um deine Gesundheit gezielt zu verbessern.

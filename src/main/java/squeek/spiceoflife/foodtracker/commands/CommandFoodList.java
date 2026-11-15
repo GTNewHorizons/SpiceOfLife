@@ -2,18 +2,22 @@ package squeek.spiceoflife.foodtracker.commands;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 
+import squeek.spiceoflife.ModConfig;
 import squeek.spiceoflife.foodtracker.FoodHistory;
 import squeek.spiceoflife.foodtracker.FoodTracker;
 import squeek.spiceoflife.foodtracker.ProgressInfo;
+import squeek.spiceoflife.foodtracker.queue.FixedSizeQueue;
 
 public class CommandFoodList extends CommandBase {
 
@@ -69,21 +73,52 @@ public class CommandFoodList extends CommandBase {
 
             if (args[0].equals("size")) {
                 final ProgressInfo progressInfo = foodHistory.getProgressInfo();
-                final int foodsEaten = progressInfo.foodsPointsEaten;
-                final int milestone = progressInfo.milestonesAchieved();
-                final int foodsUntilNextMilestone = progressInfo.foodPointsUntilNextMilestone();
 
                 commandSender.addChatMessage(
                     new ChatComponentTranslation("spiceoflife.chat.foodstats", player.getDisplayName()));
-                commandSender
-                    .addChatMessage(new ChatComponentTranslation("spiceoflife.chat.foodstats.eaten", foodsEaten));
-                commandSender.addChatMessage(
+
+                if (ModConfig.IRON_CHEF_MODE_ENABLE) {
+                    final int milestonesAchieved = progressInfo.milestoneAwards;
+                    final double timeRemaining = foodHistory.ticksActive / 24000F;
+
+                    FixedSizeQueue currentChallenge = foodHistory.getMilestoneTargets();
+                    boolean hasCompletedChallenge = currentChallenge.isEmpty() && currentChallenge.getMaxSize() == 0;
+
+                    List<String> activeChallenge = foodHistory.getMilestoneTargets()
+                        .stream()
+                        .map(ItemStack::getDisplayName)
+                        .collect(Collectors.toList());
+
+                    commandSender.addChatMessage(
+                        new ChatComponentTranslation("spiceoflife.chat.foodstats.bonus", milestonesAchieved));
+
+                    commandSender.addChatMessage(
+                        new ChatComponentTranslation(
+                            "spiceoflife.chat.foodstats.time",
+                            String.format("%.1f", timeRemaining)));
+
+                    if (hasCompletedChallenge) commandSender
+                        .addChatMessage(new ChatComponentTranslation("spiceoflife.chat.foodstats.complete"));
+                    else if (activeChallenge.isEmpty())
+                        commandSender.addChatMessage(new ChatComponentTranslation("spiceoflife.chat.foodstats.null"));
+                    else commandSender.addChatMessage(
+                        new ChatComponentTranslation("spiceoflife.chat.foodstats.active", activeChallenge));
+
+                    return;
+                } else {
+                    final int foodsEaten = progressInfo.foodsPointsEaten;
+                    final int milestone = progressInfo.milestonesAchieved();
+                    final int foodsUntilNextMilestone = progressInfo.foodPointsUntilNextMilestone();
+
+                    commandSender
+                        .addChatMessage(new ChatComponentTranslation("spiceoflife.chat.foodstats.eaten", foodsEaten));
                     new ChatComponentTranslation(
                         "spiceoflife.chat.foodstats.bonus",
-                        (milestone * ProgressInfo.HEARTS_PER_MILESTONE)));
-                commandSender.addChatMessage(
-                    new ChatComponentTranslation("spiceoflife.chat.foodstats.next", foodsUntilNextMilestone));
-                return;
+                        (milestone * ProgressInfo.HEARTS_PER_MILESTONE));
+                    commandSender.addChatMessage(
+                        new ChatComponentTranslation("spiceoflife.chat.foodstats.next", foodsUntilNextMilestone));
+                    return;
+                }
             } else if (args[0].equals("sync")) {
                 FoodTracker.syncFoodHistory(foodHistory);
                 commandSender.addChatMessage(

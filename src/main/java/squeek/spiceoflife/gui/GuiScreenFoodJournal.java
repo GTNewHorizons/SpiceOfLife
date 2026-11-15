@@ -23,6 +23,7 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import squeek.spiceoflife.ModConfig;
 import squeek.spiceoflife.foodtracker.FoodEaten;
 import squeek.spiceoflife.foodtracker.FoodHistory;
 import squeek.spiceoflife.foodtracker.ProgressInfo;
@@ -41,8 +42,9 @@ public class GuiScreenFoodJournal extends GuiScreen {
     protected int numPages;
     protected GuiButton buttonNextPage;
     protected GuiButton buttonPrevPage;
-    private int bookImageWidth = 192;
-    private int bookImageHeight = 192;
+    private final int bookImageWidth = 192;
+    private final int bookImageHeight = 192;
+    private final boolean showMilestonePage = ModConfig.EXTRA_HEARTS_ENABLE && !ModConfig.IRON_CHEF_MODE_ENABLE;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -62,7 +64,8 @@ public class GuiScreenFoodJournal extends GuiScreen {
             .sorted(Comparator.comparing(i -> i.itemStack.getDisplayName()))
             .forEach(f -> foodEatenWidgets.add(new WidgetFoodEaten(f, recent.contains(f))));
 
-        numPages = 1 + (int) Math.ceil((float) foodEatenWidgets.size() / numPerPage);
+        int startingIndex = showMilestonePage ? 1 : 0;
+        numPages = startingIndex + (int) Math.ceil((float) foodEatenWidgets.size() / numPerPage);
 
         updateButtons();
     }
@@ -105,7 +108,7 @@ public class GuiScreenFoodJournal extends GuiScreen {
             .bindTexture(bookGuiTextures);
         int x = (this.width - this.bookImageWidth) / 2;
         int y = 2;
-        this.drawTexturedModalRect(x, y, 0, 0, this.bookImageWidth, this.bookImageHeight);
+        this.drawTexturedModalRect(x, y, 0, 0, this.bookImageWidth, bookImageHeight);
 
         GL11.glDisable(GL11.GL_LIGHTING);
         for (Object objButton : this.buttonList) {
@@ -118,7 +121,7 @@ public class GuiScreenFoodJournal extends GuiScreen {
         int leftOffset = leftMargin + leftPadding;
 
         FoodHistory foodHistory = FoodHistory.get(mc.thePlayer);
-        if (pageNum == 0) {
+        if (pageNum == 0 && showMilestonePage) {
             final ProgressInfo progressInfo = foodHistory.getProgressInfo();
             final int foodsEaten = progressInfo.foodsPointsEaten;
             final int extraHearts = progressInfo.milestonesAchieved() * ProgressInfo.HEARTS_PER_MILESTONE;
@@ -160,7 +163,7 @@ public class GuiScreenFoodJournal extends GuiScreen {
             }
 
             localY += verticalIndent;
-            String bonusHearts = I18n.format("spiceoflife.gui.food_history.bonus_hearts");
+            String bonusHearts = I18n.format("spiceoflife.gui.bonus_hearts");
             list = GuiUtils
                 .listFormattedStringToWidth(fontRendererObj, bonusHearts + " " + extraHearts, widthMinusPadding);
             for (String s : list) {
@@ -202,7 +205,7 @@ public class GuiScreenFoodJournal extends GuiScreen {
             int allTimeY = y + 158;
             fontRendererObj.drawString(numFoodsEatenAllTime, allTimeX, allTimeY, 0xa0a0a0);
 
-            if (foodEatenWidgets.size() > 0) {
+            if (!foodEatenWidgets.isEmpty()) {
                 GL11.glPushMatrix();
                 int foodEatenIndex = startIndex;
                 while (foodEatenIndex < foodEatenWidgets.size() && foodEatenIndex < endIndex) {

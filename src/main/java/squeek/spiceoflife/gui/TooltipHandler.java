@@ -118,7 +118,8 @@ public class TooltipHandler {
                             event.itemStack,
                             foodGroup,
                             shouldShowNutritionalValue));
-                    toolTipStringsToAdd.add(getFullHistoryToolTip(foodHistory, event.itemStack));
+                    if (!ModConfig.IRON_CHEF_MODE_ENABLE)
+                        toolTipStringsToAdd.add(getFullHistoryToolTip(foodHistory, event.itemStack));
                 }
             }
         }
@@ -181,8 +182,9 @@ public class TooltipHandler {
 
     public String getFullHistoryToolTip(FoodHistory foodHistory, ItemStack itemStack) {
         final String prefix = StatCollector.translateToLocal("spiceoflife.tooltip.extrahearts") + " "
-            + EnumChatFormatting.DARK_AQUA.toString()
-            + EnumChatFormatting.ITALIC.toString();
+            + EnumChatFormatting.DARK_AQUA
+            + EnumChatFormatting.ITALIC;
+
         if (!foodHistory.hasEverEaten(itemStack)) {
             return prefix + StatCollector.translateToLocal("spiceoflife.tooltip.not.eaten.ever");
         } else {

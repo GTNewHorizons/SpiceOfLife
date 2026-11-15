@@ -28,6 +28,8 @@ public class ModContent {
     public static void registerRecipes() {
         GameRegistry
             .addShapelessRecipe(new ItemStack(foodJournal), new ItemStack(Items.wheat), new ItemStack(Items.paper));
+        if (ModConfig.IRON_CHEF_MODE_ENABLE) GameRegistry
+            .addShapelessRecipe(new ItemStack(foodJournal, 1, 1), new ItemStack(Items.book), new ItemStack(Items.cake));
         GameRegistry.addShapedRecipe(
             new ItemStack(lunchBox),
             "_ _",
