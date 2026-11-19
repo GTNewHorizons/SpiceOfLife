@@ -14,4 +14,9 @@ public class NEICompat {
     public static void updateTooltipCache(ItemStack stack) {
         TooltipFilter.putItem(stack);
     }
+
+    @Optional.Method(modid = "NotEnoughItems")
+    public static void clearTooltipCache() {
+        TooltipFilter.clearCache();
+    }
 }
